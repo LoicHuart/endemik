@@ -6,7 +6,65 @@
             <div class="card-body px-lg-5 py-lg-5">
                 <h1>Gestion des actualités</h1>
 
-               
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#">Categories 1</a>
+                    <a class="dropdown-item" href="#">Categories 2</a>
+                    <a class="dropdown-item" href="#">Categories 3</a>
+                    </div>
+                </div>
+
+                <div class="float-end">
+                    <button type="button" class="btn btn-primary">Ajouter</button>
+                    
+                </div>
+
+                <br><br><br>
+                
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="w-10">Nom</th>
+                        <th scope="col" class="w-15">image</th>
+                        <th scope="col" class="w-35">contenu</th>
+                        <th scope="col" class="w-20">date</th>
+                        <th scope="col" class="w-20">Gestion</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Météo</td>
+                        <td> <img class="w-50" src="./img/fonderie.jpg" alt="image"></td>
+                        <td> Météo du jour</td>
+                        <td>27/12/2020</td>
+                        <td>
+                            <button type="button" class="btn btn-primary">Modifier</button>
+                            <button type="button" class="btn btn-primary">Supprimer</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Menu du jour</td>
+                        <td>  <img class="w-50" src="./img/logo_endemik.png" alt="image"></td>
+                        <td> Menu du jour</td>
+                        <td>27/12/2020</td>
+                        <td>
+                            <button type="button" class="btn btn-primary">Modifier</button>
+                            <button type="button" class="btn btn-primary">Supprimer</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Nouvelle fonderie</td>
+                        <td>  <img class="w-50" src="./img/fonderie3.jpg" alt="image"></td>
+                        <td> Voici la nouvelle fonderie.</td>
+                        <td>27/12/2020</td>
+                        <td>
+                            <button type="button" class="btn btn-primary">Modifier</button>
+                            <button type="button" class="btn btn-primary">Supprimer</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
             </div>
         </div>
