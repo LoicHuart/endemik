@@ -1,12 +1,14 @@
+var loginController = require('./controllers/loginController');
+
 function initRoutes(app) {
 
     app.get('/', (req, res) => {
         res.redirect('/login');
     });
 
-    app.get('/login', (req, res) => {
-        res.render("pages/login");
-    });
+    
+    app.get('/login',loginController.index);
+    
 
     app.get('/tableauDeBord', (req, res) => {
         res.render("pages/tableauDeBord");
