@@ -38,7 +38,9 @@ function initRoutes(app) {
         res.render("pages/gestionActualite");
     }); 
 
-
+    app.get('/gestionUtilisateur', (req, res) => {
+        res.render("pages/gestionUtilisateur");
+    }); 
 
 };
 
