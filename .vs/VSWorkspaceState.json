@@ -2,11 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\public",
+    "\\public\\asset",
+    "\\public\\asset\\css",
+    "\\public\\img",
     "\\src",
     "\\src\\views",
-    "\\src\\views\\pages",
     "\\src\\views\\partials"
   ],
-  "SelectedNode": "\\package.json",
+  "SelectedNode": "\\src\\views\\partials\\nav.ejs",
   "PreviewInSolutionExplorer": false
 }

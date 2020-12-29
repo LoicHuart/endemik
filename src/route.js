@@ -40,6 +40,14 @@ function initRoutes(app) {
         res.render("pages/gestionUtilisateur");
     }); 
 
+    app.get('/ajoutUtilisateur', (req, res) => {
+        res.render("pages/ajoutUtilisateur");
+    }); 
+
+    app.get('/editionUtilisateur', (req, res) => {
+        res.render("pages/editionUtilisateur");
+    }); 
+
 };
 
 module.exports =  initRoutes;
