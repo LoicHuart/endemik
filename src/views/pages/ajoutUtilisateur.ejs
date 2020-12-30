@@ -1,0 +1,51 @@
+<%- include("../partials/header") %>
+<%- include("../partials/nav") %>
+
+<div class="row justify-content-center m-3">
+    <div class="col-lg-12 col-md-12">
+        <div class="card bg-secondary border-0 mb-0">
+            <div class="card-body px-lg-5 py-lg-5">
+                <h1>Ajout d'un compte utilisateur</h1>
+
+                <form>
+                   <div class="form-group">
+                    <label for="exampleFormControlSelect1">Civilite</label>
+                    <select class="form-control" id="civilite">
+                      <option>Monsieur</option>
+                      <option>Madame</option>
+                      <option>Mademoiselle</option>
+                    </select>
+                   </div>
+                   <div class="form-group">
+                     <input type="input" class="form-control" id="nom" placeholder="Nom">
+                   </div>
+                   <div class="form-group">
+                     <input type="input" class="form-control" id="prenom" placeholder="Prenom">
+                   </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlInput1">Adresse mail</label>
+                    <input type="email" class="form-control" id="mail" placeholder="name@example.com">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlInput1">Telephone</label>
+                    <input type="email" class="form-control" id="tel" placeholder="0123456789">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Role</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                      <option>Service RH</option>
+                      <option>Administrateur</option>
+                      <option>Direction</option>
+                      <option>Service Communication</option>
+                      <option>Salarié</option>
+                    </select>
+                  </div>
+                </form>
+                </br>
+                  <button type="button" class="btn btn-outline-light">Valider</button>
+                 <button type="button" class="btn btn-outline-light"><a class="link-secondary" href="/gestionUtilisateur">Retour</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer") %>
