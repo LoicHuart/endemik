@@ -1,84 +1,55 @@
 var loginController = require('./controllers/loginController');
 
-function isLoggedIn(req, res, next) {
-    if (req.session.loggedin === true){
-        return next();
-    }
-    res.redirect('/');
-}
-
-
 function initRoutes(app) {
 
     app.get('/', (req, res) => {
         res.redirect('/login');
     });
 
-    app.get('/login', loginController.index);
     
-    app.post('/auth', loginController.auth);
-
-    app.get('/logout', loginController.logout);
-
-    app.get('/tableauDeBord', isLoggedIn, (req, res) => {
-        res.render("pages/tableauDeBord",{
-            session: req.session
-        });
-    });
+    app.get('/login',loginController.index);
     
-    app.get('/demandeConge', isLoggedIn, (req, res) => {
-        res.render("pages/demandeConge",{
-            session: req.session
-        });
+
+    app.get('/tableauDeBord', (req, res) => {
+        res.render("pages/tableauDeBord");
+    }); 
+
+    app.get('/demandeConge', (req, res) => {
+        res.render("pages/demandeConge");
     });   
     
-    app.get('/documentation', isLoggedIn, (req, res) => {
-        res.render("pages/documentation",{
-            session: req.session
-        });
+    app.get('/documentation', (req, res) => {
+        res.render("pages/documentation");
     });  
 
-    app.get('/tableauStatistique', isLoggedIn, (req, res) => {
-        res.render("pages/tableauStatistique",{
-            session: req.session
-        });
+    app.get('/tableauStatistique', (req, res) => {
+        res.render("pages/tableauStatistique");
     }); 
 
-    app.get('/gestionConge', isLoggedIn, (req, res) => {
-        res.render("pages/gestionConge",{
-            session: req.session
-        });
+    app.get('/gestionConge', (req, res) => {
+        res.render("pages/gestionConge");
     }); 
 
-    app.get('/gestionDocument', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDocument",{
-            session: req.session
-        });
+    app.get('/gestionDocument', (req, res) => {
+        res.render("pages/gestionDocument");
     }); 
 
-    app.get('/gestionActualite', isLoggedIn, (req, res) => {
-        res.render("pages/gestionActualite",{
-            session: req.session
-        });
+    app.get('/gestionActualite', (req, res) => {
+        res.render("pages/gestionActualite");
     }); 
 
-    app.get('/gestionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/gestionUtilisateur",{
-            session: req.session
-        });
+    app.get('/gestionUtilisateur', (req, res) => {
+        res.render("pages/gestionUtilisateur");
     }); 
 
-    app.get('/ajoutUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/ajoutUtilisateur",{
-            session: req.session
-        });
+    app.get('/ajoutUtilisateur', (req, res) => {
+        res.render("pages/ajoutUtilisateur");
     }); 
 
-    app.get('/editionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/editionUtilisateur",{
-            session: req.session
-        });
+    app.get('/editionUtilisateur', (req, res) => {
+        res.render("pages/editionUtilisateur");
     }); 
+
 };
 
 module.exports =  initRoutes;

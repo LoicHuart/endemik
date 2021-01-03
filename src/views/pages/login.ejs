@@ -25,19 +25,13 @@
       <div class="col-lg-5 col-md-7">
         <div class="card bg-secondary border-0 mb-0">
           <div class="card-body px-lg-5 py-lg-5">
-            <% if (typeof error !== 'undefined') { %>
-              <div class="alert alert-danger" role="alert">
-                <strong><%= error %></strong>
-              </div>
-            <% } %>
-            <p>Email: test@test.com  <br> Mdp: test</p>
-            <form role="form" action="auth" method="post" class="">
+            <form role="form" action="" method="post" class="">
               <div class="form-group mb-3">
                 <div class="input-group input-group-merge input-group-alternative">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                   </div>
-                  <input class="form-control" placeholder="Email" type="email" name="email">
+                  <input class="form-control" placeholder="Email" type="email">
                 </div>
               </div>
               <div class="form-group">
@@ -45,7 +39,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                   </div>
-                  <input class="form-control" placeholder="Password" type="password" name="password">
+                  <input class="form-control" placeholder="Password" type="password">
                 </div>
               </div>
               <div class="custom-control custom-control-alternative custom-checkbox">
@@ -55,7 +49,7 @@
                 </label>
               </div>
               <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4" >Sign in</button>  
+                  <a href="/tableauDeBord"><button type="button" class="btn btn-primary my-4" >Sign in</button></a>   
               </div>
             </form>
           </div>
