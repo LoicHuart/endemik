@@ -31,13 +31,53 @@
                   <td>
                       <button class="btn btn-icon btn-primary" type="edit">
                           <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                      </button>
-                      <button class="btn btn-icon btn-success" type="act/desac">
-                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                      </button>
-                      <button class="btn btn-icon" type="supp">
-                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                      </button>
+                      </button>            
+                      <!-- Modal -->
+                       <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment d&eacutesactiver/activer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                      <!-- Modal -->
+                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment supprimer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
                   </td>
                 </tr>
                 <tr>
@@ -51,12 +91,52 @@
                     <button class="btn btn-icon btn-primary" type="edit">
                       <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
                     </button>
-                    <button class="btn btn-icon btn-danger" type="act/desac">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span></a>
-                    </button>
-                    <button class="btn btn-icon btn-danger" type="supp">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                    </button>
+                     <!-- Modal -->
+                       <button class="btn btn-icon btn-danger" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment d&eacutesactiver/activer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                     <!-- Modal -->
+                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment supprimer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
                   </td>
                 </tr>
                 <tr>
@@ -70,12 +150,52 @@
                     <button class="btn btn-icon btn-primary" type="edit">
                       <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
                     </button>
-                    <button class="btn btn-icon btn-success" type="act/desac">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                    </button>
-                    <button class="btn btn-icon" type="supp">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                    </button>
+                     <!-- Modal -->
+                       <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment d&eacutesactiver/activer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                     <!-- Modal -->
+                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                       </button>
+                         <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
+                           <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                            <div class="modal-content">
+                             <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title-default"> Confirmation de choix</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">x</span>
+                                </button>
+                             </div>
+                            <div class="modal-body">
+                             <p>Voulez-vous vraiment supprimer ce compte ? </p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Valider</button>
+                              <button type="button" class="btn btn-secondary  ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
                   </td>
                 </tr>
               </tbody>

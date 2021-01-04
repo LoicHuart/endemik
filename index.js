@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const initRoute = require("./src/route.js");
 const app = express();
-const port = process.env.APP_PORT || 3000;
+const port = process.env.APP_PORT || 4000;
 
 let publicDisPath = path.join(__dirname, "./public");
 app.use(express.static(publicDisPath));
