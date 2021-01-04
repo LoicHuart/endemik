@@ -1,87 +1,90 @@
 <%- include("../partials/header") %>
 <%- include("../partials/nav") %>
-<div class="row justify-content-center m-3">
+<div class="container-fluid">
+  <div class="row justify-content-center m-3">
     <div class="col-lg-12 col-md-12">
-        <div class="card bg-secondary border-0 mb-0">
-            <div class="card-body px-lg-5 py-lg-5">
-                <h1>Gestion des utilisateurs</h1>
-                
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Civilit&eacute</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Pr&eacutenom</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">T&eacutel&eacutephone</th>
-                        <th scope="col">R&ocircle</th>
-                        <th scope="col">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Monsieur</td>
-                        <td>DUPONT</td>
-                        <td>Jean</td>
-                        <td>jean.dupont@gmail.com</td>
-                        <td>06.84.56.95.24</td>
-                        <td>Salari&eacute</td>
-                        <td>
-                            <button class="btn btn-icon btn-primary" type="edit">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon" type="act/desac">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon" type="supp">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                            </button>
-                        </td>
-                      </tr>
-                      <tr>
-                      <td>Madame</td>
-                        <td>MALOU</td>
-                        <td>Sophie</td>
-                        <td>sophie.malou@hotmail.com</td>
-                        <td>06.46.82.46.12</td>
-                        <td>Salari&eacute du service RH</td>
-                        <td>
-                           <button class="btn btn-icon btn-primary" type="edit">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon btn-success" type="act/desac">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon btn-danger" type="supp">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                            </button>
-                        </td>
-                      </tr>
-                      <tr>
-                      <td>Mademoiselle</td>
-                        <td>Pottier</td>
-                        <td>Domitille</td>
-                        <td>domitille.pottier@outlook.fr</td>
-                        <td>06.78.59.42.57</td>
-                        <td>Direction</td>
-                        <td>
-                          <button class="btn btn-icon btn-primary" type="edit">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon" type="act/desac">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                            </button>
-                            <button class="btn btn-icon" type="supp">
-                                <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                            </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </br></br>
-                  <button type="button" class="btn btn-outline-light float-right"><a class="link-secondary" href="/ajoutUtilisateur">Ajouter un compte</button>
-            </div>
+      <div class="card bg-secondary border-0 mb-0">
+        <div class="card-body px-lg-5 py-lg-5">
+          <h1>Gestion des utilisateurs</h1>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Civilit&eacute</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Pr&eacutenom</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">T&eacutel&eacutephone</th>
+                  <th scope="col">R&ocircle</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Monsieur</td>
+                  <td>DUPONT</td>
+                  <td>Jean</td>
+                  <td>jean.dupont@gmail.com</td>
+                  <td>06.84.56.95.24</td>
+                  <td>Salari&eacute</td>
+                  <td>
+                      <button class="btn btn-icon btn-primary" type="edit">
+                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
+                      </button>
+                      <button class="btn btn-icon" type="act/desac">
+                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
+                      </button>
+                      <button class="btn btn-icon" type="supp">
+                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                      </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Madame</td>
+                  <td>MALOU</td>
+                  <td>Sophie</td>
+                  <td>sophie.malou@hotmail.com</td>
+                  <td>06.46.82.46.12</td>
+                  <td>Salari&eacute du service RH</td>
+                  <td>
+                    <button class="btn btn-icon btn-primary" type="edit">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
+                    </button>
+                    <button class="btn btn-icon btn-success" type="act/desac">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span></a>
+                    </button>
+                    <button class="btn btn-icon btn-danger" type="supp">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mademoiselle</td>
+                  <td>Pottier</td>
+                  <td>Domitille</td>
+                  <td>domitille.pottier@outlook.fr</td>
+                  <td>06.78.59.42.57</td>
+                  <td>Direction</td>
+                  <td>
+                    <button class="btn btn-icon btn-primary" type="edit">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
+                    </button>
+                    <button class="btn btn-icon" type="act/desac">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
+                    </button>
+                    <button class="btn btn-icon" type="supp">
+                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </br></br>
+          <button type="button" class="btn btn-outline-light float-right"><a class="link-secondary" href="/ajoutUtilisateur">Ajouter un compte</button>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <%- include("../partials/footer") %>
