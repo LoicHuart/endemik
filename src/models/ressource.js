@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const ressourceSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
     title:  String,
-    date: String,
+    date: Date,
     url_doc: String,
     active: Boolean,
     id_categorie: Schema.Types.ObjectId,
