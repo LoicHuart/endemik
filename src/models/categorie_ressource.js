@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const categorieRessourceSchema = new mongoose.Schema({
+    _id: Schema.Types.ObjectId,
     titre:  String,
 });
 

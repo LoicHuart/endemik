@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const salarieSchema = new mongoose.Schema({
+    _id: Schema.Types.ObjectId,
     nom:  String, 
     prenom: String,
     date_nais: String,
@@ -16,7 +17,7 @@ const salarieSchema = new mongoose.Schema({
     nb_enfant: Number,
     mdp: String,
     url_photo: { type: String, default: null },
-    id_service: Number
+    id_service: Schema.Types.ObjectId
 });
 
 module.exports = mongoose.model('salarie', salarieSchema, 'salarie');  
