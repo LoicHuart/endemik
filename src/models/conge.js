@@ -4,9 +4,10 @@ const { Schema } = mongoose;
 const congeSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
     note:  String,
-    date_debut: String,
-    date_fin: String,
-    date_validation: { type: String, default: null },
+    date_debut: Date,
+    date_fin: Date,
+    date_demande: Date,
+    date_validation: { type: Date, default: null },
     type: String,
     status: {type: String, enum: ['en attente', 'prevalider', 'valider', 'refuser'] },
     id_salarie_demande: Schema.Types.ObjectId,

@@ -5,7 +5,7 @@ const actualiteSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
     title:  String,
     contenu: String,
-    date: String,
+    date: Date,
     url_image: String,
     active: Boolean,
     id_categorie: Schema.Types.ObjectId,
