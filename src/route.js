@@ -20,61 +20,61 @@ function initRoutes(app) {
     
 
     app.get('/tableauDeBord', isLoggedIn, (req, res) => {
-        res.render("pages/tableauDeBord",{
+        res.render("pages/tableauDeBord/tableauDeBord",{
             session: req.session
         });
     }); 
 
     app.get('/demandeConge', isLoggedIn, (req, res) => {
-        res.render("pages/demandeConge",{
+        res.render("pages/demandeDeConge/demandeConge",{
             session: req.session
         });
     });   
     
     app.get('/documentation', isLoggedIn, (req, res) => {
-        res.render("pages/documentation",{
+        res.render("pages/documentation/documentation",{
             session: req.session
         });
     });  
 
     app.get('/tableauStatistique', isLoggedIn, (req, res) => {
-        res.render("pages/tableauStatistique",{
+        res.render("pages/tableauDeBordStatistique/tableauStatistique",{
             session: req.session
         });
     }); 
 
     app.get('/gestionConge', isLoggedIn, (req, res) => {
-        res.render("pages/gestionConge",{
+        res.render("pages/gestionDesConges/gestionConge",{
             session: req.session
         });
     }); 
 
     app.get('/gestionDocument', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDocument",{
+        res.render("pages/gestionDesDocumentations/gestionDocument",{
             session: req.session
         });
     }); 
 
     app.get('/gestionActualite', isLoggedIn, (req, res) => {
-        res.render("pages/gestionActualite",{
+        res.render("pages/gestionDesActualites/gestionActualite",{
             session: req.session
         });
     }); 
 
     app.get('/gestionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/gestionUtilisateur",{
+        res.render("pages/gestionDesUtilisateurs/gestionUtilisateur",{
             session: req.session
         });
     }); 
 
     app.get('/ajoutUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/ajoutUtilisateur",{
+        res.render("pages/gestionDesUtilisateurs/ajoutUtilisateur",{
             session: req.session
         });
     }); 
 
     app.get('/editionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/editionUtilisateur",{
+        res.render("pages/gestionDesUtilisateurs/editionUtilisateur",{
             session: req.session
         });
     }); 
