@@ -2,7 +2,9 @@ var UtilisateurSchema = require("../models/salarie");
 
 var UtilisateurController = {
   async index(req, res) {
-    res.render("pages/gestionUtilisateur");
+    res.render("pages/gestionDesUtilisateurs/gestionUtilisateur",{
+      session: req.session
+    });
   },
 };
 

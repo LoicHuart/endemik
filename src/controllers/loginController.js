@@ -1,4 +1,4 @@
-var SalarieSchema = require("../models/salarie");
+var SalarieSchema = require("../models/Salarie");
 
 var LoginController = {
   async index(req, res) {

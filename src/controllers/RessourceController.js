@@ -1,9 +1,11 @@
-var RessourceSchema = require("../models/ressource");
-var CategRessourceSchema = require("../models/categorie_ressource");
+var RessourceSchema = require("../models/Ressource");
+var CategRessourceSchema = require("../models/Categorie_ressource");
 
 var RessourceController = {
   async index(req, res) {
-    res.render("pages/gestionDocument");
+    res.render("pages/gestionDesDocumentation/gestionDocument",{
+      session: req.session
+    });
   },
 };
 
