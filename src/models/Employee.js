@@ -2,24 +2,24 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const validator = require("validator");
 
-const SalarieSchema = new mongoose.Schema({
-  nom: {
+const EmployeeSchema = new mongoose.Schema({
+  lastName: {
     type: String,
     uppercase: true,
     required: true,
     trim: true,
   },
-  prenom: {
+  firstName: {
     type: String,
     lowercase: true,
     required: true,
     trim: true,
   },
-  date_nais: {
+  date_birth: {
     type: Date,
     required: true,
   },
-  num_secu: {
+  social_security_number: {
     type: String,
     require: true,
     validate(value) {
@@ -42,7 +42,7 @@ const SalarieSchema = new mongoose.Schema({
       }
     },
   },
-  tel: {
+  tel_nb: {
     type: String,
     require: true,
     validate(value) {
@@ -51,7 +51,7 @@ const SalarieSchema = new mongoose.Schema({
       }
     },
   },
-  code_postal: {
+  postal_code: {
     type: String,
     require: true,
     validate(value) {
@@ -60,31 +60,31 @@ const SalarieSchema = new mongoose.Schema({
       }
     },
   },
-  num_rue: {
+  street_nb: {
     type: String,
     require: true,
   },
-  rue: {
+  street: {
     type: String,
     require: true,
   },
-  ville: {
+  city: {
     type: String,
     require: true,
   },
-  date_arrivee: {
+  arrival_date: {
     type: Date,
     require: true,
   },
-  nb_enfant: {
+  children_nb: {
     type: Number,
     require: true,
   },
-  mdp: {
+  password: {
     type: String,
     require: true,
   },
-  url_photo: {
+  photo_url: {
     type: String,
     default: null,
   },
@@ -98,4 +98,4 @@ const SalarieSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("salarie", SalarieSchema, "salarie");
+module.exports = mongoose.model("Employee", EmployeeSchema, "Employee");

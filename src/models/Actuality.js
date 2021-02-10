@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const { Schema } = mongoose;
 
-const ActualiteSchema = new mongoose.Schema({
+const ActualitySchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -12,7 +12,7 @@ const ActualiteSchema = new mongoose.Schema({
       }
     },
   },
-  contenu: {
+  content: {
     type: String,
     required: true,
     validate(value) {
@@ -46,10 +46,10 @@ const ActualiteSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     required: true,
   },
-  id_salarie_createur: {
+  id_author: {
     type: Schema.Types.ObjectId,
     required: true,
   },
 });
 
-module.exports = mongoose.model("actualite", ActualiteSchema, "actualite");
+module.exports = mongoose.model("actuality", ActualitySchema, "actuality");

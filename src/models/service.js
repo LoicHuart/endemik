@@ -25,7 +25,7 @@ const ServiceSchema = new mongoose.Schema({
       }
     },
   },
-  id_responsable: {
+  id_manager: {
     type: Schema.Types.ObjectId,
     required: true,
   },

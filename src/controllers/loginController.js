@@ -1,23 +1,23 @@
-var SalarieSchema = require("../models/Salarie");
+var EmployeeSchema = require("../models/Employee");
 
 var LoginController = {
   async login(req, res) {
-    res.render("pages/login/login");
+    res.render("pages/Login/Login");
   },
 
   async auth(req, res) {
     var email = req.body.email;
     var password = req.body.password;
     if (email && password) {
-      SalarieSchema.find(
+      EmployeeSchema.find(
         { mail: email, mdp: password },
         function (error, results, fields) {
           if (results.length > 0) {
             req.session.loggedin = true;
             req.session.user = results[0];
-            res.redirect("/tableauDeBord");
+            res.redirect("/tableauDeBoard");
           } else {
-            res.render("pages/login/login", {
+            res.render("pages/Login/Login", {
               error: "Email ou mot de passe incorrect",
             });
           }
@@ -25,7 +25,7 @@ var LoginController = {
         }
       );
     } else {
-      res.render("pages/login/login", {
+      res.render("pages/Login/Login", {
         error: "Entrer une adresse Email et un mot de passe s'il vous plaît",
       });
       res.end();

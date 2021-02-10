@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const { Schema } = mongoose;
 
-const CategorieActualiteSchema = new mongoose.Schema({
+const CategoryActualitySchema = new mongoose.Schema({
   _id: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -19,7 +19,7 @@ const CategorieActualiteSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model(
-  "categorie_actualite",
-  CategorieActualiteSchema,
-  "categorie_actualite"
+  "categoryActuality",
+  CategoryActualitySchema,
+  "categoryActuality"
 );
