@@ -1,4 +1,4 @@
-var loginController = require('./controllers/loginController');
+var LoginController = require('./controllers/LoginController');
 
 function isLoggedIn(req, res, next) {
     if (req.session.loggedin === true){
@@ -14,9 +14,9 @@ function initRoutes(app) {
     });
 
     
-    app.get('/login',loginController.index);
-    app.post('/auth', loginController.auth);
-    app.get('/logout', loginController.logout);
+    app.get('/login',LoginController.index);
+    app.post('/auth', LoginController.auth);
+    app.get('/logout', LoginController.logout);
     
 
     app.get('/tableauDeBord', isLoggedIn, (req, res) => {
