@@ -89,7 +89,11 @@ const salarieSchema = new mongoose.Schema({
     default: null,
   },
   id_service: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    require: true,
+  },
+  id_role: {
+    type: Schema.Types.ObjectId,
     require: true,
   },
 });
