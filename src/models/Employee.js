@@ -2,26 +2,28 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const validator = require("validator");
 
-const SalarieSchema = new mongoose.Schema({
-  nom: {
+const EmployeeSchema = new mongoose.Schema({
+  _id: Schema.Types.ObjectId,
+  lastName: {
     type: String,
     uppercase: true,
     required: true,
-    trim: true,
+    trim: true
   },
-  prenom: {
+  firstName: {
     type: String,
     lowercase: true,
     required: true,
-    trim: true,
+    trim: true
   },
-  date_nais: {
+  date_birth: {
     type: Date,
-    required: true,
+    required: true
   },
-  num_secu: {
+  social_security_number: {
     type: String,
     require: true,
+    trim: true,
     validate(value) {
       if (validator.isLength(value, 13)) {
         throw new Error("Numéro de sécu n'est pas de la bonne taille (13)");
@@ -31,71 +33,83 @@ const SalarieSchema = new mongoose.Schema({
           "Numéro de sécu ne doit pas contenir de caractères alphanumériques (A-Za-z)"
         );
       }
-    },
+    }
   },
   mail: {
     type: String,
     require: true,
+    trim: true,
     validate(value) {
       if (validator.isEmail(value)) {
         throw new Error("Le format n'est pas un mail");
       }
-    },
+    }
   },
-  tel: {
+  tel_nb: {
     type: String,
     require: true,
+    trim: true,
     validate(value) {
       if (validator.isMobilePhone(value, "fr-FR")) {
         throw new Error("Le format n'est pas un téléphone portable");
       }
-    },
+    }
   },
-  code_postal: {
+  postal_code: {
     type: String,
     require: true,
+    trim: true,
     validate(value) {
       if (validator.isPostalCode(value, "fr-FR")) {
         throw new Error("Le format n'est pas un code postal");
       }
-    },
+    }
   },
-  num_rue: {
+  street_nb: {
     type: String,
     require: true,
+    trim: true
   },
-  rue: {
+  street: {
     type: String,
     require: true,
+    trim: true
   },
-  ville: {
+  city: {
     type: String,
     require: true,
+    trim: true
   },
-  date_arrivee: {
+  arrival_date: {
     type: Date,
     require: true,
+    trim: true
   },
-  nb_enfant: {
+  children_nb: {
     type: Number,
     require: true,
+    trim: true
   },
-  mdp: {
+  password: {
     type: String,
     require: true,
+    trim: true
   },
-  url_photo: {
+  photo_url: {
     type: String,
     default: null,
+    trim: true
   },
-  id_service: {
-    type: Schema.Types.ObjectId,
-    require: true,
+  id_service: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'Service', 
+    required: true 
   },
-  id_role: {
-    type: Schema.Types.ObjectId,
-    require: true,
+  id_role: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'Role', 
+    required: true 
   },
 });
 
-module.exports = mongoose.model("salarie", SalarieSchema, "salarie");
+module.exports = mongoose.model("Employee", EmployeeSchema, "Employee");
