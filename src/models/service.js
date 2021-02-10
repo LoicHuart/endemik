@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const serviceSchema = new mongoose.Schema({
-    name:  String, 
-    site: String,
-    id_responsable: Number
+    _id: Schema.Types.ObjectId,
+    name:  { type: String, required: true }, 
+    site: { type: String, required: true },
+    id_responsable: { type: Schema.Types.ObjectId, required: true }
 });
 
 module.exports = mongoose.model('service', serviceSchema, 'service');  

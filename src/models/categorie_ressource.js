@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const categorieRessourceSchema = new mongoose.Schema({
-    titre:  String,
+    _id: Schema.Types.ObjectId,
+    titre:  { String, required: true },
 });
 
 module.exports = mongoose.model('categorie_ressource', categorieRessourceSchema, 'categorie_ressource');  
