@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const congeSchema = new mongoose.Schema({
+const CongeSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
     note:  String,
     date_debut: { type: Date, required: true },
@@ -15,4 +15,4 @@ const congeSchema = new mongoose.Schema({
     id_service: { type: Schema.Types.ObjectId, required: true }
 });
 
-module.exports = mongoose.model('conge', congeSchema, 'conge');  
+module.exports = mongoose.model('conge', CongeSchema, 'conge');  

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const categorieRessourceSchema = new mongoose.Schema({
+const CategorieRessourceSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
-    titre:  { String, required: true },
+    titre:  { type: String, required: true },
 });
 
-module.exports = mongoose.model('categorie_ressource', categorieRessourceSchema, 'categorie_ressource');  
+module.exports = mongoose.model('categorie_ressource', CategorieRessourceSchema, 'categorie_ressource');  

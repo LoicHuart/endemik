@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const validator = require("validator");
 
-const salarieSchema = new mongoose.Schema({
+const SalarieSchema = new mongoose.Schema({
   nom: {
     type: String,
     uppercase: true,
@@ -98,4 +98,4 @@ const salarieSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("salarie", salarieSchema, "salarie");
+module.exports = mongoose.model("salarie", SalarieSchema, "salarie");
