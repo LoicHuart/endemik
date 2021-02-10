@@ -2,7 +2,7 @@ var salarieSchema = require('../models/salarie');
    
 var loginController={  
     async index(req,res){ 
-        res.render("pages/login");
+        res.render("pages/login/login");
     },
   
     async auth(req, res) {
@@ -15,12 +15,12 @@ var loginController={
                     req.session.user = results[0];
                     res.redirect('/tableauDeBord');
                 } else {
-                    res.render('pages/login',{error: "Email ou Mot de passe incorrect"});
+                    res.render('pages/login/login',{error: "Email ou Mot de passe incorrect"});
                 }			
                 res.end();
             });
         } else {
-            res.render('pages/login',{error: 'Entrer une adresse Email et un Mot de passe s\'il vous plaît'});
+            res.render('pages/login/login',{error: 'Entrer une adresse Email et un Mot de passe s\'il vous plaît'});
             res.end();
         }
     },
