@@ -1,6 +1,6 @@
-<%- include("../partials/header") %>
+<%- include("../../partials/header") %>
 <title>Gestion des utilisateurs</title>
-<%- include("../partials/nav") %>
+<%- include("../../partials/nav") %>
 <div class="container-fluid">
   <div class="row justify-content-center m-3">
     <div class="col-lg-12 col-md-12">
@@ -29,13 +29,17 @@
                   <td>06.84.56.95.24</td>
                   <td>Salari&eacute</td>
                   <td>
+                    <a class="link-secondary" href="/editionUtilisateur">
                       <button class="btn btn-icon btn-primary" type="edit">
-                          <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                      </button>            
+                          <span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span>
+                      </button>
+                    </a>
                       <!-- Modal -->
-                       <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -56,9 +60,11 @@
                           </div>
                          </div>
                       <!-- Modal -->
-                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -88,13 +94,17 @@
                   <td>06.46.82.46.12</td>
                   <td>Salari&eacute du service RH</td>
                   <td>
-                    <button class="btn btn-icon btn-primary" type="edit">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
-                    </button>
+                    <a class="link-secondary" href="/editionUtilisateur">
+                      <button class="btn btn-icon btn-primary" type="edit">
+                       <span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span>
+                      </button>
+                    </a>
                      <!-- Modal -->
-                       <button class="btn btn-icon btn-danger" type="act/desac" data-toggle="modal" data-target="#modal-default">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon btn-danger" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <span class="btn-inner--icon"><i class="fas fa-toggle-off"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -115,9 +125,11 @@
                           </div>
                          </div>
                      <!-- Modal -->
-                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -147,13 +159,17 @@
                   <td>06.78.59.42.57</td>
                   <td>Direction</td>
                   <td>
+                   <a class="link-secondary" href="/editionUtilisateur">
                     <button class="btn btn-icon btn-primary" type="edit">
-                      <a class="link-secondary" href="/editionUtilisateur"><span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span></a>
+                      <span class="btn-inner--icon"><i class="fas fa-user-edit"></i></span>
                     </button>
+                   </a>
                      <!-- Modal -->
-                       <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon btn-success" type="act/desac" data-toggle="modal" data-target="#modal-default">
+                         <span class="btn-inner--icon"><i class="fas fa-toggle-on"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -174,9 +190,11 @@
                           </div>
                          </div>
                      <!-- Modal -->
-                       <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
-                         <a class="link-secondary" href=""><span class="btn-inner--icon"><i class="fas fa-trash"></i></span></a>
-                       </button>
+                       <!--<a class="link-secondary" href="">-->
+                        <button class="btn btn-icon" style="background-color: #D3D3D3" type="supp" data-toggle="modal" data-target="#modal-supp">
+                         <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+                        </button>
+                       <!--</a>-->
                          <div class="modal fade" id="modal-supp" tabindex="-1" role="dialog" aria-labelledby="modal-supp" aria-hidden="true">
                            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div class="modal-content">
@@ -202,10 +220,10 @@
             </table>
           </div>
           </br></br>
-          <button type="button" class="btn btn-outline-light float-right"><a class="link-secondary" href="/ajoutUtilisateur">Ajouter un compte</button>
+          <a class="link-secondary" href="/ajoutUtilisateur"><button type="button" class="btn btn-outline-light float-right">Ajouter un compte</button></a>
         </div>
       </div>
     </div>
   </div>
 </div>
-<%- include("../partials/footer") %>
+<%- include("../../partials/footer") %>
