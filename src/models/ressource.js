@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const ressourceSchema = new mongoose.Schema({
+const RessourceSchema = new mongoose.Schema({
     _id: Schema.Types.ObjectId,
     title: { type: String, required: true },
     date: { type: Date, required: true },
@@ -12,4 +12,4 @@ const ressourceSchema = new mongoose.Schema({
     id_service: { type: Schema.Types.ObjectId, default: null, required: true }
 });
 
-module.exports = mongoose.model('ressource', ressourceSchema, 'ressource');  
+module.exports = mongoose.model('ressource', RessourceSchema, 'ressource');  

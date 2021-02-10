@@ -1,4 +1,11 @@
 var LoginController = require('./controllers/LoginController');
+var ActualiteController = require('./controllers/ActualiteController');
+var RessourceController = require('./controllers/RessourceController');
+var UtilisateurController = require('./controllers/UtilisateurController');
+var TableauDeBordController = require('./controllers/TableauDeBordController');
+var CongeController = require('./controllers/CongeController');
+
+
 
 function isLoggedIn(req, res, next) {
     if (req.session.loggedin === true){
@@ -14,70 +21,29 @@ function initRoutes(app) {
     });
 
     
-    app.get('/login',LoginController.index);
+    app.get('/login',LoginController.login);
     app.post('/auth', LoginController.auth);
     app.get('/logout', LoginController.logout);
     
+    app.get('/tableauDeBord', isLoggedIn, TableauDeBordController.tableauDeBord);
 
-    app.get('/tableauDeBord', isLoggedIn, (req, res) => {
-        res.render("pages/tableauDeBord/tableauDeBord",{
-            session: req.session
-        });
-    }); 
+    app.get('/demandeConge', isLoggedIn, CongeController.demandeDeConge);
 
-    app.get('/demandeConge', isLoggedIn, (req, res) => {
-        res.render("pages/demandeDeConge/demandeConge",{
-            session: req.session
-        });
-    });   
-    
-    app.get('/documentation', isLoggedIn, (req, res) => {
-        res.render("pages/documentation/documentation",{
-            session: req.session
-        });
-    });  
+    app.get('/documentation', isLoggedIn, RessourceController.Documentation);
 
-    app.get('/tableauStatistique', isLoggedIn, (req, res) => {
-        res.render("pages/tableauDeBordStatistique/tableauStatistique",{
-            session: req.session
-        });
-    }); 
+    app.get('/tableauStatistique', isLoggedIn, TableauDeBordController.tableauStatistique);
 
-    app.get('/gestionConge', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesConges/gestionConge",{
-            session: req.session
-        });
-    }); 
+    app.get('/gestionConge', isLoggedIn, CongeController.gestionConge);
 
-    app.get('/gestionDocument', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesDocumentations/gestionDocument",{
-            session: req.session
-        });
-    }); 
+    app.get('/gestionDocument', isLoggedIn, RessourceController.gestionDocument);
 
-    app.get('/gestionActualite', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesActualites/gestionActualite",{
-            session: req.session
-        });
-    }); 
+    app.get('/gestionActualite', isLoggedIn, ActualiteController.gestionActualite);
 
-    app.get('/gestionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesUtilisateurs/gestionUtilisateur",{
-            session: req.session
-        });
-    }); 
+    app.get('/gestionUtilisateur', isLoggedIn, UtilisateurController.gestionUtilisateur);
 
-    app.get('/ajoutUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesUtilisateurs/ajoutUtilisateur",{
-            session: req.session
-        });
-    }); 
+    app.get('/ajoutUtilisateur', isLoggedIn, UtilisateurController.ajoutUtilisateur);
 
-    app.get('/editionUtilisateur', isLoggedIn, (req, res) => {
-        res.render("pages/gestionDesUtilisateurs/editionUtilisateur",{
-            session: req.session
-        });
-    }); 
+    app.get('/editionUtilisateur', isLoggedIn, UtilisateurController.editionUtilisateur);
 
 };
 

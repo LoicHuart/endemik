@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const { Schema } = mongoose;
 
-const actualiteSchema = new mongoose.Schema({
+const ActualiteSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -52,4 +52,4 @@ const actualiteSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("actualite", actualiteSchema, "actualite");
+module.exports = mongoose.model("actualite", ActualiteSchema, "actualite");

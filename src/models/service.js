@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const { Schema } = mongoose;
 
-const serviceSchema = new mongoose.Schema({
+const ServiceSchema = new mongoose.Schema({
   _id: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -31,4 +31,4 @@ const serviceSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("service", serviceSchema, "service");
+module.exports = mongoose.model("service", ServiceSchema, "service");
