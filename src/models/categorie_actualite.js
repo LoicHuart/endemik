@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 const { Schema } = mongoose;
 
 const categorieActualiteSchema = new mongoose.Schema({
   _id: {
     type: Schema.Types.ObjectId,
     required: true,
-    validate(value) {
-      if (!validator.isMongoId(value)) {
-        throw new Error("Problem with MongoDB Id");
-      }
-    },
   },
   title: {
     type: String,
@@ -27,5 +23,3 @@ module.exports = mongoose.model(
   categorieRessourceSchema,
   "categorie_actualite"
 );
-
-isMongoId;

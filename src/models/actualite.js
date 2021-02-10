@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 const { Schema } = mongoose;
 
 const actualiteSchema = new mongoose.Schema({
@@ -44,20 +45,10 @@ const actualiteSchema = new mongoose.Schema({
   id_categorie: {
     type: Schema.Types.ObjectId,
     required: true,
-    validate(value) {
-      if (!validator.isMongoId(value)) {
-        throw new Error("Problem with MongoDB Id");
-      }
-    },
   },
   id_salarie_createur: {
     type: Schema.Types.ObjectId,
     required: true,
-    validate(value) {
-      if (!validator.isMongoId(value)) {
-        throw new Error("Problem with MongoDB Id");
-      }
-    },
   },
 });
 
