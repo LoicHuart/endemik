@@ -1,9 +1,10 @@
 const path = require("path");
 const express = require("express");
-const session = require('express-session');
-const bodyParser = require('body-parser');
+const session = require("express-session");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const initRoute = require("./src/route.js");
+const initRoute = require("./src/routes/routes");
+const holydayRoutes = require("./src/routes/api/Holiday");
 require("dotenv").config();
 
 const app = express();
@@ -12,12 +13,14 @@ const port = process.env.APP_PORT || 4000;
 app.use(express.static(path.join(__dirname, "./public")));
 app.set("views", path.join(__dirname, "./src/views"));
 app.set("view engine", "ejs");
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 mongoose.connect(
@@ -37,6 +40,7 @@ db.once("open", function () {
 });
 
 initRoute(app);
+holydayRoutes(app);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`);

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 //majuscules
 const ServiceSchema = new mongoose.Schema({
-  _id: Schema.Types.ObjectId,
   name: {
     type: String,
     required: true,

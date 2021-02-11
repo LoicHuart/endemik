@@ -3,10 +3,6 @@ const validator = require("validator");
 const { Schema } = mongoose;
 
 const CategoryActualitySchema = new mongoose.Schema({
-  _id: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
