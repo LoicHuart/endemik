@@ -52,6 +52,8 @@ function initRoutes(app) {
   app.get("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
 
   app.get("/editionUtilisateur", isLoggedIn, UserController.editUser);
+
+  app.get("/profil", isLoggedIn, UserController.profilUser);
 }
 
 module.exports = initRoutes;
