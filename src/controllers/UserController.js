@@ -18,6 +18,12 @@ var UserController = {
       session: req.session,
     });
   },
+
+  async profilUser(req, res) {
+    res.render("pages/UserManagement/Profil", {
+      session: req.session,
+    });
+  },
 };
 
 module.exports = UserController;
