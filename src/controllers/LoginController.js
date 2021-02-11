@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+const { render } = require('ejs');
 var EmployeeSchema = require("../models/Employee");
 
 var LoginController = {
@@ -10,9 +12,10 @@ var LoginController = {
     var password = req.body.password;
     if (email && password) {
       EmployeeSchema.find(
-        { mail: email, password: password },
+        { mail: email },
         function (error, results, fields) {
-          if (results.length > 0) {
+          console.log(results[0].password);
+          if (results.length > 0 && bcrypt.compareSync(password, results[0].password)) {
             req.session.loggedin = true;
             req.session.user = results[0];
             res.redirect("/tableauDeBord");
