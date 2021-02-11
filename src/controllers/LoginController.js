@@ -10,12 +10,12 @@ var LoginController = {
     var password = req.body.password;
     if (email && password) {
       EmployeeSchema.find(
-        { mail: email, mdp: password },
+        { mail: email, password: password },
         function (error, results, fields) {
           if (results.length > 0) {
             req.session.loggedin = true;
             req.session.user = results[0];
-            res.redirect("/tableauDeBoard");
+            res.redirect("/tableauDeBord");
           } else {
             res.render("pages/Login/Login", {
               error: "Email ou mot de passe incorrect",
