@@ -1,9 +1,9 @@
-var LoginController = require("./controllers/LoginController");
-var ActualityController = require("./controllers/ActualityController");
-var ResourceController = require("./controllers/ResourceController");
-var UserController = require("./controllers/UserController");
-var DashboardController = require("./controllers/DashboardController");
-var VacancyController = require("./controllers/VacancyController");
+var LoginController = require("../controllers/LoginController");
+var ActualityController = require("../controllers/ActualityController");
+var ResourceController = require("../controllers/ResourceController");
+var UserController = require("../controllers/UserController");
+var DashboardController = require("../controllers/DashboardController");
+var HolidayController = require("../controllers/HolidayController");
 
 function isLoggedIn(req, res, next) {
   if (req.session.loggedin === true) {
@@ -23,7 +23,7 @@ function initRoutes(app) {
 
   app.get("/tableauDeBord", isLoggedIn, DashboardController.dashboard);
 
-  app.get("/demandeConge", isLoggedIn, VacancyController.vacancyRequest);
+  app.get("/demandeConge", isLoggedIn, HolidayController.holidayRequest);
 
   app.get("/documentation", isLoggedIn, ResourceController.resource);
 
@@ -33,7 +33,7 @@ function initRoutes(app) {
     DashboardController.statisticsDashboard
   );
 
-  app.get("/gestionConge", isLoggedIn, VacancyController.vacancyManagement);
+  app.get("/gestionConge", isLoggedIn, HolidayController.holidayManagement);
 
   app.get(
     "/gestionDocument",
