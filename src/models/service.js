@@ -1,34 +1,23 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 const { Schema } = mongoose;
 
 const ServiceSchema = new mongoose.Schema({
-  _id: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
+  _id: Schema.Types.ObjectId,
   name: {
     type: String,
     required: true,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new Error("name cannot be empty");
-      }
-    },
+    trim: true,
   },
   site: {
     type: String,
     required: true,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new Error("site cannot be empty");
-      }
-    },
+    trim: true,
   },
   id_manager: {
     type: Schema.Types.ObjectId,
+    ref: "Employee",
     required: true,
   },
 });
 
-module.exports = mongoose.model("service", ServiceSchema, "service");
+module.exports = mongoose.model("Service", ServiceSchema, "Service");
