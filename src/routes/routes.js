@@ -1,9 +1,9 @@
-var LoginController = require("./controllers/LoginController");
-var ActualityController = require("./controllers/ActualityController");
-var ResourceController = require("./controllers/ResourceController");
-var UserController = require("./controllers/UserController");
-var DashboardController = require("./controllers/DashboardController");
-var VacancyController = require("./controllers/VacancyController");
+var LoginController = require("../controllers/LoginController");
+var ActualityController = require("../controllers/ActualityController");
+var ResourceController = require("../controllers/ResourceController");
+var UserController = require("../controllers/UserController");
+var DashboardController = require("../controllers/DashboardController");
+var HolidayController = require("../controllers/HolidayController");
 
 var EmployeeSchema = require("./models/Employee");
 var jwt = require('jsonwebtoken');
@@ -57,7 +57,7 @@ function initRoutes(app) {
 
   app.get("/tableauDeBord", isLoggedIn, DashboardController.dashboard);
 
-  app.get("/demandeConge", isLoggedIn, VacancyController.vacancyRequest);
+  //app.get("/demandeConge", isLoggedIn, HolidayController.holidayRequest);
 
   app.get("/documentation", isLoggedIn, ResourceController.resource);
 
@@ -67,7 +67,7 @@ function initRoutes(app) {
     DashboardController.statisticsDashboard
   );
 
-  app.get("/gestionConge", isLoggedIn, VacancyController.vacancyManagement);
+  //app.get("/gestionConge", isLoggedIn, HolidayController.holidayManagement);
 
   app.get(
     "/gestionDocument",
@@ -83,7 +83,9 @@ function initRoutes(app) {
 
   app.get("/gestionUtilisateur", isLoggedIn, UserController.userManagement);
 
-  app.get("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
+  app.post("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
+
+  app.get("/pageAjoutUtilisateur", isLoggedIn, UserController.pageAddUser);
 
   app.get("/editionUtilisateur", isLoggedIn, UserController.editUser);
 
