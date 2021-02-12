@@ -1,37 +1,43 @@
 const bcrypt = require('bcrypt');
 const { render } = require('ejs');
 var EmployeeSchema = require("../models/Employee");
+var jwt = require('jsonwebtoken');
 
 var LoginController = {
   async login(req, res) {
     res.render("pages/Login/Login");
   },
 
-  async auth(req, res) {
+  async auth(req, res, next) {
     var email = req.body.email;
     var password = req.body.password;
-    if (email && password) {
-      EmployeeSchema.find(
-        { mail: email },
-        function (error, results, fields) {
-          console.log(results[0].password);
-          if (results.length > 0 && bcrypt.compareSync(password, results[0].password)) {
-            req.session.loggedin = true;
-            req.session.user = results[0];
-            res.redirect("/tableauDeBord");
-          } else {
-            res.render("pages/Login/Login", {
-              error: "Email ou mot de passe incorrect",
-            });
-          }
-          res.end();
-        }
-      );
-    } else {
-      res.render("pages/Login/Login", {
-        error: "Entrer une adresse Email et un mot de passe s'il vous plaît",
+
+    try {
+      let employee = await EmployeeSchema.findOne({ 
+        mail: email 
       });
-      res.end();
+      if (!employee) {
+        throw new Error();
+      }
+
+      let match = bcrypt.compareSync(password, employee.password);
+      if (!match) {
+        throw new Error();
+      }
+      
+      token = jwt.sign({
+        user_id: employee._id
+      }, process.env.SECRET_JWT, {expiresIn: 60*60});
+      err = {
+          status: 200
+      };
+      next();
+    } catch (error) {
+       err = {
+        message: "Email ou mot de passe incorrect",
+        status: 401
+      };
+      next();
     }
   },
 

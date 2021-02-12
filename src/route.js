@@ -5,11 +5,25 @@ var UserController = require("./controllers/UserController");
 var DashboardController = require("./controllers/DashboardController");
 var VacancyController = require("./controllers/VacancyController");
 
-function isLoggedIn(req, res, next) {
-  if (req.session.loggedin === true) {
-    return next();
+var EmployeeSchema = require("./models/Employee");
+var jwt = require('jsonwebtoken');
+
+async function isLoggedIn(req, res, next) {
+  try {
+    const token = req.session.token;
+    // "Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxx" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    const decoded = jwt.verify(token, process.env.SECRET_JWT);
+    const user = await EmployeeSchema.findById(decoded.user_id);
+    if (!user) {
+      throw new Error();
+    }
+    req.session.user = user;
+    next();
+  } catch (error) {
+    res.status(401).send({
+      message: error,
+    });
   }
-  res.redirect("/");
 }
 
 function initRoutes(app) {
@@ -18,7 +32,27 @@ function initRoutes(app) {
   });
 
   app.get("/login", LoginController.login);
-  app.post("/auth", LoginController.auth);
+  app.post("/auth", LoginController.auth, 
+  (req, res) => {
+    if ( err.status === 200) {
+      req.session.token = token;
+      res.redirect("/tableauDeBord");
+    }else{
+      res.render("pages/Login/Login", { error: err.message });
+    }
+  });
+
+  app.post("/api/auth", LoginController.auth, 
+  (req, res) => {
+    if ( err.status === 200) {
+      res.status(200).send(token);
+    }else{
+      res.status(401).send(err.message);
+
+    }
+  });
+
+
   app.get("/logout", LoginController.logout);
 
   app.get("/tableauDeBord", isLoggedIn, DashboardController.dashboard);
