@@ -1,4 +1,4 @@
-var EmployeeSchema = require("../models/Employee");
+var Employee = require("../models/Employee");
 
 var UserController = {
   async userManagement(req, res) {
@@ -15,12 +15,9 @@ var UserController = {
 
   async addUser(req, res) {
     console.log(req.body);
-    res.render("pages/UserManagement/AddUser", {
-      session: req.session,
-    });
-    req.password = "toto";
-    const user = new EmployeeSchema(req.body);
+    //req.password = "toto";
     try {
+      const user = new Employee(req.body);
       console.log(user);
       await user.save();
       res.status(201).send(user);
