@@ -8,9 +8,11 @@
               <div class="card-body px-lg-5 py-lg-5">
                   <h1>Ajout d'un compte utilisateur</h1>
 
-                  <form>
+                  <form role="form" action="ajoutUtilisateur" method="post">
                     <div class="form-group">
+                    </br>
                       <label for="exampleFormControlSelect1">Civilit&eacute</label>
+                    </br></br>
                       <select class="form-control" id="civilite">
                         <option>Monsieur</option>
                         <option>Madame</option>
@@ -18,22 +20,26 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <input type="input" class="form-control" id="nom" placeholder="Nom">
+                      <input type="input" class="form-control" placeholder="Nom" name="lastname">
                     </div>
                     <div class="form-group">
-                      <input type="input" class="form-control" id="prenom" placeholder="Prénom">
+                      <input type="input" class="form-control" placeholder="Prénom" name="firstname">
                     </div>
                     <div class="form-group">
-                      <label for="exampleFormControlInput1">Adresse mail</label>
-                      <input type="email" class="form-control" id="mail" placeholder="name@example.com">
+                      <input type="date" class="form-control" placeholder="Date de naissance" name="date_birth">
                     </div>
                     <div class="form-group">
-                      <label for="exampleFormControlInput1">T&eacutel&eacutephone</label>
-                      <input type="email" class="form-control" id="tel" placeholder="0123456789">
+                      <input type="email" class="form-control"  placeholder="name@example.com" name="mail">
                     </div>
                     <div class="form-group">
-                      <label for="exampleFormControlSelect1">R&ocircle</label>
-                      <select class="form-control" id="exampleFormControlSelect1">
+                      <input type="number" class="form-control"  placeholder="Telephone" name="tel_nb">
+                    </div>
+                    <div class="form-group">
+                      <input type="input" class="form-control"  placeholder="Numero de securite sociale" name="social_security_number">
+                    </div>
+                    <div class="form-group">
+                      <select class="form-control" id="exampleFormControlSelect1" name="id_role">
+                        <option selected="selected" disabled="disabled">R&ocircle</option>
                         <option>Service RH</option>
                         <option>Administrateur</option>
                         <option>Direction</option>
@@ -41,10 +47,35 @@
                         <option>Salari&eacute</option>
                       </select>
                     </div>
-                  </form>
+                    <div class="form-group">
+                      <select class="form-control" id="exampleFormControlSelect1" name="id_service">
+                        <option selected="selected" disabled="disabled">Service</option>
+                        <option>Production</option>
+                        <option>Comptabilite</option>
+                        <option>Livraison</option>
+                        <option>Logistique</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlSelect1">Adresse</label>
+                    </br></br>
+                      <div class="form-group">
+                        <input type="input" class="form-control" placeholder="Code postal" name="postal_code">
+                      </div>
+                      <div class="form-group">
+                        <input type="input" class="form-control" placeholder="Numéro de rue" name="street_nb">
+                      </div>
+                      <div class="form-group">
+                        <input type="input" class="form-control" placeholder="Rue" name="street">
+                      </div>
+                      <div class="form-group">
+                        <input type="input" class="form-control" placeholder="Ville" name="city">
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-light">Valider</button>
                   </br>
-                    <button type="button" class="btn btn-outline-light">Valider</button>
-                    <a class="link-secondary" href="/UserManagement"><button type="button" class="btn btn-outline-light">Retour</button></a>
+                  </form>
+                    <a class="link-secondary" href="/UserManagement/UserManagement"><button type="button" class="btn btn-outline-light">Retour</button></a>
               </div>
           </div>
       </div>

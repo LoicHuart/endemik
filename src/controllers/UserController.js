@@ -7,10 +7,26 @@ var UserController = {
     });
   },
 
-  async addUser(req, res) {
+  async pageAddUser(req, res) {
     res.render("pages/UserManagement/AddUser", {
       session: req.session,
     });
+  },
+
+  async addUser(req, res) {
+    console.log(req.body);
+    res.render("pages/UserManagement/AddUser", {
+      session: req.session,
+    });
+    req.password = "toto";
+    const user = new EmployeeSchema(req.body);
+    try {
+      console.log(user);
+      await user.save();
+      res.status(201).send(user);
+    } catch (err) {
+      res.status(400).send(err);
+    }
   },
 
   async editUser(req, res) {
