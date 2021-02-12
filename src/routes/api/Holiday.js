@@ -1,9 +1,11 @@
 const Holiday = require("../../controllers/HolidayController");
 
-function holydayRoutes(app) {
+function holidayRoutes(app) {
   app
     .post("/holidays", Holiday.addHoliday)
-    .get("/holidays", Holiday.getHolidays);
+    .get("/holidays", Holiday.getHolidays)
+    .delete("/holidays", Holiday.deleteHolidays)
+    .post("/holidays/:id", Holiday.updateHoliday);
 }
 
-module.exports = holydayRoutes;
+module.exports = holidayRoutes;
