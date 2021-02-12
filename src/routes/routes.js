@@ -23,7 +23,7 @@ function initRoutes(app) {
 
   app.get("/tableauDeBord", isLoggedIn, DashboardController.dashboard);
 
-  app.get("/demandeConge", isLoggedIn, HolidayController.holidayRequest);
+  //app.get("/demandeConge", isLoggedIn, HolidayController.holidayRequest);
 
   app.get("/documentation", isLoggedIn, ResourceController.resource);
 
@@ -33,7 +33,7 @@ function initRoutes(app) {
     DashboardController.statisticsDashboard
   );
 
-  app.get("/gestionConge", isLoggedIn, HolidayController.holidayManagement);
+  //app.get("/gestionConge", isLoggedIn, HolidayController.holidayManagement);
 
   app.get(
     "/gestionDocument",
