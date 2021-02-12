@@ -13,9 +13,8 @@ var HolidayController = {
   //   });
   // },
 
-  async addHoliday(req, res) {
+  async addHoliday(req, res, next) {
     const holiday = new HolidaySchema(req.body);
-    console.log(holiday);
     try {
       await holiday.save();
       res.status(201).send(holiday);
@@ -23,6 +22,30 @@ var HolidayController = {
       res.status(400).send({
         error: err,
       });
+    }
+  },
+
+  async getHolidayByID(req, res) {
+    const id = req.params.id;
+    const populate = req.query.populate;
+    let holiday;
+    try {
+      if (populate) {
+        holiday = await HolidaySchema.findById(id).populate(
+          "id_requester_employee"
+        );
+      } else {
+        holiday = await HolidaySchema.findById(id);
+      }
+
+      if (!holiday) {
+        return res.status(404).send({
+          message: "holiday not found",
+        });
+      }
+      res.send(holiday);
+    } catch (err) {
+      res.status(500).send(err);
     }
   },
 
@@ -75,7 +98,7 @@ var HolidayController = {
 };
 
 function checkKeys(body, allowedKeys) {
-  const updatesKeys = Object.keys(body); // => ["name", "age"]
+  const updatesKeys = Object.keys(body);
   return updatesKeys.every((key) => allowedKeys.includes(key));
 }
 
