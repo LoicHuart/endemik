@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const initRoute = require("./src/routes/routes");
 const holydayRoutes = require("./src/routes/api/Holiday");
+const employeeRoutes = require("./src/routes/api/Employee");
 require("dotenv").config();
 
 const app = express();
@@ -41,6 +42,7 @@ db.once("open", function () {
 
 initRoute(app);
 holydayRoutes(app);
+employeeRoutes(app);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`);

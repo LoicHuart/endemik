@@ -49,7 +49,9 @@ function initRoutes(app) {
 
   app.get("/gestionUtilisateur", isLoggedIn, UserController.userManagement);
 
-  app.get("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
+  app.post("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
+
+  app.get("/pageAjoutUtilisateur", isLoggedIn, UserController.pageAddUser);
 
   app.get("/editionUtilisateur", isLoggedIn, UserController.editUser);
 

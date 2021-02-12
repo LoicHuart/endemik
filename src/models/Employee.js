@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 const validator = require("validator");
+const { Schema } = mongoose;
+const bcrypt = require("bcrypt");
 
 const EmployeeSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    lowercase: true,
+    required: true,
+  },
   lastName: {
     type: String,
     uppercase: true,
@@ -21,10 +27,10 @@ const EmployeeSchema = new mongoose.Schema({
   },
   social_security_number: {
     type: String,
-    require: true,
+    required: true,
     trim: true,
     validate(value) {
-      if (validator.isLength(value, 13)) {
+      if (!validator.isLength(value, 12)) {
         throw new Error("Numéro de sécu n'est pas de la bonne taille (13)");
       }
       if (validator.isAlpha(value, "fr-FR")) {
@@ -36,63 +42,66 @@ const EmployeeSchema = new mongoose.Schema({
   },
   mail: {
     type: String,
-    require: true,
+    required: true,
     trim: true,
     validate(value) {
-      if (validator.isEmail(value)) {
+      if (!validator.isEmail(value)) {
         throw new Error("Le format n'est pas un mail");
       }
     },
   },
   tel_nb: {
     type: String,
-    require: true,
+    required: true,
     trim: true,
     validate(value) {
-      if (validator.isMobilePhone(value, "fr-FR")) {
+      if (!validator.isMobilePhone(value, "fr-FR")) {
         throw new Error("Le format n'est pas un téléphone portable");
       }
     },
   },
   postal_code: {
     type: String,
-    require: true,
+    required: true,
     trim: true,
     validate(value) {
-      if (validator.isPostalCode(value, "fr-FR")) {
+      if (!validator.isLength(value, 4)) {
+        throw new Error("Le format n'est pas un code postal (5)");
+      }
+      if (validator.isAlpha(value, "fr-FR")) {
         throw new Error("Le format n'est pas un code postal");
       }
     },
   },
   street_nb: {
     type: String,
-    require: true,
+    required: true,
     trim: true,
   },
   street: {
     type: String,
-    require: true,
+    required: true,
+    lowercase: true,
     trim: true,
   },
   city: {
     type: String,
-    require: true,
+    required: true,
+    lowercase: true,
     trim: true,
   },
   arrival_date: {
     type: Date,
-    require: true,
+    required: true,
     trim: true,
   },
   children_nb: {
     type: Number,
-    require: true,
-    trim: true,
+    required: true,
   },
   password: {
     type: String,
     require: true,
-    trim: true,
   },
   photo_url: {
     type: String,
@@ -107,8 +116,16 @@ const EmployeeSchema = new mongoose.Schema({
   id_role: {
     type: Schema.Types.ObjectId,
     ref: "Role",
-    required: true,
+    required: false,
   },
 });
 
-module.exports = mongoose.model("Employee", EmployeeSchema, "Employee");
+EmployeeSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
+
+const Employee = mongoose.model("Employee", EmployeeSchema, "Employee");
+module.exports = Employee;
