@@ -83,13 +83,11 @@ function initRoutes(app) {
 
   app.get("/gestionUtilisateur", isLoggedIn, UserController.userManagement);
 
-  app.post("/ajoutUtilisateur", isLoggedIn, UserController.addUser);
-
   app.get("/pageAjoutUtilisateur", isLoggedIn, UserController.pageAddUser);
 
-  app.get("/editionUtilisateur", isLoggedIn, UserController.editUser);
+  app.get("/pageEditionUtilisateur", isLoggedIn, UserController.pageEditUser);
 
-  app.get("/profil", isLoggedIn, UserController.profilUser);
+  app.get("/pageProfil", isLoggedIn, UserController.pageProfil);
 }
 
 module.exports = initRoutes;
