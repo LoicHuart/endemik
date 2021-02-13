@@ -89,7 +89,7 @@ var UserController = {
   async deleteEmployee(req, res) {
     const id = req.body._id;
     try {
-      await Employee.findByIdAndDelete(id);
+      let employee = await Employee.findByIdAndDelete(id);
       res.send({
         message: `user deleted`,
       });
