@@ -4,11 +4,7 @@ var EmployeeSchema = require("../models/Employee");
 var jwt = require('jsonwebtoken');
 
 var LoginController = {
-  async login(req, res) {
-    res.render("pages/Login/Login");
-  },
-
-  async auth(req, res, next) {
+  async auth(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
@@ -26,27 +22,15 @@ var LoginController = {
       }
       
       token = jwt.sign({
-        user_id: employee._id
+        employee_id: employee._id
       }, process.env.SECRET_JWT, {expiresIn: 60*60});
-      err = {
-          status: 200
-      };
-      next();
+
+      res.send({
+        token: token,
+      });
     } catch (error) {
-       err = {
-        message: "Email ou mot de passe incorrect",
-        status: 401
-      };
-      next();
+      res.status(401).send("Email ou mot de passe incorrect");
     }
-  },
-
-  async logout(req, res) {
-    res.clearCookie("myCookie");
-
-    req.session.destroy((err) => {
-      res.redirect("/");
-    });
   },
 };
 

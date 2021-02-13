@@ -1,18 +1,6 @@
 var HolidaySchema = require("../models/Holiday");
 
 var HolidayController = {
-  // async holidayManagement(req, res) {
-  //   res.render("pages/HolidayManagement/HolidayManagement", {
-  //     session: req.session,
-  //   });
-  // },
-
-  // async holidayRequest(req, res) {
-  //   res.render("pages/HolidayRequest/HolidayRequest", {
-  //     session: req.session,
-  //   });
-  // },
-
   async addHoliday(req, res, next) {
     const holiday = new HolidaySchema(req.body);
     try {
