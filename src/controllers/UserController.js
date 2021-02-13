@@ -77,9 +77,50 @@ var UserController = {
       });
   },
 
-  async getUserById(req, res) {
+  async getEmployees(_, res) {
     try {
-      let user = await await Employee.findById(req.body._id);
+      let employees = await Employee.find();
+      res.send(employees);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
+  async deleteEmployee(req, res) {
+    const id = req.body._id;
+    try {
+      await Employee.findByIdAndDelete(id);
+      res.send({
+        message: `user deleted`,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+
+  async getUserById(req, res) {
+    const id = req.body._id;
+    const populate = req.query.populate;
+    let employee;
+    try {
+      if (populate) {
+        employee = await Employee.findById(id).populate("id_role");
+        //add populate id_service
+      } else {
+        employee = await Employee.findById(id);
+      }
+
+      if (!employee) {
+        return res.status(404).send({
+          message: "user not found",
+        });
+      }
+      res.send(employee);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+    /* 
+      let user = await Employee.findById();
       console.log(user);
       if (!user) {
         return res.status(404).send({
@@ -89,7 +130,7 @@ var UserController = {
       res.send(user);
     } catch (err) {
       res.status(400).send(err);
-    }
+    }*/
   },
 };
 
