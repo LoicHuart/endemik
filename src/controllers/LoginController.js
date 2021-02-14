@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { render } = require('ejs');
 var EmployeeSchema = require("../models/Employee");
 var jwt = require('jsonwebtoken');
 
