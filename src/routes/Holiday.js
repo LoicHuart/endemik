@@ -5,12 +5,12 @@ const HolidayController = require("../controllers/HolidayController");
 
 router.route("/holidays")
   .post(HolidayController.addHoliday)
-  .get(HolidayController.getHolidays)
-  .delete(HolidayController.deleteHolidays);
-
+  .get(HolidayController.getHolidays);
+  
 router.route("/holidays/:id")
-  .post(HolidayController.updateHoliday)
-  .get(HolidayController.getHolidayByID);
+  .put(HolidayController.updateHoliday)
+  .get(HolidayController.getHolidayByID)
+  .delete(HolidayController.deleteHoliday);
 
 
 module.exports = router;

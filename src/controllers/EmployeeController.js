@@ -51,9 +51,23 @@ var EmployeeController = {
       .catch((err) => res.status(500).send(err));
   },
 
-  async getEmployees(_, res) {
+  async getEmployees(req, res) {
+    const populate = parseInt(req.query.populate);
+    let employees;
     try {
-      let employees = await EmployeeSchema.find().populate("id_service").populate("id_role");
+      if (populate) {
+        employees = await EmployeeSchema.find()
+          .populate("id_service")
+          .populate("id_role");
+      } else {
+        employees = await EmployeeSchema.find();
+      }
+
+      if (!employees) {
+        return res.status(404).send({
+          message: "employee not found",
+        });
+      }
       res.send(employees);
     } catch (err) {
       res.status(500).send(err);
@@ -62,18 +76,29 @@ var EmployeeController = {
 
   async getEmployeeById(req, res) {
     const id = req.params.id;
+    const populate = parseInt(req.query.populate);
+    let employee;
     try {
-      let employee = await EmployeeSchema.findById(id).populate("id_service").populate("id_role");
+      if (populate) {
+        employee = await EmployeeSchema.findById(id)
+          .populate("id_service")
+          .populate("id_role");
+      } else {
+        employee = await EmployeeSchema.findById(id);
+      }
+
       if (!employee) {
         return res.status(404).send({
-          message: "Employee not found",
+          message: "employee not found",
         });
       }
       res.send(employee);
     } catch (err) {
-      console.log(err);
       res.status(500).send(err);
     }
+
+
+   
    
     /* 
       let Employee = await EmployeeSchema.findById();

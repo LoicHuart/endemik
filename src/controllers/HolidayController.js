@@ -1,12 +1,13 @@
 var HolidaySchema = require("../models/Holiday");
 
 var HolidayController = {
-  async addHoliday(req, res, next) {
-    const holiday = new HolidaySchema(req.body);
+  async addHoliday(req, res) {
     try {
+      const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
     } catch (err) {
+      console.log(err);
       res.status(400).send({
         error: err,
       });
@@ -15,7 +16,7 @@ var HolidayController = {
 
   async getHolidayByID(req, res) {
     const id = req.params.id;
-    const populate = req.query.populate;
+    const populate = parseInt(req.query.populate);
     let holiday;
     try {
       if (populate) {
@@ -37,20 +38,34 @@ var HolidayController = {
     }
   },
 
-  async getHolidays(_, res) {
+  async getHolidays(req, res) {
+    const populate = parseInt(req.query.populate);
+    let holidays;
     try {
-      let holidays = await HolidaySchema.find();
+      if (populate) {
+        holidays = await HolidaySchema.find()
+          .populate("id_requester_employee");
+      } else {
+        holidays = await HolidaySchema.find();
+      }
+
+      if (!holidays) {
+        return res.status(404).send({
+          message: "holiday not found",
+        });
+      }
       res.send(holidays);
     } catch (err) {
       res.status(500).send(err);
     }
   },
 
-  async deleteHolidays(_, res) {
+  async deleteHoliday(req, res) {
+    const id = req.params.id;
     try {
-      await HolidaySchema.deleteMany();
+      await HolidaySchema.findByIdAndDelete(id);
       res.send({
-        message: "deleted",
+        message: `Holiday deleted`,
       });
     } catch (error) {
       res.status(500).send(error);
