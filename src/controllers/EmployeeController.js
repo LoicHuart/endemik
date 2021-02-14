@@ -1,11 +1,10 @@
-var Employee = require("../models/Employee");
+var EmployeeSchema = require("../models/Employee");
 
 var EmployeeController = {
   async addEmployee(req, res) {
     //req.password = "toto";
     try {
-      const Employee = new Employee(req.body);
-      console.log(Employee);
+      const Employee = new EmployeeSchema(req.body);
       await Employee.save();
       res.status(201).send(Employee);
     } catch (err) {
@@ -15,7 +14,7 @@ var EmployeeController = {
     }
   },
 
-  async editEmployee(req, res) {
+  async updateEmployee(req, res) {
     const id = req.params.id;
     if (
       !checkKeys(req.body, [
@@ -43,61 +42,66 @@ var EmployeeController = {
         error: "invalid key",
       });
     }
-    Employee.findByIdAndUpdate(id, req.body)
+    EmployeeSchema.findByIdAndUpdate(id, req.body)
       .then(() => {
         res.send({
           message: `Employee (${id}) have been updated`,
         });
       })
-      .catch((err) => {
-        res.status(500).send(err);
-      });
+      .catch((err) => res.status(500).send(err));
   },
 
-  async getEmployees(_, res) {
+  async getEmployees(req, res) {
+    const populate = parseInt(req.query.populate);
+    let employees;
     try {
-      let employees = await Employee.find();
+      if (populate) {
+        employees = await EmployeeSchema.find()
+          .populate("id_service")
+          .populate("id_role");
+      } else {
+        employees = await EmployeeSchema.find();
+      }
+
+      if (!employees) {
+        return res.status(404).send({
+          message: "employee not found",
+        });
+      }
       res.send(employees);
     } catch (err) {
       res.status(500).send(err);
     }
   },
 
-  async deleteEmployee(req, res) {
-    const id = req.body._id;
-    try {
-      let employee = await Employee.findByIdAndDelete(id);
-      res.send({
-        message: `Employee deleted`,
-      });
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  },
-
   async getEmployeeById(req, res) {
-    const id = req.body._id;
-    const populate = req.query.populate;
+    const id = req.params.id;
+    const populate = parseInt(req.query.populate);
     let employee;
     try {
       if (populate) {
-        employee = await Employee.findById(id).populate("id_role");
-        //add populate id_service
+        employee = await EmployeeSchema.findById(id)
+          .populate("id_service")
+          .populate("id_role");
       } else {
-        employee = await Employee.findById(id);
+        employee = await EmployeeSchema.findById(id);
       }
 
       if (!employee) {
         return res.status(404).send({
-          message: "Employee not found",
+          message: "employee not found",
         });
       }
       res.send(employee);
     } catch (err) {
       res.status(500).send(err);
     }
+
+
+   
+   
     /* 
-      let Employee = await Employee.findById();
+      let Employee = await EmployeeSchema.findById();
       console.log(Employee);
       if (!Employee) {
         return res.status(404).send({
@@ -108,6 +112,18 @@ var EmployeeController = {
     } catch (err) {
       res.status(400).send(err);
     }*/
+  },
+
+  async deleteEmployee(req, res) {
+    const id = req.params.id;
+    try {
+      await EmployeeSchema.findByIdAndDelete(id);
+      res.send({
+        message: `Employee deleted`,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   },
 };
 
