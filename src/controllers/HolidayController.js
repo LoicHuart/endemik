@@ -38,7 +38,7 @@ var HolidayController = {
     }
   },
 
-  async getHolidays(req, res) {
+  async getAllHolidays(req, res) {
     const populate = parseInt(req.query.populate);
     let holidays;
     try {

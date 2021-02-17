@@ -4,10 +4,8 @@ const EmployeeController = require("../controllers/EmployeeController");
 
 
 router.route("/employees")
-  .post(EmployeeController.addEmployee);
-
-router.route("/employees/all")
-  .get(EmployeeController.getEmployees);
+  .post(EmployeeController.addEmployee)
+  .get(EmployeeController.getAllEmployees);
     
 router.route("/employees/:id")
   .put(EmployeeController.updateEmployee)

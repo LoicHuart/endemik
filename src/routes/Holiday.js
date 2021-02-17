@@ -5,7 +5,7 @@ const HolidayController = require("../controllers/HolidayController");
 
 router.route("/holidays")
   .post(HolidayController.addHoliday)
-  .get(HolidayController.getHolidays);
+  .get(HolidayController.getAllHolidays);
   
 router.route("/holidays/:id")
   .put(HolidayController.updateHoliday)
