@@ -43,8 +43,7 @@ var HolidayController = {
     let holidays;
     try {
       if (populate) {
-        holidays = await HolidaySchema.find()
-          .populate("id_requester_employee");
+        holidays = await HolidaySchema.find().populate("id_requester_employee");
       } else {
         holidays = await HolidaySchema.find();
       }
@@ -66,6 +65,17 @@ var HolidayController = {
       await HolidaySchema.findByIdAndDelete(id);
       res.send({
         message: `Holiday deleted`,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+
+  async deleteAllHolidays(req, res) {
+    try {
+      await HolidaySchema.deleteMany();
+      res.send({
+        message: `All holidays have been delete`,
       });
     } catch (error) {
       res.status(500).send(error);
