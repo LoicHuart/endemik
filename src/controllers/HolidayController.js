@@ -1,4 +1,6 @@
 var HolidaySchema = require("../models/Holiday");
+const NotificationController = require("../controllers/NotificationController");
+
 
 var HolidayController = {
   async addHoliday(req, res) {
@@ -38,7 +40,7 @@ var HolidayController = {
     }
   },
 
-  async getHolidays(req, res) {
+  async getAllHolidays(req, res) {
     const populate = parseInt(req.query.populate);
     let holidays;
     try {
@@ -95,6 +97,13 @@ var HolidayController = {
         res.send({
           message: `Holiday ${id} was updated !`,
         });
+        if(req.body.status) {
+          NotificationController.HolidayRequestStatusUpdateToEmployee(id);
+          NotificationController.HolidayRequestStatusUpdateToManager(id);
+          if(req.body.status == "prevalider") {
+            NotificationController.NewHolidayRequestToRh(id);
+          }
+        }
       })
       .catch((err) => res.status(500).send(err));
   },

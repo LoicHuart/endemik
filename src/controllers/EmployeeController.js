@@ -51,7 +51,7 @@ var EmployeeController = {
       .catch((err) => res.status(500).send(err));
   },
 
-  async getEmployees(req, res) {
+  async getAllEmployees(req, res) {
     const populate = parseInt(req.query.populate);
     let employees;
     try {
