@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer");
 const HolidaySchema = require("../models/Holiday");
 const EmployeeSchema = require("../models/Employee");
-
 const date = new Date();
 
 

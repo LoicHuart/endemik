@@ -1,4 +1,4 @@
-var EmployeeSchema = require("../models/Employee");
+const EmployeeSchema = require("../models/Employee");
 
 var EmployeeController = {
   async addEmployee(req, res) {
