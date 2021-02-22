@@ -1,4 +1,4 @@
-var HolidaySchema = require("../models/Holiday");
+const HolidaySchema = require("../models/Holiday");
 const NotificationController = require("../controllers/NotificationController");
 
 
