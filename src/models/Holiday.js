@@ -32,6 +32,7 @@ const HolidaySchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["en attente", "prevalider", "valider", "refuser"],
+    default: "en attente",
     required: true,
   },
   id_requester_employee: {

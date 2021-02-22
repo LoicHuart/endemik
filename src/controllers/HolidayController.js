@@ -8,6 +8,7 @@ var HolidayController = {
       const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
+      NotificationController.NewHolidayRequestToManager(holiday.id);
     } catch (err) {
       console.log(err);
       res.status(400).send({
