@@ -110,6 +110,11 @@ const EmployeeSchema = new mongoose.Schema({
     default: null,
     trim: true,
   },
+  active: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
   id_service: {
     type: Schema.Types.ObjectId,
     ref: "Service",
