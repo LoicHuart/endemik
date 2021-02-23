@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const HolidaySchema = new mongoose.Schema({
   note: {
     type: String,
-    required: true,
     trim: true,
   },
   starting_date: {
