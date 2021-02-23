@@ -2,14 +2,37 @@ const EmployeeSchema = require("../models/Employee");
 
 var EmployeeController = {
   async addEmployee(req, res) {
-    //req.password = "toto";
     try {
+      if (
+        !checkKeys(req.body, [
+          "title",
+          "firstName",
+          "lastName",
+          "date_birth",
+          "social_security_number",
+          "mail",
+          "tel_nb",
+          "postal_code",
+          "street_nb",
+          "street",
+          "city",
+          "arrival_date",
+          "children_nb",
+          "id_service",
+          "id_role",
+        ])
+      ) {
+        throw{
+          error: "invalid keys",
+        };
+      }
       const Employee = new EmployeeSchema(req.body);
       await Employee.save();
       res.status(201).send(Employee);
     } catch (err) {
       res.status(400).send({
         message: "can't create the Employee",
+        error: err
       });
     }
   },
