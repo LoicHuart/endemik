@@ -60,14 +60,6 @@ var NotificationController = {
         sendMail(Holiday.id_requester_employee.id_service.id_manager.mail, `Le status de votre demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} a changé`, html);
     },
 
-    async NewHolidayRequestToManager() {
-
-    },
-
-    async NewEmployeetoServiceToManager() {
-
-    },
-
     async NewHolidayRequestToRh(HolidayId) {
         Holiday = await HolidaySchema.findById(HolidayId).populate(
             'id_requester_employee'
@@ -78,10 +70,36 @@ var NotificationController = {
             return RH.mail;
         });
         let html = `<b>Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} du ${date.toLocaleDateString(Holiday.starting_date)} au ${date.toLocaleDateString(Holiday.ending_date)} est en attente de validation</b>`;
+        html += `<br>`;
+        html += `Demande de congé :`;
         sendMail(RHMail, `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} est en attente de validation`, html);
     },
 
+    async NewHolidayRequestToManager(HolidayId) {
+        Holiday = await HolidaySchema.findById(HolidayId).populate({
+            path: 'id_requester_employee',
+            populate: {
+                path: 'id_service',
+                populate: {
+                    path: 'id_manager'
+                }
+            }
+        });
+        let html = `<b>Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} du ${date.toLocaleDateString(Holiday.starting_date)} au ${date.toLocaleDateString(Holiday.ending_date)} est en attente de validation</b>`;
+        html += `<br>`;
+        html += `Demande de congé :`;
+        sendMail(Holiday.id_requester_employee.id_service.id_manager.mail, `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} est en attente de validation`, html);
+    },
+
+    async NewEmployeetoServiceToManager() {
+
+    },
+
     async NewEmployeeRegistedToDirection() {
+
+    },
+
+    async ForgotPassword() {
 
     }
 };

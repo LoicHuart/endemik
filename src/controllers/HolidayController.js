@@ -5,9 +5,23 @@ const NotificationController = require("../controllers/NotificationController");
 var HolidayController = {
   async addHoliday(req, res) {
     try {
+      if (
+        !checkKeys(req.body, [
+          "note",
+          "starting_date",
+          "ending_date",
+          "type",
+          "id_requester_employee",
+        ])
+      ) {
+        throw{
+          error: "invalid keys",
+        };
+      }
       const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
+      NotificationController.NewHolidayRequestToManager(holiday.id);
     } catch (err) {
       console.log(err);
       res.status(400).send({
