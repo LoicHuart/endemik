@@ -1,4 +1,5 @@
 const HolidaySchema = require("../models/Holiday");
+const EmployeeSchema = require("../models/Employee");
 const NotificationController = require("../controllers/NotificationController");
 
 var HolidayController = {
@@ -13,17 +14,20 @@ var HolidayController = {
           "id_requester_employee",
         ])
       ) {
-        throw {
-          error: "invalid keys",
-        };
+        throw "Invalid keys";
       }
+
+      if(req.body.id_requester_employee && !await EmployeeSchema.exists({_id: req.body.id_requester_employee}).catch((err) => {throw "Invalid employee id"})) {
+        throw "Invalid employee id";
+      }
+
       const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
       NotificationController.NewHolidayRequestToManager(holiday.id);
     } catch (err) {
-      console.log(err);
       res.status(400).send({
+        message: "Error when adding a holiday",
         error: err,
       });
     }
@@ -44,7 +48,7 @@ var HolidayController = {
 
       if (!holiday) {
         return res.status(404).send({
-          message: "holiday not found",
+          message: "Holiday not found",
         });
       }
       res.send(holiday);
@@ -81,7 +85,7 @@ var HolidayController = {
 
       if (!holidays) {
         return res.status(404).send({
-          message: "holiday not found",
+          message: "Holiday not found",
         });
       }
       res.send(holidays);
@@ -93,12 +97,19 @@ var HolidayController = {
   async deleteHoliday(req, res) {
     const id = req.params.id;
     try {
+      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
+        throw "Invalid holiday id";
+      }
+      
       await HolidaySchema.findByIdAndDelete(id);
       res.send({
         message: `Holiday deleted`,
       });
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when deleting a holiday",
+        error: err,
+      });
     }
   },
 
@@ -115,36 +126,47 @@ var HolidayController = {
 
   async updateHoliday(req, res) {
     const id = req.params.id;
-    if (
-      !checkKeys(req.body, [
-        "validation_date",
-        "note",
-        "starting_date",
-        "ending_date",
-        "current_date",
-        "status",
-        "type",
-        "id_requester_employee",
-      ])
-    ) {
-      return res.status(400).send({
-        error: "invalid keys",
+    try {
+      if (
+        !checkKeys(req.body, [
+          "validation_date",
+          "note",
+          "starting_date",
+          "ending_date",
+          "current_date",
+          "status",
+          "type",
+          "id_requester_employee",
+        ])
+      ) {
+        throw "Invalid keys";
+      }
+
+      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
+        throw "Invalid holiday id";
+      }
+      if(req.body.id_requester_employee && !await HolidaySchema.exists({_id: req.body.id_requester_employee}).catch((err) => {throw "Invalid employee id"})) {
+        throw "Invalid employee id";
+      }
+
+      statusHoliday = await HolidaySchema.findById(id).status;
+      HolidaySchema.findByIdAndUpdate(id, req.body)
+      res.send({
+        message: `Holiday ${id} was updated !`,
+      });
+      if (statusHoliday != req.body.status) {
+        NotificationController.HolidayRequestStatusUpdateToEmployee(id);
+        NotificationController.HolidayRequestStatusUpdateToManager(id);
+        if (req.body.status == "prevalider") {
+          NotificationController.NewHolidayRequestToRh(id);
+        }
+      }
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when updating a holiday",
+        error: err,
       });
     }
-    HolidaySchema.findByIdAndUpdate(id, req.body)
-      .then(() => {
-        res.send({
-          message: `Holiday ${id} was updated !`,
-        });
-        if (req.body.status) {
-          NotificationController.HolidayRequestStatusUpdateToEmployee(id);
-          NotificationController.HolidayRequestStatusUpdateToManager(id);
-          if (req.body.status == "prevalider") {
-            NotificationController.NewHolidayRequestToRh(id);
-          }
-        }
-      })
-      .catch((err) => res.status(500).send(err));
   },
 };
 
