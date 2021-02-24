@@ -68,11 +68,15 @@ var EmployeeController = {
         error: "invalid key",
       });
     }
+    serviceEmployee = await EmployeeSchema.findById(id).id_service;
     EmployeeSchema.findByIdAndUpdate(id, req.body)
       .then(() => {
         res.send({
           message: `Employee (${id}) have been updated`,
         });
+        if(serviceEmployee != req.body.id_service) {
+          NotificationController.NewEmployeetoServiceToManager(id);
+        }
       })
       .catch((err) => res.status(500).send(err));
   },

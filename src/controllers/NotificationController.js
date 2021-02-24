@@ -103,7 +103,15 @@ var NotificationController = {
     },
 
     async NewEmployeeRegistedToDirection(EmployeeId) {
-
+        Employee = await EmployeeSchema.findById(EmployeeId).populate({
+            path: 'id_service',
+            populate: {
+                path: 'id_manager'
+            }
+        });
+        EmployeeServiceDirection = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_RH});
+        let html = `<b>Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}, il viens de rejoindre le service ${Employee.id_service.name} manager par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
+        sendMail(Employee.id_service.id_manager.mail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
     },
 
     async ForgotPassword() {
