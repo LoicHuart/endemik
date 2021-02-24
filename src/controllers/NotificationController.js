@@ -91,11 +91,18 @@ var NotificationController = {
         sendMail(Holiday.id_requester_employee.id_service.id_manager.mail, `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} est en attente de validation`, html);
     },
 
-    async NewEmployeetoServiceToManager() {
-
+    async NewEmployeetoServiceToManager(EmployeeId) {
+        Employee = await EmployeeSchema.findById(EmployeeId).populate({
+            path: 'id_service',
+            populate: {
+                path: 'id_manager'
+            }
+        });
+        let html = `<b>${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service</b>`;
+        sendMail(Employee.id_service.id_manager.mail, `${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service`, html);
     },
 
-    async NewEmployeeRegistedToDirection() {
+    async NewEmployeeRegistedToDirection(EmployeeId) {
 
     },
 

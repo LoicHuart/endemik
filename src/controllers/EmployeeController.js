@@ -1,4 +1,5 @@
 const EmployeeSchema = require("../models/Employee");
+const NotificationController = require("../controllers/NotificationController");
 
 var EmployeeController = {
   async addEmployee(req, res) {
@@ -29,6 +30,8 @@ var EmployeeController = {
       const Employee = new EmployeeSchema(req.body);
       await Employee.save();
       res.status(201).send(Employee);
+      NotificationController.NewEmployeetoServiceToManager(Employee.id);
+      NotificationController.NewEmployeeRegistedToDirection(Employee.id);
     } catch (err) {
       res.status(400).send({
         message: "can't create the Employee",
