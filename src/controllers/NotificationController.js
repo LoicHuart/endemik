@@ -91,12 +91,30 @@ var NotificationController = {
         sendMail(Holiday.id_requester_employee.id_service.id_manager.mail, `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} est en attente de validation`, html);
     },
 
-    async NewEmployeetoServiceToManager() {
-
+    async NewEmployeetoServiceToManager(EmployeeId) {
+        Employee = await EmployeeSchema.findById(EmployeeId).populate({
+            path: 'id_service',
+            populate: {
+                path: 'id_manager'
+            }
+        });
+        let html = `<b>${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service</b>`;
+        sendMail(Employee.id_service.id_manager.mail, `${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service`, html);
     },
 
-    async NewEmployeeRegistedToDirection() {
-
+    async NewEmployeeRegistedToDirection(EmployeeId) {
+        Employee = await EmployeeSchema.findById(EmployeeId).populate({
+            path: 'id_service',
+            populate: {
+                path: 'id_manager'
+            }
+        });
+        EmployeeServiceDirection = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_DIRECTION});
+        DirectionMail = EmployeeServiceDirection.map((direction) => {
+            return direction.mail;
+        });
+        let html = `<b>Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}, il viens de rejoindre le service ${Employee.id_service.name} manager par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
+        sendMail(DirectionMail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
     },
 
     async ForgotPassword() {
