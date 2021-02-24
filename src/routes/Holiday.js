@@ -14,4 +14,6 @@ router
   .get(HolidayController.getHolidayByID)
   .delete(HolidayController.deleteHoliday);
 
+router.route("/holidays/user/:id").get(HolidayController.getHolidaysByUser);
+
 module.exports = router;

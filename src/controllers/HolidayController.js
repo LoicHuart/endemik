@@ -38,7 +38,23 @@ var HolidayController = {
     }
   },
 
-  async getHolidays(req, res) {
+  async getHolidaysByUser(req, res) {
+    const id = req.params.id;
+    try {
+      tab = [];
+      holidays = await HolidaySchema.find();
+      holidays.forEach((holiday) => {
+        if (holiday.id_requester_employee == id) {
+          tab.push(holiday);
+        }
+      });
+      res.send(tab);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
+  async getAllHolidays(req, res) {
     const populate = parseInt(req.query.populate);
     let holidays;
     try {
