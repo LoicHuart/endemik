@@ -109,9 +109,12 @@ var NotificationController = {
                 path: 'id_manager'
             }
         });
-        EmployeeServiceDirection = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_RH});
+        EmployeeServiceDirection = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_DIRECTION});
+        DirectionMail = EmployeeServiceDirection.map((direction) => {
+            return direction.mail;
+        });
         let html = `<b>Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}, il viens de rejoindre le service ${Employee.id_service.name} manager par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
-        sendMail(Employee.id_service.id_manager.mail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
+        sendMail(DirectionMail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
     },
 
     async ForgotPassword() {
