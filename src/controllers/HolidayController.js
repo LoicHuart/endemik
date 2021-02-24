@@ -1,7 +1,6 @@
 const HolidaySchema = require("../models/Holiday");
 const NotificationController = require("../controllers/NotificationController");
 
-
 var HolidayController = {
   async addHoliday(req, res) {
     try {
@@ -14,7 +13,7 @@ var HolidayController = {
           "id_requester_employee",
         ])
       ) {
-        throw{
+        throw {
           error: "invalid keys",
         };
       }
@@ -54,13 +53,28 @@ var HolidayController = {
     }
   },
 
+  async getHolidaysByUser(req, res) {
+    const id = req.params.id;
+    try {
+      tab = [];
+      holidays = await HolidaySchema.find();
+      holidays.forEach((holiday) => {
+        if (holiday.id_requester_employee == id) {
+          tab.push(holiday);
+        }
+      });
+      res.send(tab);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
   async getAllHolidays(req, res) {
     const populate = parseInt(req.query.populate);
     let holidays;
     try {
       if (populate) {
-        holidays = await HolidaySchema.find()
-          .populate("id_requester_employee");
+        holidays = await HolidaySchema.find().populate("id_requester_employee");
       } else {
         holidays = await HolidaySchema.find();
       }
@@ -82,6 +96,17 @@ var HolidayController = {
       await HolidaySchema.findByIdAndDelete(id);
       res.send({
         message: `Holiday deleted`,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+
+  async deleteAllHolidays(req, res) {
+    try {
+      await HolidaySchema.deleteMany();
+      res.send({
+        message: `All holidays have been delete`,
       });
     } catch (error) {
       res.status(500).send(error);
@@ -111,10 +136,10 @@ var HolidayController = {
         res.send({
           message: `Holiday ${id} was updated !`,
         });
-        if(req.body.status) {
+        if (req.body.status) {
           NotificationController.HolidayRequestStatusUpdateToEmployee(id);
           NotificationController.HolidayRequestStatusUpdateToManager(id);
-          if(req.body.status == "prevalider") {
+          if (req.body.status == "prevalider") {
             NotificationController.NewHolidayRequestToRh(id);
           }
         }
