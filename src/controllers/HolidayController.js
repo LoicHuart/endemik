@@ -1,11 +1,26 @@
-var HolidaySchema = require("../models/Holiday");
+const HolidaySchema = require("../models/Holiday");
+const NotificationController = require("../controllers/NotificationController");
 
 var HolidayController = {
   async addHoliday(req, res) {
     try {
+      if (
+        !checkKeys(req.body, [
+          "note",
+          "starting_date",
+          "ending_date",
+          "type",
+          "id_requester_employee",
+        ])
+      ) {
+        throw {
+          error: "invalid keys",
+        };
+      }
       const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
+      NotificationController.NewHolidayRequestToManager(holiday.id);
     } catch (err) {
       console.log(err);
       res.status(400).send({
@@ -121,6 +136,13 @@ var HolidayController = {
         res.send({
           message: `Holiday ${id} was updated !`,
         });
+        if (req.body.status) {
+          NotificationController.HolidayRequestStatusUpdateToEmployee(id);
+          NotificationController.HolidayRequestStatusUpdateToManager(id);
+          if (req.body.status == "prevalider") {
+            NotificationController.NewHolidayRequestToRh(id);
+          }
+        }
       })
       .catch((err) => res.status(500).send(err));
   },

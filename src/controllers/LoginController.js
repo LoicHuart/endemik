@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-var EmployeeSchema = require("../models/Employee");
-var jwt = require('jsonwebtoken');
+const EmployeeSchema = require("../models/Employee");
+const jwt = require('jsonwebtoken');
 
 var LoginController = {
   async auth(req, res) {

@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const HolidaySchema = new mongoose.Schema({
   note: {
     type: String,
-    required: true,
     trim: true,
   },
   starting_date: {
@@ -17,12 +16,10 @@ const HolidaySchema = new mongoose.Schema({
   },
   current_date: {
     type: Date,
-    required: true,
   },
   validation_date: {
     type: Date,
     default: null,
-    required: true,
   },
   type: {
     type: String,
@@ -32,6 +29,7 @@ const HolidaySchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["en attente", "prevalider", "valider", "refuser"],
+    default: "en attente",
     required: true,
   },
   id_requester_employee: {
@@ -39,6 +37,11 @@ const HolidaySchema = new mongoose.Schema({
     ref: "Employee",
     required: true,
   },
+});
+
+HolidaySchema.pre("save", async function (next) {
+  this.current_date = await Date.now();
+  next();
 });
 
 module.exports = mongoose.model("Holiday", HolidaySchema, "Holiday");

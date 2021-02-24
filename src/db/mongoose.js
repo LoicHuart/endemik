@@ -10,7 +10,7 @@ mongoose.connect(
     "/" +
     process.env.DB_NAME +
     "?authSource=admin",
-  { useNewUrlParser: true, useUnifiedTopology: true }
+  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
