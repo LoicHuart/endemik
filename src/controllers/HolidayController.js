@@ -38,6 +38,9 @@ var HolidayController = {
     const populate = parseInt(req.query.populate);
     let holiday;
     try {
+      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
+        throw "Invalid holiday id";
+      }
       if (populate) {
         holiday = await HolidaySchema.findById(id).populate(
           "id_requester_employee"
@@ -45,31 +48,28 @@ var HolidayController = {
       } else {
         holiday = await HolidaySchema.findById(id);
       }
-
-      if (!holiday) {
-        return res.status(404).send({
-          message: "Holiday not found",
-        });
-      }
       res.send(holiday);
     } catch (err) {
-      res.status(500).send(err);
+      res.status(400).send({
+        message: "Error when geting a holiday by id",
+        error: err,
+      });
     }
   },
 
   async getHolidaysByUser(req, res) {
     const id = req.params.id;
     try {
-      tab = [];
-      holidays = await HolidaySchema.find();
-      holidays.forEach((holiday) => {
-        if (holiday.id_requester_employee == id) {
-          tab.push(holiday);
-        }
-      });
-      res.send(tab);
+      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+        throw "Invalid employee id";
+      }
+      holidays = await HolidaySchema.find({id_requester_employee: id});
+      res.send(holidays);
     } catch (err) {
-      res.status(500).send(err);
+      res.status(400).send({
+        message: "Error when geting a holiday by id",
+        error: err,
+      });
     }
   },
 

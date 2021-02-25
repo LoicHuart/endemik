@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "merge-dev-loic": "git checkout loic && git checkout dev && git pull && git checkout loic && git merge dev",
+    "merge-dev-duygu": "git checkout duygu && git checkout dev && git pull && git checkout duygu && git merge dev",
+    "merge-dev-gaspard": "git checkout gaspard && git checkout dev && git pull && git checkout gaspard && git merge dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -20,6 +24,7 @@
     "mongoose": "^5.11.8",
     "nodemailer": "^6.4.18",
     "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
     "validator": "^13.5.2"
   }
 }
