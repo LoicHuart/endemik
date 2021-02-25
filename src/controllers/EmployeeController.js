@@ -121,7 +121,10 @@ var EmployeeController = {
       }
       res.send(employees);
     } catch (err) {
-      res.status(500).send(err);
+      res.status(400).send({
+        message: "Error when geting all employee",
+        error: err,
+      });
     }
   },
 
