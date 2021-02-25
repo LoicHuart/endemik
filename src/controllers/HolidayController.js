@@ -82,15 +82,12 @@ var HolidayController = {
       } else {
         holidays = await HolidaySchema.find();
       }
-
-      if (!holidays) {
-        return res.status(404).send({
-          message: "Holiday not found",
-        });
-      }
       res.send(holidays);
     } catch (err) {
-      res.status(500).send(err);
+      res.status(400).send({
+        message: "Error when geting all holiday",
+        error: err,
+      });
     }
   },
 
@@ -120,7 +117,10 @@ var HolidayController = {
         message: `All holidays have been delete`,
       });
     } catch (error) {
-      res.status(500).send(error);
+      res.status(400).send({
+        message: "Error when deleting all holiday",
+        error: err,
+      });
     }
   },
 
