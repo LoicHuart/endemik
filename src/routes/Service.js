@@ -5,8 +5,8 @@ const ServiceController = require("../controllers/ServiceController");
 router
   .route("/services")
   .post(ServiceController.addService)
-  .get(ServiceController.getAllServices);
-//   .delete(ServiceController.deleteAllServices);
+  .get(ServiceController.getAllServices)
+  .delete(ServiceController.deleteAllServices);
 
 // router
 //   .route("/services/:id")

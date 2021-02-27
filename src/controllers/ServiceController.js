@@ -45,6 +45,19 @@ var ServiceController = {
       });
     }
   },
+  async deleteAllServices(req, res) {
+    try {
+      await ServiceSchema.deleteMany();
+      res.send({
+        message: `All services have been delete`,
+      });
+    } catch (error) {
+      res.status(400).send({
+        message: "Error when deleting all services",
+        error: err,
+      });
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {
