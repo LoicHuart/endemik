@@ -58,6 +58,43 @@ var ServiceController = {
       });
     }
   },
+  async updateService(req, res) {
+    const id = req.params.id;
+    try {
+      if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
+        throw "Invalid keys";
+      }
+
+      if (
+        id &&
+        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid service id";
+        }))
+      ) {
+        throw "Invalid service id";
+      }
+      if (
+        req.body.id_manager &&
+        !(await ServiceSchema.exists({
+          _id: req.body.id_manager,
+        }).catch((err) => {
+          throw "Invalid manager id";
+        }))
+      ) {
+        throw "Invalid manager id";
+      }
+
+      ServiceSchema.findByIdAndUpdate(id, req.body);
+      res.send({
+        message: `Service ${id} was updated !`,
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when updating a service",
+        error: err,
+      });
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {
