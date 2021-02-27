@@ -121,6 +121,29 @@ var ServiceController = {
       });
     }
   },
+  async deleteService(req, res) {
+    const id = req.params.id;
+    try {
+      if (
+        id &&
+        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid service id";
+        }))
+      ) {
+        throw "Invalid service id";
+      }
+
+      await ServiceSchema.findByIdAndDelete(id);
+      res.send({
+        message: `Service deleted`,
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when deleting a service",
+        error: err,
+      });
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {

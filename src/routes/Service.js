@@ -11,7 +11,7 @@ router
 router
   .route("/services/:id")
   .put(ServiceController.updateService)
-  .get(ServiceController.getServiceByID);
-//   .delete(ServiceController.deleteService);
+  .get(ServiceController.getServiceByID)
+  .delete(ServiceController.deleteService);
 
 module.exports = router;
