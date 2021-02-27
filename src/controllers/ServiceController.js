@@ -28,6 +28,23 @@ var ServiceController = {
       });
     }
   },
+  async getAllServices(req, res) {
+    const populate = parseInt(req.query.populate);
+    let services;
+    try {
+      if (populate) {
+        services = await ServiceSchema.find().populate("id_manager");
+      } else {
+        services = await ServiceSchema.find();
+      }
+      res.send(services);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when geting all services",
+        error: err,
+      });
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {
