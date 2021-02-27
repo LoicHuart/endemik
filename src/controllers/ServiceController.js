@@ -75,7 +75,7 @@ var ServiceController = {
       }
       if (
         req.body.id_manager &&
-        !(await ServiceSchema.exists({
+        !(await EmployeeSchema.exists({
           _id: req.body.id_manager,
         }).catch((err) => {
           throw "Invalid manager id";
@@ -91,6 +91,32 @@ var ServiceController = {
     } catch (err) {
       res.status(400).send({
         message: "Error when updating a service",
+        error: err,
+      });
+    }
+  },
+  async getServiceByID(req, res) {
+    const id = req.params.id;
+    const populate = parseInt(req.query.populate);
+    let service;
+    try {
+      if (
+        id &&
+        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid service id";
+        }))
+      ) {
+        throw "Invalid service id";
+      }
+      if (populate) {
+        service = await ServiceSchema.findById(id).populate("id_manager");
+      } else {
+        service = await ServiceSchema.findById(id);
+      }
+      res.send(service);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when geting a service by id",
         error: err,
       });
     }

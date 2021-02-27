@@ -8,8 +8,10 @@ router
   .get(ServiceController.getAllServices)
   .delete(ServiceController.deleteAllServices);
 
-router.route("/services/:id").put(ServiceController.updateService);
-//   .get(ServiceController.getServiceByID)
+router
+  .route("/services/:id")
+  .put(ServiceController.updateService)
+  .get(ServiceController.getServiceByID);
 //   .delete(ServiceController.deleteService);
 
 module.exports = router;
