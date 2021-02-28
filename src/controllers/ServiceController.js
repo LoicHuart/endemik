@@ -28,6 +28,7 @@ var ServiceController = {
       });
     }
   },
+  
   async getAllServices(req, res) {
     const populate = parseInt(req.query.populate);
     let services;
@@ -45,6 +46,7 @@ var ServiceController = {
       });
     }
   },
+
   async deleteAllServices(req, res) {
     try {
       await ServiceSchema.deleteMany();
@@ -58,6 +60,7 @@ var ServiceController = {
       });
     }
   },
+
   async updateService(req, res) {
     const id = req.params.id;
     try {
@@ -65,14 +68,6 @@ var ServiceController = {
         throw "Invalid keys";
       }
 
-      if (
-        id &&
-        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
-          throw "Invalid service id";
-        }))
-      ) {
-        throw "Invalid service id";
-      }
       if (
         req.body.id_manager &&
         !(await EmployeeSchema.exists({
@@ -85,6 +80,16 @@ var ServiceController = {
       }
 
       ServiceSchema.findByIdAndUpdate(id, req.body);
+
+      service = await ServiceSchema.findById(id);
+      if (!service) {
+        throw "Invalid service id";
+      }
+      updateKeys = Object.keys(req.body);
+      updateKeys.forEach(key => (service[key] = req.body[key]));
+      await service.save();
+
+
       res.send({
         message: `Service ${id} was updated !`,
       });
@@ -95,24 +100,22 @@ var ServiceController = {
       });
     }
   },
+
   async getServiceByID(req, res) {
     const id = req.params.id;
     const populate = parseInt(req.query.populate);
     let service;
     try {
-      if (
-        id &&
-        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
-          throw "Invalid service id";
-        }))
-      ) {
-        throw "Invalid service id";
-      }
       if (populate) {
         service = await ServiceSchema.findById(id).populate("id_manager");
       } else {
         service = await ServiceSchema.findById(id);
       }
+
+      if (!service) {
+        throw "Invalid service id";
+      }
+
       res.send(service);
     } catch (err) {
       res.status(400).send({
@@ -121,19 +124,16 @@ var ServiceController = {
       });
     }
   },
+
   async deleteService(req, res) {
     const id = req.params.id;
     try {
-      if (
-        id &&
-        !(await ServiceSchema.exists({ _id: id }).catch((err) => {
-          throw "Invalid service id";
-        }))
-      ) {
+      service = await ServiceSchema.findById(id);
+      if (!service) {
         throw "Invalid service id";
       }
+      service.remove();
 
-      await ServiceSchema.findByIdAndDelete(id);
       res.send({
         message: `Service deleted`,
       });
