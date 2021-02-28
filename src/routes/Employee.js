@@ -1,7 +1,6 @@
 const express = require("express");
 const router = new express.Router();
 const EmployeeController = require("../controllers/EmployeeController");
-const FileController = require("../controllers/FileController");
 const slugify = require('slugify');
 const bcrypt = require("bcrypt");
 const imagemin = require('imagemin');

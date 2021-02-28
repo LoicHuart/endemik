@@ -46,6 +46,9 @@ var EmployeeController = {
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
       NotificationController.NewEmployeeRegistedToDirection(Employee.id);
     } catch (err) {
+      try {
+        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+      } catch {}
       res.status(400).send({
         message: "Error when creating a employee",
         error: err
@@ -112,6 +115,9 @@ var EmployeeController = {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
     } catch (err) {
+      try {
+        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+      } catch {}
       res.status(400).send({
         message: "Error when updating a employee",
         error: err,
