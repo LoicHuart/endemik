@@ -20,8 +20,6 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "imagemin": "^7.0.1",
-    "imagemin-webp": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "multer": "^1.4.2",

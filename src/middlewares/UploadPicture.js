@@ -1,25 +1,16 @@
 const slugify = require('slugify');
 const bcrypt = require("bcrypt");
-const imagemin = require('imagemin');
-const imageminWebp = require('imagemin-webp');
+
 const multer = require('multer');
-
-// async function imageToWebp(image,imagemin) {
-//   await imagemin(image, 'build/images', {
-//       use: [
-//           imageminWebp({quality: 50})
-//       ]
-//   });
-
-//   console.log('Images optimized');
-// };
+const path = require('path');
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, `./public/uploads/`);
   },
   filename: async function(req, file, cb) {
-    cb(null, slugify(bcrypt.hashSync(file.originalname, 10)) + ".webp");
+    cb(null, slugify(bcrypt.hashSync(file.originalname, 10)) + "." + file.mimetype.split("/")[1]);
+    imageToWebp(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename))
   }
 });
 

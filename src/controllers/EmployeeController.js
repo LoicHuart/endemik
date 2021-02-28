@@ -36,7 +36,7 @@ var EmployeeController = {
       if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
         throw "Invalid role id";
       }
-      
+      console.log(req.file.mimetype.split("/")[1]);
       if(req.file) {
         req.body.photo_url = req.file.filename;
       }
