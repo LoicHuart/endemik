@@ -53,7 +53,7 @@ var ServiceController = {
       res.send({
         message: `All services have been delete`,
       });
-    } catch (error) {
+    } catch (err) {
       res.status(400).send({
         message: "Error when deleting all services",
         error: err,

@@ -21,13 +21,13 @@ var LoginController = {
       }
       
       token = jwt.sign({
-        employee_id: employee._id
+        _id: employee._id
       }, process.env.SECRET_JWT, {expiresIn: 60*60});
 
       res.send({
         token: token,
       });
-    } catch (error) {
+    } catch (err) {
       res.status(401).send("Email ou mot de passe incorrect");
     }
   },

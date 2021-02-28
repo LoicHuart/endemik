@@ -10,7 +10,6 @@ var storage = multer.diskStorage({
   },
   filename: async function(req, file, cb) {
     cb(null, slugify(bcrypt.hashSync(file.originalname, 10)) + "." + file.mimetype.split("/")[1]);
-    imageToWebp(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename))
   }
 });
 
