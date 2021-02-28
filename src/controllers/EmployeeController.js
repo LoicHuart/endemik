@@ -2,6 +2,8 @@ const EmployeeSchema = require("../models/Employee");
 const ServiceSchema = require("../models/Service");
 const RoleSchema = require("../models/Role");
 const NotificationController = require("../controllers/NotificationController");
+const fs = require('fs');
+const path = require('path');
 
 var EmployeeController = {
   async addEmployee(req, res) {
@@ -34,13 +36,19 @@ var EmployeeController = {
       if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
         throw "Invalid role id";
       }
-
+      console.log(req.file.mimetype.split("/")[1]);
+      if(req.file) {
+        req.body.photo_url = req.file.filename;
+      }
       const Employee = new EmployeeSchema(req.body);
       await Employee.save();
       res.status(201).send(Employee);
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
       NotificationController.NewEmployeeRegistedToDirection(Employee.id);
     } catch (err) {
+      try {
+        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+      } catch {}
       res.status(400).send({
         message: "Error when creating a employee",
         error: err
@@ -75,9 +83,6 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
-        throw "Invalid employee id";
-      }
       if(req.body.id_service && !await ServiceSchema.exists({_id: req.body.id_service}).catch((err) => {throw "Invalid service id"})) {
         throw "Invalid service id";
       }
@@ -86,7 +91,23 @@ var EmployeeController = {
       }
 
       serviceEmployee = await EmployeeSchema.findById(id).id_service;
-      EmployeeSchema.findByIdAndUpdate(id, req.body)
+      employee = await EmployeeSchema.findById(id);
+      if (!employee) {
+        throw "Invalid employee id";
+      }
+
+      if(req.file) {
+        try {
+          fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+employee.photo_url));
+        } catch {}
+        req.body.photo_url = req.file.filename;
+      }
+
+      updateKeys = Object.keys(req.body);
+      updateKeys.forEach(key => (employee[key] = req.body[key]));
+
+      await employee.save();
+
       res.send({
         message: `Employee (${id}) have been updated`,
       });
@@ -94,6 +115,9 @@ var EmployeeController = {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
     } catch (err) {
+      try {
+        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+      } catch {}
       res.status(400).send({
         message: "Error when updating a employee",
         error: err,
@@ -133,9 +157,6 @@ var EmployeeController = {
     const populate = parseInt(req.query.populate);
     let employee;
     try {
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
-        throw "Invalid employee id";
-      }
       if (populate) {
         employee = await EmployeeSchema.findById(id)
           .populate("id_service")
@@ -143,6 +164,11 @@ var EmployeeController = {
       } else {
         employee = await EmployeeSchema.findById(id);
       }
+
+      if (!employee) {
+        throw "Invalid employee id";
+      }
+
       res.send(employee);
     } catch (err) {
       res.status(400).send({
@@ -155,11 +181,15 @@ var EmployeeController = {
   async deleteEmployee(req, res) {
     const id = req.params.id;
     try {
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+      employee = await EmployeeSchema.findById(id);
+      if (!employee) {
         throw "Invalid employee id";
       }
+      try {
+        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+employee.photo_url));
+      } catch {}
+      employee.remove();
 
-      await EmployeeSchema.findByIdAndDelete(id);
       res.send({
         message: `Employee deleted`,
       });

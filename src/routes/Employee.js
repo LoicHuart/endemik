@@ -1,14 +1,14 @@
 const express = require("express");
 const router = new express.Router();
 const EmployeeController = require("../controllers/EmployeeController");
-
+const UploadPicture = require("../middlewares/UploadPicture");
 
 router.route("/employees")
-  .post(EmployeeController.addEmployee)
+  .post(UploadPicture.single('photo') ,EmployeeController.addEmployee)
   .get(EmployeeController.getAllEmployees);
     
 router.route("/employees/:id")
-  .put(EmployeeController.updateEmployee)
+  .put(UploadPicture.single('photo'), EmployeeController.updateEmployee)
   .delete(EmployeeController.deleteEmployee)
   .get(EmployeeController.getEmployeeById);
 
