@@ -24,9 +24,9 @@ async function mailOptions(to, subject, html) {
 }
 
 async function sendMail(to, subject, html) {
-    transporter.sendMail(await mailOptions(to, subject, html), function(error, info){
-        if (error) {
-            console.log(error);
+    transporter.sendMail(await mailOptions(to, subject, html), function(err, info){
+        if (err) {
+            console.log("Error when sending a mail");
         } else {
             console.log('Email sent: ' + info.response);
         }
@@ -66,7 +66,7 @@ var NotificationController = {
         );
         EmployeeServiceRH = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_RH});
 
-        RHMail = EmployeeServiceRH.map((RH) => {
+        RHMail = await EmployeeServiceRH.map((RH) => {
             return RH.mail;
         });
         let html = `<b>Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${Holiday.id_requester_employee.firstName} du ${date.toLocaleDateString(Holiday.starting_date)} au ${date.toLocaleDateString(Holiday.ending_date)} est en attente de validation</b>`;
