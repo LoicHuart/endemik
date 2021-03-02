@@ -79,8 +79,6 @@ var ServiceController = {
         throw "Invalid manager id";
       }
 
-      ServiceSchema.findByIdAndUpdate(id, req.body);
-
       service = await ServiceSchema.findById(id);
       if (!service) {
         throw "Invalid service id";
@@ -131,6 +129,9 @@ var ServiceController = {
       service = await ServiceSchema.findById(id);
       if (!service) {
         throw "Invalid service id";
+      }
+      if(await EmployeeSchema.exists({id_service: id}).catch((err) => {throw "Cannot delete the service while employee is linked"})) {
+        throw "Cannot delete the service while employee is linked";
       }
       service.remove();
 
