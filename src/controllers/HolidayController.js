@@ -137,7 +137,6 @@ var HolidayController = {
           "starting_date",
           "ending_date",
           "current_date",
-          "status",
           "type",
           "id_requester_employee",
         ])
@@ -147,6 +146,36 @@ var HolidayController = {
 
       if(req.body.id_requester_employee && !await HolidaySchema.exists({_id: req.body.id_requester_employee}).catch((err) => {throw "Invalid employee id"})) {
         throw "Invalid employee id";
+      }
+
+      holiday = await HolidaySchema.findById(id);
+      if (!holiday) {
+        throw "Invalid holiday id";
+      }
+      updateKeys = Object.keys(req.body);
+      updateKeys.forEach(key => (holiday[key] = req.body[key]));
+      await holiday.save();
+
+      res.send({
+        message: `Holiday ${id} was updated !`,
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when updating a holiday",
+        error: err,
+      });
+    }
+  },
+
+  async updateHolidayStatus(req, res) {
+    const id = req.params.id;
+    try {
+      if (
+        !checkKeys(req.body, [
+          "status",
+        ])
+      ) {
+        throw "Invalid keys";
       }
 
       statusHoliday = await HolidaySchema.findById(id).status;
@@ -159,7 +188,7 @@ var HolidayController = {
       await holiday.save();
 
       res.send({
-        message: `Holiday ${id} was updated !`,
+        message: `Holiday status ${id} was updated !`,
       });
       if (statusHoliday != req.body.status) {
         NotificationController.HolidayRequestStatusUpdateToEmployee(id);
