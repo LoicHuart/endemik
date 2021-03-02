@@ -28,10 +28,22 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if(req.body.id_service && !await ServiceSchema.exists({_id: req.body.id_service}).catch((err) => {throw "Invalid service id"})) {
+      if (
+        req.body.id_service &&
+        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
+          (err) => {
+            throw "Invalid service id";
+          }
+        ))
+      ) {
         throw "Invalid service id";
       }
-      if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
+      if (
+        req.body.id_role &&
+        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
+          throw "Invalid role id";
+        }))
+      ) {
         throw "Invalid role id";
       }
 
@@ -42,8 +54,8 @@ var EmployeeController = {
       NotificationController.NewEmployeeRegistedToDirection(Employee.id);
     } catch (err) {
       res.status(400).send({
-        message: "Error when creating a employee",
-        error: err
+        message: "Error : can't created employee",
+        error: err,
       });
     }
   },
@@ -65,7 +77,6 @@ var EmployeeController = {
           "street_nb",
           "street",
           "city",
-          "password",
           "arrival_date",
           "children_nb",
           "id_service",
@@ -75,31 +86,47 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        id &&
+        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
-      if(req.body.id_service && !await ServiceSchema.exists({_id: req.body.id_service}).catch((err) => {throw "Invalid service id"})) {
+      if (
+        req.body.id_service &&
+        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
+          (err) => {
+            throw "Invalid service id";
+          }
+        ))
+      ) {
         throw "Invalid service id";
       }
-      if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
+      if (
+        req.body.id_role &&
+        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
+          throw "Invalid role id";
+        }))
+      ) {
         throw "Invalid role id";
       }
 
       serviceEmployee = await EmployeeSchema.findById(id).id_service;
-      EmployeeSchema.findByIdAndUpdate(id, req.body)
+      EmployeeSchema.findByIdAndUpdate(id, req.body);
       res.send({
         message: `Employee (${id}) have been updated`,
       });
-      if(serviceEmployee != req.body.id_service) {
+      if (serviceEmployee != req.body.id_service) {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
     } catch (err) {
       res.status(400).send({
-        message: "Error when updating a employee",
+        message: `Error : can't updated employee with id(${id})`,
         error: err,
       });
     }
-        
   },
 
   async getAllEmployees(req, res) {
@@ -122,7 +149,7 @@ var EmployeeController = {
       res.send(employees);
     } catch (err) {
       res.status(400).send({
-        message: "Error when geting all employee",
+        message: "Error : can't get all employee",
         error: err,
       });
     }
@@ -133,7 +160,12 @@ var EmployeeController = {
     const populate = parseInt(req.query.populate);
     let employee;
     try {
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        id &&
+        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
       if (populate) {
@@ -146,7 +178,7 @@ var EmployeeController = {
       res.send(employee);
     } catch (err) {
       res.status(400).send({
-        message: "Error when geting a employee by id",
+        message: `Error : can't get employee with id (${id}) `,
         error: err,
       });
     }
@@ -155,7 +187,12 @@ var EmployeeController = {
   async deleteEmployee(req, res) {
     const id = req.params.id;
     try {
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        id &&
+        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
 
@@ -165,7 +202,7 @@ var EmployeeController = {
       });
     } catch (err) {
       res.status(400).send({
-        message: "Error when deleting a employee",
+        message: `Error : can't delete employee with id (${id})`,
         error: err,
       });
     }

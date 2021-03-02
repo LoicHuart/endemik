@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const EmployeeSchema = require("../models/Employee");
 const jwt = require('jsonwebtoken');
+const { ForgotPassword } = require('./NotificationController');
 
 var LoginController = {
   async auth(req, res) {
@@ -30,7 +31,25 @@ var LoginController = {
     } catch (error) {
       res.status(401).send("Email ou mot de passe incorrect");
     }
-  },
+   },
+
+    async logout(req, res) {
+        var id = req.body.id;
+        try {
+            const token = req.body.token;
+            token = "";
+            res.send({
+                token: token,
+            })
+        } catch (error) {
+            res.status(401).send("Coucou");
+        }
+        
+    },
+
+    async ForgotPassword(req, res) {
+
+    },
 };
 
 module.exports = LoginController;

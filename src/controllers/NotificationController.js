@@ -98,7 +98,7 @@ var NotificationController = {
                 path: 'id_manager'
             }
         });
-        let html = `<b>${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service</b>`;
+        let html = `<b>${Employee.lastName} ${Employee.firstName} vient de rejoindre votre service</b>`;
         sendMail(Employee.id_service.id_manager.mail, `${Employee.lastName} ${Employee.firstName} viens de rejoindre votre service`, html);
     },
 
@@ -113,12 +113,20 @@ var NotificationController = {
         DirectionMail = EmployeeServiceDirection.map((direction) => {
             return direction.mail;
         });
-        let html = `<b>Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}, il viens de rejoindre le service ${Employee.id_service.name} manager par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
+        let html = `<b>Un nouvel employé vient d'etre créé, ${Employee.lastName} ${Employee.firstName}, il rejoint le service ${Employee.id_service.name} manager par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
         sendMail(DirectionMail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
     },
 
-    async ForgotPassword() {
+    async ForgotPassword(EmployeeId) {
+        Employee = await EmployeeSchema.findById(EmployeeId).populate();
 
+        
+
+        let html = `<b>Bonjour ${Employee.firstName},`;
+        html += `<br>`;
+        html += `Voici le lien de réinitialisation de votre mot de passe : `;
+        //faire un formulaire de réinitialisation de mot de passe 
+        sendMail(EmployeeId, "Mot de passe oublié", html)
     }
 };
 

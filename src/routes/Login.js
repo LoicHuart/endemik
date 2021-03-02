@@ -4,7 +4,12 @@ const LoginController = require("../controllers/LoginController");
 
 
 router.route("/auth")
-  .post(LoginController.auth);
+    .post(LoginController.auth);
 
+router.route("/logout")
+    .get(LoginController.logout);
+
+/*router.route("/forgotpassword")
+    .post(LoginController.ForgotPassword);*/
 
 module.exports = router;
