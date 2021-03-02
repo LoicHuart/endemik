@@ -36,6 +36,9 @@ var EmployeeController = {
       if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
         throw "Invalid role id";
       }
+      if(req.body.mail && await EmployeeSchema.exists({mail: req.body.mail}).catch((err) => {throw "Mail already used"})) {
+        throw "Mail already used";
+      }
 
       if(req.file) {
         req.body.photo_url = req.file.filename;
@@ -88,6 +91,9 @@ var EmployeeController = {
       }
       if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
         throw "Invalid role id";
+      }
+      if(req.body.mail && !await EmployeeSchema.exists({mail: req.body.mail}).catch((err) => {throw "Mail already used"})) {
+        throw "Mail already used";
       }
 
       serviceEmployee = await EmployeeSchema.findById(id).id_service;
