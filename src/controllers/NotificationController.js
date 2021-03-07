@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const HolidaySchema = require("../models/Holiday");
 const EmployeeSchema = require("../models/Employee");
+const Employee = require("../models/Employee");
 const date = new Date();
 
 
@@ -117,8 +118,25 @@ var NotificationController = {
         sendMail(DirectionMail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
     },
 
-    async ForgotPassword() {
-
+    async ForgotPasswordToDirection(req, res) {
+        EmployeeServiceDirection = await EmployeeSchema.find({id_service: process.env.ID_SERVICE_DIRECTION});
+        DirectionMail = EmployeeServiceDirection.map((direction) => {
+            return direction.mail;
+        });
+        let Employee = await EmployeeSchema.findOne({mail: req.params.mail});
+        if (!Employee) {
+            res.status(400).send({
+                message: "Error when send ForgotPassword",
+                error: "Invalid employee mail",
+            });
+            res.end()
+        } else {
+            let html = `<b>L'employé ${Employee.lastName} ${Employee.firstName} a oublier sont mot de passe</b>`;
+            sendMail(DirectionMail, `Un nouvelle employé viens d'etre créé, ${Employee.lastName} ${Employee.firstName}`, html);
+            res.send({
+                message: "mail has been send to direction"
+            });
+        }
     }
 };
 
