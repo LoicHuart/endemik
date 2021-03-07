@@ -1,17 +1,32 @@
 const express = require("express");
 const router = new express.Router();
 const EmployeeController = require("../controllers/EmployeeController");
+const UploadPicture = require("../middlewares/UploadPicture");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 
+router
+  .route("/employees")
+  .post(
+    isLoggedIn,
+    UploadPicture.single("photo"),
+    EmployeeController.addEmployee
+  )
+  .get(isLoggedIn, EmployeeController.getAllEmployees);
 
-router.route("/employees")
-  .post(EmployeeController.addEmployee)
-  .get(EmployeeController.getAllEmployees);
-    
-router.route("/employees/:id")
-  .put(EmployeeController.updateEmployee)
-  .delete(EmployeeController.deleteEmployee)
-  .get(EmployeeController.getEmployeeById);
+router
+  .route("/employees/:id")
+  .put(
+    isLoggedIn,
+    UploadPicture.single("photo"),
+    EmployeeController.updateEmployee
+  )
+  .delete(isLoggedIn, EmployeeController.deleteEmployee)
+  .get(isLoggedIn, EmployeeController.getEmployeeById);
 
-
+router
+  .route("/forgotpassword/:id")
+  .post(EmployeeController.ForgotPassword)
+  .put(isLoggedIn, EmployeeController.updatePasswordEmployee);
+//.get(isLoggedIn, EmployeeController.getEmployeeById);
 
 module.exports = router;

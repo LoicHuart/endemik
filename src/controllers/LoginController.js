@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const EmployeeSchema = require("../models/Employee");
-const jwt = require('jsonwebtoken');
-const { ForgotPassword } = require('./NotificationController');
+const jwt = require("jsonwebtoken");
+const { ForgotPassword } = require("./NotificationController");
 
 var LoginController = {
   async auth(req, res) {
@@ -9,8 +9,8 @@ var LoginController = {
     var password = req.body.password;
 
     try {
-      let employee = await EmployeeSchema.findOne({ 
-        mail: email 
+      let employee = await EmployeeSchema.findOne({
+        mail: email,
       });
       if (!employee) {
         throw new Error();
@@ -20,36 +20,35 @@ var LoginController = {
       if (!match) {
         throw new Error();
       }
-      
-      token = jwt.sign({
-        employee_id: employee._id
-      }, process.env.SECRET_JWT, {expiresIn: 60*60});
+
+      token = jwt.sign(
+        {
+          _id: employee._id,
+        },
+        process.env.SECRET_JWT,
+        { expiresIn: 60 * 60 }
+      );
 
       res.send({
         token: token,
       });
-    } catch (error) {
+    } catch (err) {
       res.status(401).send("Email ou mot de passe incorrect");
     }
-   },
+  },
 
-    async logout(req, res) {
-        var id = req.body.id;
-        try {
-            const token = req.body.token;
-            token = "";
-            res.send({
-                token: token,
-            })
-        } catch (error) {
-            res.status(401).send("Coucou");
-        }
-        
-    },
-
-    async ForgotPassword(req, res) {
-
-    },
+  async logout(req, res) {
+    var id = req.body.id;
+    try {
+      const token = req.body.token;
+      token = "";
+      res.send({
+        token: token,
+      });
+    } catch (error) {
+      res.status(401).send("Coucou");
+    }
+  },
 };
 
 module.exports = LoginController;

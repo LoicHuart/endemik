@@ -17,7 +17,14 @@ var HolidayController = {
         throw "Invalid keys";
       }
 
-      if(req.body.id_requester_employee && !await EmployeeSchema.exists({_id: req.body.id_requester_employee}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        req.body.id_requester_employee &&
+        !(await EmployeeSchema.exists({
+          _id: req.body.id_requester_employee,
+        }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
 
@@ -38,9 +45,6 @@ var HolidayController = {
     const populate = parseInt(req.query.populate);
     let holiday;
     try {
-      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
-        throw "Invalid holiday id";
-      }
       if (populate) {
         holiday = await HolidaySchema.findById(id).populate(
           "id_requester_employee"
@@ -48,6 +52,11 @@ var HolidayController = {
       } else {
         holiday = await HolidaySchema.findById(id);
       }
+
+      if (!holiday) {
+        throw "Invalid holiday id";
+      }
+
       res.send(holiday);
     } catch (err) {
       res.status(400).send({
@@ -60,10 +69,15 @@ var HolidayController = {
   async getHolidaysByUser(req, res) {
     const id = req.params.id;
     try {
-      if(id && !await EmployeeSchema.exists({_id: id}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        id &&
+        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
-      holidays = await HolidaySchema.find({id_requester_employee: id});
+      holidays = await HolidaySchema.find({ id_requester_employee: id });
       res.send(holidays);
     } catch (err) {
       res.status(400).send({
@@ -94,11 +108,12 @@ var HolidayController = {
   async deleteHoliday(req, res) {
     const id = req.params.id;
     try {
-      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
+      holiday = await HolidaySchema.findById(id);
+      if (!holiday) {
         throw "Invalid holiday id";
       }
-      
-      await HolidaySchema.findByIdAndDelete(id);
+      holiday.remove();
+
       res.send({
         message: `Holiday deleted`,
       });
@@ -142,15 +157,26 @@ var HolidayController = {
         throw "Invalid keys";
       }
 
-      if(id && !await HolidaySchema.exists({_id: id}).catch((err) => {throw "Invalid holiday id"})) {
-        throw "Invalid holiday id";
-      }
-      if(req.body.id_requester_employee && !await HolidaySchema.exists({_id: req.body.id_requester_employee}).catch((err) => {throw "Invalid employee id"})) {
+      if (
+        req.body.id_requester_employee &&
+        !(await HolidaySchema.exists({
+          _id: req.body.id_requester_employee,
+        }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
         throw "Invalid employee id";
       }
 
       statusHoliday = await HolidaySchema.findById(id).status;
-      HolidaySchema.findByIdAndUpdate(id, req.body)
+      holiday = await HolidaySchema.findById(id);
+      if (!holiday) {
+        throw "Invalid holiday id";
+      }
+      updateKeys = Object.keys(req.body);
+      updateKeys.forEach((key) => (holiday[key] = req.body[key]));
+      await holiday.save();
+
       res.send({
         message: `Holiday ${id} was updated !`,
       });
