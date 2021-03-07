@@ -48,15 +48,30 @@ var EmployeeController = {
       ) {
         throw "Invalid role id";
       }
+      if (
+        req.body.mail &&
+        (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
+          throw "Mail already used";
+        }))
+      ) {
+        throw "Mail already used";
+      }
 
       if (req.file) {
         req.body.photo_url = req.file.filename;
       }
-      const Employee = new EmployeeSchema(req.body);
+      let Employee = new EmployeeSchema(req.body);
+      let password = generatePassword();
+      Employee.password = password;
+
       await Employee.save();
       res.status(201).send(Employee);
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
       NotificationController.NewEmployeeRegistedToDirection(Employee.id);
+      NotificationController.NewEmployeeRegistedToEmployee(
+        Employee.id,
+        password
+      );
     } catch (err) {
       try {
         fs.unlinkSync(
@@ -147,6 +162,14 @@ var EmployeeController = {
         }))
       ) {
         throw "Invalid role id";
+      }
+      if (
+        req.body.mail &&
+        !(await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
+          throw "Mail already used";
+        }))
+      ) {
+        throw "Mail already used";
       }
 
       serviceEmployee = await EmployeeSchema.findById(id).id_service;
@@ -271,11 +294,42 @@ var EmployeeController = {
     }
   },
 
-  async ForgotPassword(req, res) {},
+  async updatePassword(req, res) {
+    let mail = req.body.mail;
+    let password = generatePassword();
+    let Employee = await EmployeeSchema.findOne({ mail: mail });
+
+    if (!Employee) {
+      res.status(400).send({
+        message: "Error when send ForgotPassword",
+        error: "Invalid employee mail",
+      });
+      res.end();
+    } else {
+      Employee.password = password;
+      await Employee.save();
+
+      res.send({
+        message: "Password has been update",
+      });
+      NotificationController.ForgotPasswordToEmployee(Employee.id, password);
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {
   const updatedKeys = Object.keys(body);
   return updatedKeys.every((key) => allowedKeys.includes(key));
 }
+
+function generatePassword() {
+  var length = 8,
+    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    retVal = "";
+  for (var i = 0, n = charset.length; i < length; ++i) {
+    retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+}
+
 module.exports = EmployeeController;

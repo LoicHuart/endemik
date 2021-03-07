@@ -46,7 +46,7 @@ var LoginController = {
         token: token,
       });
     } catch (error) {
-      res.status(401).send("Coucou");
+      res.status(401).send("Can't logout");
     }
   },
 };
