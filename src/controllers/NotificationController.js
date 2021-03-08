@@ -191,7 +191,6 @@ var NotificationController = {
         message: "Error when send ForgotPassword",
         error: "Invalid employee mail",
       });
-      res.end();
     } else {
       let html = `<b>L'employé ${Employee.lastName} ${Employee.firstName} a oublié son mot de passe</b>`;
       sendMail(
@@ -207,7 +206,6 @@ var NotificationController = {
 
   async ForgotPasswordToEmployee(EmployeeId, password) {
     let Employee = await EmployeeSchema.findById(EmployeeId);
-    console.log(Employee);
     let html = `<b>Bonjour ${Employee.firstName},</b>`;
     html += `<b>Voici votre nouveau mot de passe : </b>`;
     html += `<b>${password}</b>`;
