@@ -2,8 +2,8 @@ const EmployeeSchema = require("../models/Employee");
 const ServiceSchema = require("../models/Service");
 const RoleSchema = require("../models/Role");
 const NotificationController = require("../controllers/NotificationController");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 var EmployeeController = {
   async addEmployee(req, res) {
@@ -30,31 +30,83 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if(req.body.id_service && !await ServiceSchema.exists({_id: req.body.id_service}).catch((err) => {throw "Invalid service id"})) {
+      if (
+        req.body.id_service &&
+        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
+          (err) => {
+            throw "Invalid service id";
+          }
+        ))
+      ) {
         throw "Invalid service id";
       }
-      if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
+      if (
+        req.body.id_role &&
+        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
+          throw "Invalid role id";
+        }))
+      ) {
         throw "Invalid role id";
       }
-      if(req.body.mail && await EmployeeSchema.exists({mail: req.body.mail}).catch((err) => {throw "Mail already used"})) {
+      if (
+        req.body.mail &&
+        (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
+          throw "Mail already used";
+        }))
+      ) {
         throw "Mail already used";
       }
 
-      if(req.file) {
+      if (req.file) {
         req.body.photo_url = req.file.filename;
       }
-      const Employee = new EmployeeSchema(req.body);
+      let Employee = new EmployeeSchema(req.body);
+      let password = generatePassword();
+      Employee.password = password;
+
       await Employee.save();
       res.status(201).send(Employee);
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
       NotificationController.NewEmployeeRegistedToDirection(Employee.id);
+      NotificationController.NewEmployeeRegistedToEmployee(
+        Employee.id,
+        password
+      );
     } catch (err) {
       try {
-        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+        fs.unlinkSync(
+          path.resolve(
+            __dirname + "../../../public/uploads/" + req.file.filename
+          )
+        );
       } catch {}
       res.status(400).send({
-        message: "Error when creating a employee",
-        error: err
+        message: "Error : can't created employee",
+        error: err,
+      });
+    }
+  },
+
+  async updatePasswordEmployee(req, res) {
+    const id = req.params.id;
+    try {
+      if (!checkKeys(req.body, ["password"])) {
+        throw "Invalid keys";
+      }
+
+      employee = await EmployeeSchema.findById(id);
+      if (!employee) {
+        throw "Invalid employee id";
+      }
+
+      updateKeys = Object.keys(req.body);
+      updateKeys.forEach((key) => (employee[key] = req.body[key]));
+
+      await employee.save();
+    } catch (err) {
+      res.status(400).send({
+        message: `Error : can't updated (${id}) employee password`,
+        error: err,
       });
     }
   },
@@ -76,7 +128,6 @@ var EmployeeController = {
           "street_nb",
           "street",
           "city",
-          "password",
           "arrival_date",
           "children_nb",
           "id_service",
@@ -86,13 +137,38 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if(req.body.id_service && !await ServiceSchema.exists({_id: req.body.id_service}).catch((err) => {throw "Invalid service id"})) {
+      if (
+        id &&
+        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
+          throw "Invalid employee id";
+        }))
+      ) {
+        throw "Invalid employee id";
+      }
+      if (
+        req.body.id_service &&
+        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
+          (err) => {
+            throw "Invalid service id";
+          }
+        ))
+      ) {
         throw "Invalid service id";
       }
-      if(req.body.id_role && !await RoleSchema.exists({_id: req.body.id_role}).catch((err) => {throw "Invalid role id"})) {
+      if (
+        req.body.id_role &&
+        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
+          throw "Invalid role id";
+        }))
+      ) {
         throw "Invalid role id";
       }
-      if(req.body.mail && !await EmployeeSchema.exists({mail: req.body.mail}).catch((err) => {throw "Mail already used"})) {
+      if (
+        req.body.mail &&
+        !(await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
+          throw "Mail already used";
+        }))
+      ) {
         throw "Mail already used";
       }
 
@@ -102,34 +178,41 @@ var EmployeeController = {
         throw "Invalid employee id";
       }
 
-      if(req.file) {
+      if (req.file) {
         try {
-          fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+employee.photo_url));
+          fs.unlinkSync(
+            path.resolve(
+              __dirname + "../../../public/uploads/" + employee.photo_url
+            )
+          );
         } catch {}
         req.body.photo_url = req.file.filename;
       }
 
       updateKeys = Object.keys(req.body);
-      updateKeys.forEach(key => (employee[key] = req.body[key]));
+      updateKeys.forEach((key) => (employee[key] = req.body[key]));
 
       await employee.save();
 
       res.send({
         message: `Employee (${id}) have been updated`,
       });
-      if(serviceEmployee != req.body.id_service) {
+      if (serviceEmployee != req.body.id_service) {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
     } catch (err) {
       try {
-        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+req.file.filename));
+        fs.unlinkSync(
+          path.resolve(
+            __dirname + "../../../public/uploads/" + req.file.filename
+          )
+        );
       } catch {}
       res.status(400).send({
-        message: "Error when updating a employee",
+        message: `Error : can't updated employee with id(${id})`,
         error: err,
       });
     }
-        
   },
 
   async getAllEmployees(req, res) {
@@ -152,7 +235,7 @@ var EmployeeController = {
       res.send(employees);
     } catch (err) {
       res.status(400).send({
-        message: "Error when geting all employee",
+        message: "Error : can't get all employee",
         error: err,
       });
     }
@@ -178,7 +261,7 @@ var EmployeeController = {
       res.send(employee);
     } catch (err) {
       res.status(400).send({
-        message: "Error when geting a employee by id",
+        message: `Error : can't get employee with id (${id}) `,
         error: err,
       });
     }
@@ -192,7 +275,11 @@ var EmployeeController = {
         throw "Invalid employee id";
       }
       try {
-        fs.unlinkSync(path.resolve(__dirname + "../../../public/uploads/"+employee.photo_url));
+        fs.unlinkSync(
+          path.resolve(
+            __dirname + "../../../public/uploads/" + employee.photo_url
+          )
+        );
       } catch {}
       employee.remove();
 
@@ -201,9 +288,31 @@ var EmployeeController = {
       });
     } catch (err) {
       res.status(400).send({
-        message: "Error when deleting a employee",
+        message: `Error : can't delete employee with id (${id})`,
         error: err,
       });
+    }
+  },
+
+  async updatePassword(req, res) {
+    let mail = req.body.mail;
+    let password = generatePassword();
+    let Employee = await EmployeeSchema.findOne({ mail: mail });
+
+    if (!Employee) {
+      res.status(400).send({
+        message: "Error when send ForgotPassword",
+        error: "Invalid employee mail",
+      });
+      res.end();
+    } else {
+      Employee.password = password;
+      await Employee.save();
+
+      res.send({
+        message: "Password has been update",
+      });
+      NotificationController.ForgotPasswordToEmployee(Employee.id, password);
     }
   },
 };
@@ -212,4 +321,15 @@ function checkKeys(body, allowedKeys) {
   const updatedKeys = Object.keys(body);
   return updatedKeys.every((key) => allowedKeys.includes(key));
 }
+
+function generatePassword() {
+  var length = 8,
+    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    retVal = "";
+  for (var i = 0, n = charset.length; i < length; ++i) {
+    retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+}
+
 module.exports = EmployeeController;
