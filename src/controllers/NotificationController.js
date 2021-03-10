@@ -4,6 +4,7 @@ const EmployeeSchema = require("../models/Employee");
 const Employee = require("../models/Employee");
 const { populate } = require("../models/Holiday");
 const date = new Date();
+const hbs = require('nodemailer-express-handlebars');
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -15,14 +16,31 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.use('compile', hbs({
+    viewEngine: 'express_handlebars',
+    viewPath: './templateMail/'
+}));
+
 async function mailOptions(to, subject, html) {
   return {
     from: '"Endemik" <Endemik@Endemik.com>',
     to: to,
     subject: subject,
-    html: html,
+      html: html,
+      attachments: [
+          { filename: 'picture.JPG', path: './picutre.JPG' }
+      ],
+      template: 'index'
   };
 }
+
+/*transporter.sendMail(mailOptions, function (err, info) {
+    if (err) {
+        console.log('Error : ', err);
+    } else {
+        console.log('Message sent');
+    }
+})*/
 
 async function sendMail(to, subject, html) {
   transporter.sendMail(
