@@ -1,42 +1,24 @@
-const path = require("path");
-const express = require("express");
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const mongoose = require("mongoose");
-const initRoute = require("./src/route.js");
 require("dotenv").config();
+require("./src/db/mongoose");
+const express = require("express");
+const path = require('path');
+const publicDirectoryPath = path.join(__dirname, '../public');
+const holidayRoutes = require("./src/routes/Holiday");
+const employeeRoutes = require("./src/routes/Employee");
+const loginRoutes = require("./src/routes/Login");
+
+const serviceRoutes = require("./src/routes/Service");
 
 const app = express();
 const port = process.env.APP_PORT || 4000;
 
-app.use(express.static(path.join(__dirname, "./public")));
-app.set("views", path.join(__dirname, "./src/views"));
-app.set("view engine", "ejs");
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
-app.use(bodyParser.urlencoded({extended : true}));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(publicDirectoryPath));
+app.use("/api", holidayRoutes);
+app.use("/api", employeeRoutes);
+app.use("/api", loginRoutes);
 
-mongoose.connect(
-  "mongodb://" +
-    process.env.DB_USERNAME +
-    ":" +
-    process.env.DB_PASSWORD +
-    "@" +
-    process.env.DB_HOST +
-    "/endemik?authSource=admin",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
-  console.log("connexion mongodb réussi");
-});
-
-initRoute(app);
+app.use("/api", serviceRoutes);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
