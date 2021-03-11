@@ -130,7 +130,7 @@ var ServiceController = {
         service.name.toLowerCase() == "rh" ||
         service.name.toLowerCase() == "direction"
       ) {
-        throw "You can't delete this service";
+        throw "Cannot delete this service";
       }
 
       if (!service) {
