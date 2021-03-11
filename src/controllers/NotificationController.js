@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const HolidaySchema = require("../models/Holiday");
 const EmployeeSchema = require("../models/Employee");
 const { populate } = require("../models/Holiday");
+const ServiceSchema = require("../models/Service");
 const date = new Date();
 
 const transporter = nodemailer.createTransport({
@@ -86,13 +87,16 @@ var NotificationController = {
     Holiday = await HolidaySchema.findById(HolidayId).populate(
       "id_requester_employee"
     );
-    EmployeeServiceRH = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_RH,
-    });
+
+    serviceRhId = await ServiceSchema.findOne({name: "rh"});
+    EmployeeServiceRH = await EmployeeSchema.find({id_service: serviceRhId.id}).populate(
+      "id_service"
+    );
 
     RHMail = await EmployeeServiceRH.map((RH) => {
       return RH.mail;
     });
+    console.log(RHMail)
     let html = `<b>Une nouvelle demande de congé de ${
       Holiday.id_requester_employee.lastName
     } ${Holiday.id_requester_employee.firstName} du ${date.toLocaleDateString(
@@ -138,12 +142,15 @@ var NotificationController = {
         path: "id_manager",
       },
     });
+
+    serviceDirectionId = await ServiceSchema.findOne({name: "direction"});
     EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_DIRECTION,
+      id_service: serviceDirectionId.id,
     });
     DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
     });
+
     let html = `<b>Un nouvel employé vient d'etre créé, ${Employee.lastName} ${Employee.firstName}, il rejoint le service ${Employee.id_service.name} managé par ${Employee.id_service.id_manager.lastName} ${Employee.id_service.id_manager.firstName}</b>`;
     sendMail(
       DirectionMail,

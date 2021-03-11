@@ -28,7 +28,7 @@ var ServiceController = {
       });
     }
   },
-  
+
   async getAllServices(req, res) {
     const populate = parseInt(req.query.populate);
     let services;
@@ -84,9 +84,8 @@ var ServiceController = {
         throw "Invalid service id";
       }
       updateKeys = Object.keys(req.body);
-      updateKeys.forEach(key => (service[key] = req.body[key]));
+      updateKeys.forEach((key) => (service[key] = req.body[key]));
       await service.save();
-
 
       res.send({
         message: `Service ${id} was updated !`,
@@ -127,10 +126,21 @@ var ServiceController = {
     const id = req.params.id;
     try {
       service = await ServiceSchema.findById(id);
+      if (
+        service.name.toLowerCase() == "rh" ||
+        service.name.toLowerCase() == "direction"
+      ) {
+        throw "Cannot delete this service";
+      }
+
       if (!service) {
         throw "Invalid service id";
       }
-      if(await EmployeeSchema.exists({id_service: id}).catch((err) => {throw "Cannot delete the service while employee is linked"})) {
+      if (
+        await EmployeeSchema.exists({ id_service: id }).catch((err) => {
+          throw "Cannot delete the service while employee is linked";
+        })
+      ) {
         throw "Cannot delete the service while employee is linked";
       }
       service.remove();
