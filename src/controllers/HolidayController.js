@@ -189,11 +189,7 @@ var HolidayController = {
   async updateHolidayStatus(req, res) {
     const id = req.params.id;
     try {
-      if (
-        !checkKeys(req.body, [
-          "status",
-        ])
-      ) {
+      if (!checkKeys(req.body, ["status"])) {
         throw "Invalid keys";
       }
 
@@ -203,7 +199,7 @@ var HolidayController = {
         throw "Invalid holiday id";
       }
       updateKeys = Object.keys(req.body);
-      updateKeys.forEach(key => (holiday[key] = req.body[key]));
+      updateKeys.forEach((key) => (holiday[key] = req.body[key]));
       await holiday.save();
 
       res.send({
