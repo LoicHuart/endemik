@@ -1,6 +1,7 @@
 const EmployeeSchema = require("../models/Employee");
 const ServiceSchema = require("../models/Service");
 const RoleSchema = require("../models/Role");
+const HolidaySchema = require("../models/Holiday");
 const NotificationController = require("../controllers/NotificationController");
 const fs = require("fs");
 const path = require("path");
@@ -274,6 +275,11 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
+      holiday = await HolidaySchema.find({id_requester_employee: id});
+      if (holiday[0]) {
+        throw "this employee has holidays requests pending";
+      }
+
       try {
         fs.unlinkSync(
           path.resolve(
