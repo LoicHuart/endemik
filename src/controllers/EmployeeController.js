@@ -63,7 +63,7 @@ var EmployeeController = {
       let Employee = new EmployeeSchema(req.body);
       let password = generatePassword();
       Employee.password = password;
-
+      console.log(password);
       await Employee.save();
       res.status(201).send(Employee);
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
