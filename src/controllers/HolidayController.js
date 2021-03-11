@@ -212,7 +212,7 @@ var HolidayController = {
       if (statusHoliday != req.body.status) {
         NotificationController.HolidayRequestStatusUpdateToEmployee(id);
         NotificationController.HolidayRequestStatusUpdateToManager(id);
-        if (req.body.status == "prevalider") {
+        if (req.body.status == "prevalidée") {
           NotificationController.NewHolidayRequestToRh(id);
         }
       }
