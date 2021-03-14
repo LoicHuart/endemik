@@ -87,30 +87,6 @@ var EmployeeController = {
     }
   },
 
-  async updatePasswordEmployee(req, res) {
-    const id = req.params.id;
-    try {
-      if (!checkKeys(req.body, ["password"])) {
-        throw "Invalid keys";
-      }
-
-      employee = await EmployeeSchema.findById(id);
-      if (!employee) {
-        throw "Invalid employee id";
-      }
-
-      updateKeys = Object.keys(req.body);
-      updateKeys.forEach((key) => (employee[key] = req.body[key]));
-
-      await employee.save();
-    } catch (err) {
-      res.status(400).send({
-        message: `Error : can't updated (${id}) employee password`,
-        error: err,
-      });
-    }
-  },
-
   async updateEmployee(req, res) {
     const id = req.params.id;
     try {
@@ -300,7 +276,7 @@ var EmployeeController = {
   },
 
   async updatePassword(req, res) {
-    let mail = req.body.mail;
+    let mail = req.params.mail;
     let password = generatePassword();
     let Employee = await EmployeeSchema.findOne({ mail: mail });
 
