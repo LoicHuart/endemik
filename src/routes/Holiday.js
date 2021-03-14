@@ -22,6 +22,6 @@ router
 
 router
   .route("/holidays/status/:status/:id")
-  .put(HolidayController.updateHolidayStatus)
+  .get(HolidayController.updateHolidayStatus)
   
 module.exports = router;
