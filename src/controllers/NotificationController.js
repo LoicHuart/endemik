@@ -30,7 +30,7 @@ async function mailOptions(to, subject, html) {
   };
 }
 
-async function sendMail(to, subject, headerHtml, bodyHtml, button, footerHtml) {
+async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml, buttonHtml) {
   const filePath = path.join(__dirname, "../templateMail/index.html");
   const source = fs.readFileSync(filePath, "utf-8").toString();
   const template = hbs.compile(source);
@@ -141,12 +141,24 @@ var NotificationController = {
       )} est en attente de validation.`
     );
     let footer = `La Direction`;
+    let button = [
+      {
+      type: 'validée',
+      url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`
+      },
+      {
+        type: 'refusée',
+        url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`
+      }
+    ]
+
     sendMail(
       RHMail,
       `Une nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} est en attente de validation ! `,
       header,
       body,
-      footer
+      footer,
+      button
     );
   },
 
