@@ -30,7 +30,7 @@ async function mailOptions(to, subject, html) {
   };
 }
 
-async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml) {
+async function sendMail(to, subject, headerHtml, bodyHtml, button, footerHtml) {
   const filePath = path.join(__dirname, "../templateMail/index.html");
   const source = fs.readFileSync(filePath, "utf-8").toString();
   const template = hbs.compile(source);
@@ -38,6 +38,7 @@ async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml) {
   const replacements = {
     header: headerHtml,
     body: bodyHtml,
+    button: buttonHtml,
     footer: footerHtml,
   };
 
@@ -62,11 +63,14 @@ var NotificationController = {
     );
 
     let header = `Le statut de votre demande de congé a changé`;
-    let body = `Votre demande de congé du ${date.toLocaleDateString(
-      Holiday.starting_date
-    )} au ${date.toLocaleDateString(
-      Holiday.ending_date
-    )} a changé de status : ${Holiday.status}.`;
+    let body = [];
+    body.push(
+      `Votre demande de congé du ${date.toLocaleDateString(
+        Holiday.starting_date
+      )} au ${date.toLocaleDateString(
+        Holiday.ending_date
+      )} a changé de status : ${Holiday.status}.`
+    );
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.mail,
@@ -91,19 +95,21 @@ var NotificationController = {
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
     let header = `Le statut de la demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} a changé`;
-    let body = `La demande de congé de ${firstname} ${
-      Holiday.id_requester_employee.lastName
-    } du ${date.toLocaleDateString(
-      Holiday.starting_date
-    )} au ${date.toLocaleDateString(Holiday.ending_date)} a changé de statut: ${
-      Holiday.status
-    }.`;
+    let body = [];
+    body.push(
+      `La demande de congé de ${firstname} ${
+        Holiday.id_requester_employee.lastName
+      } du ${date.toLocaleDateString(
+        Holiday.starting_date
+      )} au ${date.toLocaleDateString(
+        Holiday.ending_date
+      )} a changé de statut: ${Holiday.status}.`
+    );
+
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
-      `Le statut de la demande de congé de ${Holiday.id_requester_employee.lastName} !` +
-        firstname +
-        ` a changé`,
+      `Le statut de la demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} a changé`,
       header,
       body,
       footer
@@ -124,13 +130,16 @@ var NotificationController = {
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
     let header = `Une nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName}`;
-    let body = `Une nouvelle demande de congé de ${firstname} ${
-      Holiday.id_requester_employee.lastName
-    } du ${date.toLocaleDateString(
-      Holiday.starting_date
-    )} au ${date.toLocaleDateString(
-      Holiday.ending_date
-    )} est en attente de validation.`;
+    let body = [];
+    body.push(
+      `Une nouvelle demande de congé de ${firstname} ${
+        Holiday.id_requester_employee.lastName
+      } du ${date.toLocaleDateString(
+        Holiday.starting_date
+      )} au ${date.toLocaleDateString(
+        Holiday.ending_date
+      )} est en attente de validation.`
+    );
     let footer = `La Direction`;
     sendMail(
       RHMail,
@@ -151,8 +160,15 @@ var NotificationController = {
     let firstname = Employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
+    let firstnameManager = Employee.id_service.id_manager.firstName;
+    firstnameManager =
+      firstnameManager.charAt(0).toUpperCase() +
+      firstnameManager.substring(1).toLowerCase();
     let header = `${firstname} ${Employee.lastName} vient de rejoindre votre service`;
-    let body = `${firstname} ${Employee.lastName}  vient de rejoindre votre service, souhaitez lui la bienvenue !`;
+    let body = [];
+    body.push(
+      `${firstname} ${Employee.lastName} vient de rejoindre votre service, souhaitez lui la bienvenue !`
+    );
     let footer = `La Direction`;
     sendMail(
       Employee.id_service.id_manager.mail,
@@ -174,20 +190,29 @@ var NotificationController = {
     let firstname = Employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
+    let firstnameManager = Employee.id_service.id_manager.firstName;
+    firstnameManager =
+      firstnameManager.charAt(0).toUpperCase() +
+      firstnameManager.substring(1).toLowerCase();
+    let city = Employee.city;
+    city = city.charAt(0).toUpperCase() + city.substring(1).toLowerCase();
     let header = `Soyez la bienvenue !`;
-    let body;
-    body += `Voici les principales informations concernant votre compte :`;
-    body += `Nom : ${Employee.lastName}`;
-    //console.log(body);
-    /*body += `Prénom : ${firstname}`;
-    body += `Date de naissance : ${Employee.date_birth}`;
-    body += `Numéro de téléphone : ${Employee.tel_nb}`;
-    body += `Adresse mail : ${Employee.mail}`;
-    body += `Mot de passe : ${password}`;
-    body += `Adresse postale : ${Employee.street_nb} ${Employee.street}, ${Employee.city}`;
-    body += `Numéro de sécurité sociale : ${Employee.social_security_number}`;
-    body += `Service : ${Employee.id_service.name}`;
-    body += `Manager : ${Employee.id_service.id_manager.firstName}`; */
+    let body = [];
+    body.push(`Voici les principales informations concernant votre compte :`);
+    body.push(`Nom : ${Employee.lastName}`);
+    body.push(`Prénom : ${firstname}`);
+    body.push(`Date de naissance : ${Employee.date_birth}`);
+    body.push(`Numéro de téléphone : ${Employee.tel_nb}`);
+    body.push(`Adresse mail : ${Employee.mail}`);
+    body.push(`Mot de passe : ${password}`);
+    body.push(
+      `Adresse postale : ${Employee.street_nb} ${Employee.street}, ${city}`
+    );
+    body.push(
+      `Numéro de sécurité sociale : ${Employee.social_security_number}`
+    );
+    body.push(`Service : ${Employee.id_service.name}`);
+    body.push(`Manageur : ${firstnameManager}`);
     let footer = `La Direction`;
     sendMail(Employee.mail, `Votre compte a été crée !`, header, body, footer);
   },
@@ -213,7 +238,10 @@ var NotificationController = {
       return direction.mail;
     });
     let header = `Un nouvel employé vient d'etre créé !`;
-    let body = `Un nouvel employé vient d'etre créé, ${firstname} ${Employee.lastName}, il rejoint le service ${Employee.id_service.name} managé par ${firstnameManager} ${Employee.id_service.id_manager.lastName}.`;
+    let body = [];
+    body.push(
+      `Un nouvel employé vient d'etre créé, ${firstname} ${Employee.lastName}, il rejoint le service ${Employee.id_service.name} managé par ${firstnameManager} ${Employee.id_service.id_manager.lastName}.`
+    );
     let footer = ``;
     sendMail(
       DirectionMail,
@@ -238,13 +266,16 @@ var NotificationController = {
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
     let header = `Nouvelle demande de congée !`;
-    let body = `Une nouvelle demande de congée de ${
-      Holiday.id_requester_employee.lastName
-    } ${firstname} du ${date.toLocaleDateString(
-      Holiday.starting_date
-    )} au ${date.toLocaleDateString(
-      Holiday.ending_date
-    )} est en attente de validation.`;
+    let body = [];
+    body.push(
+      `Une nouvelle demande de congée de ${
+        Holiday.id_requester_employee.lastName
+      } ${firstname} du ${date.toLocaleDateString(
+        Holiday.starting_date
+      )} au ${date.toLocaleDateString(
+        Holiday.ending_date
+      )} est en attente de validation.`
+    );
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
@@ -272,11 +303,18 @@ var NotificationController = {
         error: "Invalid employee mail",
       });
     } else {
-      let header = `L'employé ${firstname} ${Employee.lastName}  a oublié son mot de passe`;
+      let header = `${firstname} a oublié son mot de passe, on a besoin de vous !`;
+      let body = [];
+      body.push(
+        `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`
+      );
+      let footer = `La Direction`;
       sendMail(
         DirectionMail,
         `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`,
-        html
+        header,
+        body,
+        footer
       );
       res.send({
         message: "mail has been send to direction",
@@ -286,14 +324,20 @@ var NotificationController = {
 
   async ForgotPasswordToEmployee(EmployeeId, password) {
     let Employee = await EmployeeSchema.findById(EmployeeId);
-    let html = `Bonjour ${Employee.firstName},`;
-    html += `Voici votre nouveau mot de passe : `;
-    html += `${password}`;
-    html += `Bonne journée, La Direction`;
+    let firstname = Employee.firstName;
+    firstname =
+      firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
+    let header = ``;
+    let body = [];
+    body.push(`Voici votre nouveau mot de passe : `);
+    body.push(`${password}`);
+    let footer = `La Direction`;
     sendMail(
       Employee.mail,
-      `${Employee.firstName}, voici votre nouveau mot de passe`,
-      html
+      `${firstname}, voici votre nouveau mot de passe`,
+      header,
+      body,
+      footer
     );
   },
 };
