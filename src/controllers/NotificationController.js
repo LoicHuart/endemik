@@ -147,12 +147,12 @@ var NotificationController = {
     button.push({
       text: 'validée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#15D636'
+      color: '#D5E8D4'
     })
     button.push({
       text: 'refusée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FC4545'
+      color: '#FF9999'
     })
     sendMail(
       RHMail,
@@ -296,12 +296,12 @@ var NotificationController = {
     button.push({
       text: 'validée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#15D636'
+      color: '#D5E8D4'
     })
     button.push({
       text: 'refusée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FC4545'
+      color: '#FF9999'
     })
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
@@ -342,7 +342,7 @@ var NotificationController = {
       button.push({
         text: 'validée',
         url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
-        color: '#15D636'
+        color: '#D5E8D4'
       })
       sendMail(
         DirectionMail,
