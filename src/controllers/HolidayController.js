@@ -150,7 +150,6 @@ var HolidayController = {
           "ending_date",
           "current_date",
           "type",
-          "id_requester_employee",
         ])
       ) {
         throw "Invalid keys";

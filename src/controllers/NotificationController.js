@@ -147,12 +147,12 @@ var NotificationController = {
     button.push({
       text: 'validée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#15D636'
+      color: '#D5E8D4'
     })
     button.push({
       text: 'refusée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FC4545'
+      color: '#FF9999'
     })
     sendMail(
       RHMail,
@@ -245,10 +245,11 @@ var NotificationController = {
     firstnameManager =
       firstnameManager.charAt(0).toUpperCase() +
       firstnameManager.substring(1).toLowerCase();
-    EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: serviceDirectionId.id,
+    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let EmployeeServiceDirection = await EmployeeSchema.find({
+      id_service: serviceDirectionId
     });
-    DirectionMail = EmployeeServiceDirection.map((direction) => {
+    let DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
     });
     let header = `Un nouvel employé vient d'etre créé !`;
@@ -295,12 +296,12 @@ var NotificationController = {
     button.push({
       text: 'validée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#15D636'
+      color: '#D5E8D4'
     })
     button.push({
       text: 'refusée',
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FC4545'
+      color: '#FF9999'
     })
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
@@ -313,13 +314,15 @@ var NotificationController = {
   },
 
   async ForgotPasswordToDirection(req, res) {
-    EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_DIRECTION,
+    let mail = req.params.mail;
+    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let EmployeeServiceDirection = await EmployeeSchema.find({
+      id_service: serviceDirectionId,
     });
-    DirectionMail = EmployeeServiceDirection.map((direction) => {
+    let DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
     });
-    let Employee = await EmployeeSchema.findOne({ mail: req.params.mail });
+    let Employee = await EmployeeSchema.findOne({ mail: mail });
     let firstname = Employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
@@ -338,8 +341,8 @@ var NotificationController = {
       let button = []
       button.push({
         text: 'validée',
-        url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-        color: '#15D636'
+        url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
+        color: '#D5E8D4'
       })
       sendMail(
         DirectionMail,
