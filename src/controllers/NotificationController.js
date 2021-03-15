@@ -245,10 +245,11 @@ var NotificationController = {
     firstnameManager =
       firstnameManager.charAt(0).toUpperCase() +
       firstnameManager.substring(1).toLowerCase();
-    EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: serviceDirectionId.id,
+    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let EmployeeServiceDirection = await EmployeeSchema.find({
+      id_service: serviceDirectionId
     });
-    DirectionMail = EmployeeServiceDirection.map((direction) => {
+    let DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
     });
     let header = `Un nouvel employé vient d'etre créé !`;
@@ -313,13 +314,15 @@ var NotificationController = {
   },
 
   async ForgotPasswordToDirection(req, res) {
-    EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_DIRECTION,
+    let mail = req.params.mail;
+    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let EmployeeServiceDirection = await EmployeeSchema.find({
+      id_service: serviceDirectionId,
     });
-    DirectionMail = EmployeeServiceDirection.map((direction) => {
+    let DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
     });
-    let Employee = await EmployeeSchema.findOne({ mail: req.params.mail });
+    let Employee = await EmployeeSchema.findOne({ mail: mail });
     let firstname = Employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
@@ -338,7 +341,7 @@ var NotificationController = {
       let button = []
       button.push({
         text: 'validée',
-        url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
+        url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
         color: '#15D636'
       })
       sendMail(
