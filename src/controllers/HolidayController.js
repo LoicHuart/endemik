@@ -150,7 +150,6 @@ var HolidayController = {
           "ending_date",
           "current_date",
           "type",
-          "id_requester_employee",
         ])
       ) {
         throw "Invalid keys";
@@ -188,31 +187,31 @@ var HolidayController = {
 
   async updateHolidayStatus(req, res) {
     const id = req.params.id;
+    const status = req.params.status;
     try {
       if (
-        !checkKeys(req.body, [
+        !checkKeys({status}, [
           "status",
         ])
       ) {
         throw "Invalid keys";
       }
 
-      statusHoliday = await HolidaySchema.findById(id).status;
+      statusHoliday = await (await HolidaySchema.findById(id)).status;
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
         throw "Invalid holiday id";
       }
-      updateKeys = Object.keys(req.body);
-      updateKeys.forEach(key => (holiday[key] = req.body[key]));
+      holiday.status = status;
       await holiday.save();
 
       res.send({
         message: `Holiday status ${id} was updated !`,
       });
-      if (statusHoliday != req.body.status) {
+      if (statusHoliday != status) {
         NotificationController.HolidayRequestStatusUpdateToEmployee(id);
         NotificationController.HolidayRequestStatusUpdateToManager(id);
-        if (req.body.status == "prevalider") {
+        if (status == "prévalidée") {
           NotificationController.NewHolidayRequestToRh(id);
         }
       }
