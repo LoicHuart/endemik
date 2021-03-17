@@ -148,9 +148,11 @@
                   </tr>
                   <tr>
                     <td align="center" style="font-size:0px;padding:0px 25px 0px 25px;word-break:break-word;font-family: Georgia, serif;">
-                        {{#each button}}
-                          <button type="button">{{this}}</button>
-                        {{/each}}
+                      
+                      {{#each button}}
+                        <a href='{{this.url}}'><button style="border-radius: 5px;font-family:Arial,sans-serif;font-size:20px;line-height:28px;text-align:center;color:#55575d; background-color: {{this.color}};border-color: {{this.color}};font-weight: simple;" type="button">{{this.text}}</button></a>
+                      {{/each}}
+                        
                     </td>
                   </tr>
                 <div>

@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const HolidaySchema = require("../models/Holiday");
 const EmployeeSchema = require("../models/Employee");
 const { populate } = require("../models/Holiday");
+const ServiceSchema = require("../models/Service");
 const date = new Date();
 const hbs = require("handlebars");
 const path = require("path");
@@ -30,7 +31,7 @@ async function mailOptions(to, subject, html) {
   };
 }
 
-async function sendMail(to, subject, headerHtml, bodyHtml, button, footerHtml) {
+async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml, buttonHtml) {
   const filePath = path.join(__dirname, "../templateMail/index.html");
   const source = fs.readFileSync(filePath, "utf-8").toString();
   const template = hbs.compile(source);
@@ -48,7 +49,7 @@ async function sendMail(to, subject, headerHtml, bodyHtml, button, footerHtml) {
     await mailOptions(to, subject, htmlToSend),
     function (err, info) {
       if (err) {
-        console.log("Error when sending a mail");
+        console.log("Error when sending a mail: "+ err);
       } else {
         console.log("Email sent: " + info.response);
       }
@@ -119,9 +120,10 @@ var NotificationController = {
     Holiday = await HolidaySchema.findById(HolidayId).populate(
       "id_requester_employee"
     );
-    EmployeeServiceRH = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_RH,
-    });
+    serviceRhId = await ServiceSchema.findOne({name: "rh"});
+    EmployeeServiceRH = await EmployeeSchema.find({id_service: serviceRhId.id}).populate(
+      "id_service"
+    );
     RHMail = await EmployeeServiceRH.map((RH) => {
       return RH.mail;
     });
@@ -140,12 +142,24 @@ var NotificationController = {
       )} est en attente de validation.`
     );
     let footer = `La Direction`;
+    let button = []
+    button.push({
+      text: 'validée',
+      url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
+      color: '#15D636'
+    })
+    button.push({
+      text: 'refusée',
+      url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
+      color: '#FC4545'
+    })
     sendMail(
       RHMail,
       `Une nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} est en attente de validation ! `,
       header,
       body,
-      footer
+      footer,
+      button
     );
   },
 
@@ -229,7 +243,7 @@ var NotificationController = {
       firstnameManager.charAt(0).toUpperCase() +
       firstnameManager.substring(1).toLowerCase();
     EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: process.env.ID_SERVICE_DIRECTION,
+      id_service: serviceDirectionId.id,
     });
     DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
@@ -274,12 +288,24 @@ var NotificationController = {
       )} est en attente de validation.`
     );
     let footer = `La Direction`;
+    let button = []
+    button.push({
+      text: 'validée',
+      url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
+      color: '#15D636'
+    })
+    button.push({
+      text: 'refusée',
+      url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
+      color: '#FC4545'
+    })
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
       `Une nouvelle demande de congé de ${Holiday.id_requester_employee.lastName} ${firstname} est en attente de validation !`,
       header,
       body,
-      footer
+      footer,
+      button
     );
   },
 
@@ -306,12 +332,19 @@ var NotificationController = {
         `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`
       );
       let footer = `La Direction`;
+      let button = []
+      button.push({
+        text: 'validée',
+        url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
+        color: '#15D636'
+      })
       sendMail(
         DirectionMail,
         `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe !`,
         header,
         body,
-        footer
+        footer,
+        button
       );
       res.send({
         message: "mail has been send to direction",

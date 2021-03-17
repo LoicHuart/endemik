@@ -21,6 +21,12 @@ router
   );
 
 router
+  .route("/employees/updatePassword/:mail")
+  .get(
+    EmployeeController.updatePassword
+  );
+
+router
   .route("/employees/:id")
   .put(
     isLoggedIn,
@@ -43,12 +49,6 @@ router
   .route("/employees/forgotPassword/:mail")
   .get(NotificationController.ForgotPasswordToDirection);
 
-router
-  .route("/update")
-  .put(
-    isLoggedIn,
-    hasAccessRole(["direction", "DEV", "admin"]),
-    EmployeeController.updatePassword
-  );
+
 
 module.exports = router;

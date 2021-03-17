@@ -21,7 +21,7 @@ router
   .get(isLoggedIn, hasAccessRole(['admin','direction','rh','employee','DEV']), HolidayController.getHolidaysByUser);
 
 router
-  .route("/holidays/status/:id")
-  .put(isLoggedIn, hasAccessRole(['direction','rh','DEV']), HolidayController.updateHolidayStatus)
+  .route("/holidays/status/:status/:id")
+  .get(HolidayController.updateHolidayStatus)
   
 module.exports = router;
