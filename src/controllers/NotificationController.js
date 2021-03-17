@@ -69,7 +69,7 @@ var NotificationController = {
         Holiday.starting_date
       )} au ${date.toLocaleDateString(
         Holiday.ending_date
-      )} a changé de status : ${Holiday.status}.`
+      )} a changé de statut : ${Holiday.status}.`
     );
     let footer = `La Direction`;
     sendMail(
@@ -103,9 +103,8 @@ var NotificationController = {
         Holiday.starting_date
       )} au ${date.toLocaleDateString(
         Holiday.ending_date
-      )} a changé de statut: ${Holiday.status}.`
+      )} a changé de statut : ${Holiday.status}.`
     );
-
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
@@ -208,9 +207,7 @@ var NotificationController = {
     body.push(
       `Adresse postale : ${Employee.street_nb} ${Employee.street}, ${city}`
     );
-    body.push(
-      `Numéro de sécurité sociale : ${Employee.social_security_number}`
-    );
+    body.push(`Numéro de sécurité social : ${Employee.social_security_number}`);
     body.push(`Service : ${Employee.id_service.name}`);
     body.push(`Manageur : ${firstnameManager}`);
     let footer = `La Direction`;
@@ -265,10 +262,10 @@ var NotificationController = {
     let firstname = Holiday.id_requester_employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
-    let header = `Nouvelle demande de congée !`;
+    let header = `Nouvelle demande de congé !`;
     let body = [];
     body.push(
-      `Une nouvelle demande de congée de ${
+      `Une nouvelle demande de congé de ${
         Holiday.id_requester_employee.lastName
       } ${firstname} du ${date.toLocaleDateString(
         Holiday.starting_date
@@ -279,7 +276,7 @@ var NotificationController = {
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
-      `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${firstname} est en attente de validation !`,
+      `Une nouvelle demande de congé de ${Holiday.id_requester_employee.lastName} ${firstname} est en attente de validation !`,
       header,
       body,
       footer
@@ -311,7 +308,7 @@ var NotificationController = {
       let footer = `La Direction`;
       sendMail(
         DirectionMail,
-        `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`,
+        `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe !`,
         header,
         body,
         footer
@@ -334,7 +331,7 @@ var NotificationController = {
     let footer = `La Direction`;
     sendMail(
       Employee.mail,
-      `${firstname}, voici votre nouveau mot de passe`,
+      `${firstname}, voici votre nouveau mot de passe !`,
       header,
       body,
       footer
