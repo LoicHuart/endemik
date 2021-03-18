@@ -34,9 +34,9 @@ var ServiceController = {
     let services;
     try {
       if (populate) {
-        services = await ServiceSchema.find().populate("id_manager");
+        services = await ServiceSchema.find(req.body).populate("id_manager");
       } else {
-        services = await ServiceSchema.find();
+        services = await ServiceSchema.find(req.body);
       }
       res.send(services);
     } catch (err) {

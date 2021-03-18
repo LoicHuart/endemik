@@ -92,9 +92,9 @@ var HolidayController = {
     let holidays;
     try {
       if (populate) {
-        holidays = await HolidaySchema.find().populate("id_requester_employee");
+        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
       } else {
-        holidays = await HolidaySchema.find();
+        holidays = await HolidaySchema.find(req.body);
       }
       res.send(holidays);
     } catch (err) {
