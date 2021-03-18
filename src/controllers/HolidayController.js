@@ -105,6 +105,42 @@ var HolidayController = {
     }
   },
 
+  async getHolidaysByService(req, res) {
+    const idService = req.params.idService;
+    console.log(idService);
+    const populate = parseInt(req.query.populate);
+    let holidays;
+    try {
+      // let idEmployeesService = await (await EmployeeSchema.find({id_service: idService})).id;
+      // if (!employeesService) {
+      //   throw "Invalid service id";
+      // }
+
+
+      if (populate) {
+        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
+      } else {
+        holidays = await HolidaySchema.find(req.body);
+      }
+
+      let holidaysService = [];
+      holidays.forEach((holiday) => {
+        if (holiday.id_requester_employee.id_service == idService) {
+          holidaysService.push(holiday);
+        }
+      });
+
+
+
+      res.send(holidaysService);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when geting holiday by service",
+        error: err,
+      });
+    }
+  },
+
   async deleteHoliday(req, res) {
     const id = req.params.id;
     try {
