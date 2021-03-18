@@ -323,15 +323,15 @@ var NotificationController = {
       return direction.mail;
     });
     let Employee = await EmployeeSchema.findOne({ mail: mail });
-    let firstname = Employee.firstName;
-    firstname =
-      firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
+    
     if (!Employee) {
       res.status(400).send({
         message: "Error when send ForgotPassword",
         error: "Invalid employee mail",
       });
     } else {
+      let firstname = Employee.firstName;
+      firstname = firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
       let header = `${firstname} a oublié son mot de passe, on a besoin de vous !`;
       let body = [];
       body.push(

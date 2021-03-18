@@ -196,19 +196,18 @@ var HolidayController = {
       ) {
         throw "Invalid keys";
       }
-
-      statusHoliday = await (await HolidaySchema.findById(id)).status;
+      
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
         throw "Invalid holiday id";
       }
+      statusHolidayCache = holiday.status
       holiday.status = status;
       await holiday.save();
-
       res.send({
         message: `Holiday status ${id} was updated !`,
       });
-      if (statusHoliday != status) {
+      if (statusHolidayCache != status) {
         NotificationController.HolidayRequestStatusUpdateToEmployee(id);
         NotificationController.HolidayRequestStatusUpdateToManager(id);
         if (status == "prévalidée") {
