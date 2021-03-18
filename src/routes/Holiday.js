@@ -11,6 +11,9 @@ router
   .put(isLoggedIn, hasAccessRole(['admin','direction','rh','employee','DEV']), HolidayController.updateHoliday)
   .get(isLoggedIn, hasAccessRole(['admin','direction','rh','employee','DEV']), HolidayController.getHolidayByID)
   .delete(isLoggedIn, hasAccessRole(['admin','direction','rh','employee','DEV']), HolidayController.deleteHoliday);
+router
+  .route("/holidays/service/:idService")
+  .get(isLoggedIn, hasAccessRole(['admin','direction','rh','employee','DEV']), HolidayController.getHolidaysByService);
 
 router
   .route("/holidays")
