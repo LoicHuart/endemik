@@ -10,7 +10,7 @@ router
   .route("/employees")
   .post(
     isLoggedIn,
-    hasAccessRole(["admin", "direction", "DEV"]),
+    hasAccessRole(["admin", "direction", "DEV", "rh"]),
     UploadPicture.single("photo"),
     EmployeeController.addEmployee
   )
@@ -22,21 +22,19 @@ router
 
 router
   .route("/employees/updatePassword/:mail")
-  .get(
-    EmployeeController.updatePassword
-  );
+  .get(EmployeeController.updatePassword);
 
 router
   .route("/employees/:id")
   .put(
     isLoggedIn,
-    hasAccessRole(["admin", "direction", "DEV"]),
+    hasAccessRole(["admin", "direction", "DEV", "rh"]),
     UploadPicture.single("photo"),
     EmployeeController.updateEmployee
   )
   .delete(
     isLoggedIn,
-    hasAccessRole(["admin", "direction", "DEV"]),
+    hasAccessRole(["admin", "direction", "DEV", "rh"]),
     EmployeeController.deleteEmployee
   )
   .get(
@@ -48,7 +46,5 @@ router
 router
   .route("/employees/forgotPassword/:mail")
   .get(NotificationController.ForgotPasswordToDirection);
-
-
 
 module.exports = router;

@@ -33,11 +33,11 @@ const EmployeeSchema = new mongoose.Schema({
     trim: true,
     validate(value) {
       if (!validator.isLength(value, 12)) {
-        throw new Error("Numéro de sécu n'est pas de la bonne taille (13)");
+        throw new Error("Numéro de sécurité social n'est pas de la bonne taille (13)");
       }
       if (validator.isAlpha(value, "fr-FR")) {
         throw new Error(
-          "Numéro de sécu ne doit pas contenir de caractères alphanumériques (A-Za-z)"
+          "Numéro de sécurité social ne doit pas contenir de caractères alphanumériques (A-Za-z)"
         );
       }
     },
