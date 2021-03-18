@@ -92,14 +92,50 @@ var HolidayController = {
     let holidays;
     try {
       if (populate) {
-        holidays = await HolidaySchema.find().populate("id_requester_employee");
+        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
       } else {
-        holidays = await HolidaySchema.find();
+        holidays = await HolidaySchema.find(req.body);
       }
       res.send(holidays);
     } catch (err) {
       res.status(400).send({
         message: "Error when geting all holiday",
+        error: err,
+      });
+    }
+  },
+
+  async getHolidaysByService(req, res) {
+    const idService = req.params.idService;
+    console.log(idService);
+    const populate = parseInt(req.query.populate);
+    let holidays;
+    try {
+      // let idEmployeesService = await (await EmployeeSchema.find({id_service: idService})).id;
+      // if (!employeesService) {
+      //   throw "Invalid service id";
+      // }
+
+
+      if (populate) {
+        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
+      } else {
+        holidays = await HolidaySchema.find(req.body);
+      }
+
+      let holidaysService = [];
+      holidays.forEach((holiday) => {
+        if (holiday.id_requester_employee.id_service == idService) {
+          holidaysService.push(holiday);
+        }
+      });
+
+
+
+      res.send(holidaysService);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error when geting holiday by service",
         error: err,
       });
     }
@@ -196,19 +232,18 @@ var HolidayController = {
       ) {
         throw "Invalid keys";
       }
-
-      statusHoliday = await (await HolidaySchema.findById(id)).status;
+      
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
         throw "Invalid holiday id";
       }
+      statusHolidayCache = holiday.status
       holiday.status = status;
       await holiday.save();
-
       res.send({
         message: `Holiday status ${id} was updated !`,
       });
-      if (statusHoliday != status) {
+      if (statusHolidayCache != status) {
         NotificationController.HolidayRequestStatusUpdateToEmployee(id);
         NotificationController.HolidayRequestStatusUpdateToManager(id);
         if (status == "prévalidée") {

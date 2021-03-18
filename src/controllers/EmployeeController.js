@@ -196,11 +196,11 @@ var EmployeeController = {
     let employees;
     try {
       if (populate) {
-        employees = await EmployeeSchema.find()
+        employees = await EmployeeSchema.find(req.body)
           .populate("id_service")
           .populate("id_role");
       } else {
-        employees = await EmployeeSchema.find();
+        employees = await EmployeeSchema.find(req.body);
       }
 
       if (!employees) {
