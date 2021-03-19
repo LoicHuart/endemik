@@ -31,7 +31,14 @@ async function mailOptions(to, subject, html) {
   };
 }
 
-async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml, buttonHtml) {
+async function sendMail(
+  to,
+  subject,
+  headerHtml,
+  bodyHtml,
+  footerHtml,
+  buttonHtml
+) {
   const filePath = path.join(__dirname, "../templateMail/index.html");
   const source = fs.readFileSync(filePath, "utf-8").toString();
   const template = hbs.compile(source);
@@ -49,7 +56,7 @@ async function sendMail(to, subject, headerHtml, bodyHtml, footerHtml, buttonHtm
     await mailOptions(to, subject, htmlToSend),
     function (err, info) {
       if (err) {
-        console.log("Error when sending a mail: "+ err);
+        console.log("Error when sending a mail: " + err);
       } else {
         console.log("Email sent: " + info.response);
       }
@@ -70,7 +77,7 @@ var NotificationController = {
         Holiday.starting_date
       )} au ${date.toLocaleDateString(
         Holiday.ending_date
-      )} a changé de status : ${Holiday.status}.`
+      )} a changé de statut : ${Holiday.status}.`
     );
     let footer = `La Direction`;
     sendMail(
@@ -104,9 +111,8 @@ var NotificationController = {
         Holiday.starting_date
       )} au ${date.toLocaleDateString(
         Holiday.ending_date
-      )} a changé de statut: ${Holiday.status}.`
+      )} a changé de statut : ${Holiday.status}.`
     );
-
     let footer = `La Direction`;
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
@@ -121,10 +127,10 @@ var NotificationController = {
     Holiday = await HolidaySchema.findById(HolidayId).populate(
       "id_requester_employee"
     );
-    serviceRhId = await ServiceSchema.findOne({name: "rh"});
-    EmployeeServiceRH = await EmployeeSchema.find({id_service: serviceRhId.id}).populate(
-      "id_service"
-    );
+    serviceRhId = await ServiceSchema.findOne({ name: "rh" });
+    EmployeeServiceRH = await EmployeeSchema.find({
+      id_service: serviceRhId.id,
+    }).populate("id_service");
     RHMail = await EmployeeServiceRH.map((RH) => {
       return RH.mail;
     });
@@ -143,17 +149,17 @@ var NotificationController = {
       )} est en attente de validation.`
     );
     let footer = `La Direction`;
-    let button = []
+    let button = [];
     button.push({
-      text: 'validée',
+      text: "validée",
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#D5E8D4'
-    })
+      color: "#D5E8D4",
+    });
     button.push({
-      text: 'refusée',
+      text: "refusée",
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FF9999'
-    })
+      color: "#FF9999",
+    });
     sendMail(
       RHMail,
       `Une nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} est en attente de validation ! `,
@@ -222,9 +228,7 @@ var NotificationController = {
     body.push(
       `Adresse postale : ${Employee.street_nb} ${Employee.street}, ${city}`
     );
-    body.push(
-      `Numéro de sécurité sociale : ${Employee.social_security_number}`
-    );
+    body.push(`Numéro de sécurité social : ${Employee.social_security_number}`);
     body.push(`Service : ${Employee.id_service.name}`);
     body.push(`Manageur : ${firstnameManager}`);
     let footer = `La Direction`;
@@ -245,9 +249,11 @@ var NotificationController = {
     firstnameManager =
       firstnameManager.charAt(0).toUpperCase() +
       firstnameManager.substring(1).toLowerCase();
-    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let serviceDirectionId = await (
+      await ServiceSchema.findOne({ name: "direction" })
+    ).id;
     let EmployeeServiceDirection = await EmployeeSchema.find({
-      id_service: serviceDirectionId
+      id_service: serviceDirectionId,
     });
     let DirectionMail = EmployeeServiceDirection.map((direction) => {
       return direction.mail;
@@ -280,32 +286,30 @@ var NotificationController = {
     let firstname = Holiday.id_requester_employee.firstName;
     firstname =
       firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
-    let header = `Nouvelle demande de congée !`;
+    let header = `Nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} ! `;
     let body = [];
     body.push(
-      `Une nouvelle demande de congée de ${
-        Holiday.id_requester_employee.lastName
-      } ${firstname} du ${date.toLocaleDateString(
+      `Une nouvelle demande de congé de ${firstname} du ${date.toLocaleDateString(
         Holiday.starting_date
       )} au ${date.toLocaleDateString(
         Holiday.ending_date
       )} est en attente de validation.`
     );
     let footer = `La Direction`;
-    let button = []
+    let button = [];
     button.push({
-      text: 'validée',
+      text: "validée",
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
-      color: '#D5E8D4'
-    })
+      color: "#D5E8D4",
+    });
     button.push({
-      text: 'refusée',
+      text: "refusée",
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
-      color: '#FF9999'
-    })
+      color: "#FF9999",
+    });
     sendMail(
       Holiday.id_requester_employee.id_service.id_manager.mail,
-      `Une nouvelle demande de congée de ${Holiday.id_requester_employee.lastName} ${firstname} est en attente de validation !`,
+      `Une nouvelle demande de congé de ${firstname} ${Holiday.id_requester_employee.lastName} est en attente de validation !`,
       header,
       body,
       footer,
@@ -315,7 +319,9 @@ var NotificationController = {
 
   async ForgotPasswordToDirection(req, res) {
     let mail = req.params.mail;
-    let serviceDirectionId = await(await ServiceSchema.findOne({name: "direction"})).id;
+    let serviceDirectionId = await (
+      await ServiceSchema.findOne({ name: "direction" })
+    ).id;
     let EmployeeServiceDirection = await EmployeeSchema.find({
       id_service: serviceDirectionId,
     });
@@ -338,15 +344,15 @@ var NotificationController = {
         `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`
       );
       let footer = `La Direction`;
-      let button = []
+      let button = [];
       button.push({
-        text: 'validée',
+        text: "validée",
         url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
-        color: '#D5E8D4'
-      })
+        color: "#D5E8D4",
+      });
       sendMail(
         DirectionMail,
-        `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe`,
+        `L'employé ${firstname} ${Employee.lastName} a oublié son mot de passe !`,
         header,
         body,
         footer,
@@ -370,7 +376,7 @@ var NotificationController = {
     let footer = `La Direction`;
     sendMail(
       Employee.mail,
-      `${firstname}, voici votre nouveau mot de passe`,
+      `${firstname}, voici votre nouveau mot de passe !`,
       header,
       body,
       footer

@@ -225,11 +225,7 @@ var HolidayController = {
     const id = req.params.id;
     const status = req.params.status;
     try {
-      if (
-        !checkKeys({status}, [
-          "status",
-        ])
-      ) {
+      if (!checkKeys({ status }, ["status"])) {
         throw "Invalid keys";
       }
       
