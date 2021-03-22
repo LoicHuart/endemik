@@ -329,7 +329,7 @@ var NotificationController = {
       return direction.mail;
     });
     let Employee = await EmployeeSchema.findOne({ mail: mail });
-    
+
     if (!Employee) {
       res.status(400).send({
         message: "Error when send ForgotPassword",
@@ -337,7 +337,9 @@ var NotificationController = {
       });
     } else {
       let firstname = Employee.firstName;
-      firstname = firstname.charAt(0).toUpperCase() + firstname.substring(1).toLowerCase();
+      firstname =
+        firstname.charAt(0).toUpperCase() +
+        firstname.substring(1).toLowerCase();
       let header = `${firstname} a oublié son mot de passe, on a besoin de vous !`;
       let body = [];
       body.push(
@@ -346,7 +348,7 @@ var NotificationController = {
       let footer = `La Direction`;
       let button = [];
       button.push({
-        text: "validée",
+        text: "générer",
         url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
         color: "#D5E8D4",
       });

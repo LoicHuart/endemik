@@ -26,6 +26,7 @@ var EmployeeController = {
           "children_nb",
           "id_service",
           "id_role",
+          "active",
         ])
       ) {
         throw "Invalid keys";
@@ -108,6 +109,7 @@ var EmployeeController = {
           "children_nb",
           "id_service",
           "id_role",
+          "active",
         ])
       ) {
         throw "Invalid keys";
@@ -250,7 +252,7 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      holiday = await HolidaySchema.find({id_requester_employee: id});
+      holiday = await HolidaySchema.find({ id_requester_employee: id });
       if (holiday[0]) {
         throw "this employee has holidays requests pending";
       }
