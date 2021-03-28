@@ -24,6 +24,8 @@ var EmployeeController = {
           "city",
           "arrival_date",
           "children_nb",
+          "holiday_balance.rtt",
+          "holiday_balance.congesPayes",
           "id_service",
           "id_role",
         ])
@@ -106,6 +108,8 @@ var EmployeeController = {
           "city",
           "arrival_date",
           "children_nb",
+          "holiday_balance.rtt",
+          "holiday_balance.congesPayes",
           "id_service",
           "id_role",
         ])
