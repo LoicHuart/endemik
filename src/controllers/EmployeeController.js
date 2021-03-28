@@ -5,6 +5,7 @@ const HolidaySchema = require("../models/Holiday");
 const NotificationController = require("../controllers/NotificationController");
 const fs = require("fs");
 const path = require("path");
+const { json } = require("express");
 
 var EmployeeController = {
   async addEmployee(req, res) {
@@ -171,6 +172,8 @@ var EmployeeController = {
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
+      employee.holiday_balance.rtt = JSON.parse(req.body['holiday_balance.rtt']);
+      employee.holiday_balance.congesPayes = JSON.parse(req.body['holiday_balance.congesPayes']);
 
       await employee.save();
 
