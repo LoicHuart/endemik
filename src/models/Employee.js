@@ -115,6 +115,18 @@ const EmployeeSchema = new mongoose.Schema({
     default: true,
     required: true,
   },
+  holiday_balance: {
+    rtt: {
+      type: Number,
+      default: 0,
+      required: false,
+    },
+    congesPayes: {
+      type: Number,
+      default: 0,
+      required: false,
+    }
+  },
   id_service: {
     type: Schema.Types.ObjectId,
     ref: "Service",
