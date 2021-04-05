@@ -5,7 +5,7 @@ const HolidaySchema = require("../models/Holiday");
 const NotificationController = require("../controllers/NotificationController");
 const fs = require("fs");
 const path = require("path");
-const { json } = require("express");
+const bcrypt = require("bcrypt");
 
 var EmployeeController = {
   async addEmployee(req, res) {
@@ -66,7 +66,7 @@ var EmployeeController = {
       }
       let Employee = new EmployeeSchema(req.body);
       let password = generatePassword();
-      Employee.password = password;
+      Employee.password = await cryptPassword(password);
       await Employee.save();
       res.status(201).send(Employee);
       NotificationController.NewEmployeetoServiceToManager(Employee.id);
@@ -172,8 +172,12 @@ var EmployeeController = {
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
-      employee.holiday_balance.rtt = JSON.parse(req.body['holiday_balance.rtt']);
-      employee.holiday_balance.congesPayes = JSON.parse(req.body['holiday_balance.congesPayes']);
+      employee.holiday_balance.rtt = JSON.parse(
+        req.body["holiday_balance.rtt"]
+      );
+      employee.holiday_balance.congesPayes = JSON.parse(
+        req.body["holiday_balance.congesPayes"]
+      );
 
       await employee.save();
 
@@ -257,7 +261,7 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      holiday = await HolidaySchema.find({id_requester_employee: id});
+      holiday = await HolidaySchema.find({ id_requester_employee: id });
       if (holiday[0]) {
         throw "this employee has holidays requests pending";
       }
@@ -294,7 +298,7 @@ var EmployeeController = {
       });
       res.end();
     } else {
-      Employee.password = password;
+      Employee.password = await cryptPassword(password);
       await Employee.save();
 
       res.send({
@@ -318,6 +322,13 @@ function generatePassword() {
     retVal += charset.charAt(Math.floor(Math.random() * n));
   }
   return retVal;
+}
+
+async function cryptPassword(password) {
+  // console.log("password : " + password);
+  password = await bcrypt.hash(password, 10);
+  // console.log("password crypt : " + password);
+  return password;
 }
 
 module.exports = EmployeeController;

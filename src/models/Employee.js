@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const { Schema } = mongoose;
-const bcrypt = require("bcrypt");
-const RoleSchema = require("../models/Role");
-const ServiceSchema = require("../models/Service");
 
 const EmployeeSchema = new mongoose.Schema({
   title: {
@@ -33,7 +30,9 @@ const EmployeeSchema = new mongoose.Schema({
     trim: true,
     validate(value) {
       if (!validator.isLength(value, 12)) {
-        throw new Error("Numéro de sécurité social n'est pas de la bonne taille (13)");
+        throw new Error(
+          "Numéro de sécurité social n'est pas de la bonne taille (13)"
+        );
       }
       if (validator.isAlpha(value, "fr-FR")) {
         throw new Error(
@@ -125,7 +124,7 @@ const EmployeeSchema = new mongoose.Schema({
       type: Number,
       default: 0,
       required: false,
-    }
+    },
   },
   id_service: {
     type: Schema.Types.ObjectId,
@@ -137,12 +136,6 @@ const EmployeeSchema = new mongoose.Schema({
     ref: "Role",
     required: false,
   },
-});
-
-EmployeeSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(this.password, 10);
-
-  next();
 });
 
 module.exports = mongoose.model("Employee", EmployeeSchema, "Employee");
