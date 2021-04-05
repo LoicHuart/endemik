@@ -17,37 +17,40 @@ var HolidayController = {
         throw "Invalid keys";
       }
 
-      let employee = await EmployeeSchema.findById(req.body.id_requester_employee)
+      let employee = await EmployeeSchema.findById(
+        req.body.id_requester_employee
+      );
       if (!employee) {
         throw "Invalid employee id";
       }
-      diff = dayDiff(req.body.starting_date, req.body.ending_date)
-      if(diff>0) {
-        if(req.body.type == "rtt") {
-          if ((employee.holiday_balance.rtt - diff) < 0) {
+      diff = dayDiff(req.body.starting_date, req.body.ending_date);
+      if (diff >= 0) {
+        if (req.body.type == "rtt") {
+          if (employee.holiday_balance.rtt - diff < 0) {
             throw "The employee does not have enough holidays";
-          }else{
-            employee.holiday_balance.rtt = employee.holiday_balance.rtt-diff
+          } else {
+            employee.holiday_balance.rtt = employee.holiday_balance.rtt - diff;
           }
         }
-        if(req.body.type == "congés payés") {
-          if ((employee.holiday_balance.congesPayes - diff) < 0) {
+        if (req.body.type == "congés payés") {
+          if (employee.holiday_balance.congesPayes - diff < 0) {
             throw "The employee does not have enough holidays";
-          }else{
-            employee.holiday_balance.congesPayes = employee.holiday_balance.congesPayes-diff
+          } else {
+            employee.holiday_balance.congesPayes =
+              employee.holiday_balance.congesPayes - diff;
           }
         }
-        employee.save()
-      }else{
+        employee.save();
+      } else {
         throw "invalid date";
       }
-      
+
       const holiday = new HolidaySchema(req.body);
       await holiday.save();
       res.status(201).send(holiday);
       NotificationController.NewHolidayRequestToManager(holiday.id);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       res.status(400).send({
         message: "Error when adding a holiday",
         error: err,
@@ -107,7 +110,9 @@ var HolidayController = {
     let holidays;
     try {
       if (populate) {
-        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
+        holidays = await HolidaySchema.find(req.body).populate(
+          "id_requester_employee"
+        );
       } else {
         holidays = await HolidaySchema.find(req.body);
       }
@@ -131,9 +136,10 @@ var HolidayController = {
       //   throw "Invalid service id";
       // }
 
-
       if (populate) {
-        holidays = await HolidaySchema.find(req.body).populate("id_requester_employee");
+        holidays = await HolidaySchema.find(req.body).populate(
+          "id_requester_employee"
+        );
       } else {
         holidays = await HolidaySchema.find(req.body);
       }
@@ -144,8 +150,6 @@ var HolidayController = {
           holidaysService.push(holiday);
         }
       });
-
-
 
       res.send(holidaysService);
     } catch (err) {
@@ -164,16 +168,20 @@ var HolidayController = {
         throw "Invalid holiday id";
       }
 
-      diff = dayDiff(holiday.starting_date, holiday.ending_date)
-      let employee = await EmployeeSchema.findById(holiday.id_requester_employee)
-      if(holiday.type == "rtt") {
-        employee.holiday_balance.rtt = parseInt(employee.holiday_balance.rtt)+parseInt(diff)
+      diff = dayDiff(holiday.starting_date, holiday.ending_date);
+      let employee = await EmployeeSchema.findById(
+        holiday.id_requester_employee
+      );
+      if (holiday.type == "rtt") {
+        employee.holiday_balance.rtt =
+          parseInt(employee.holiday_balance.rtt) + parseInt(diff);
       }
-      if(holiday.type == "congés payés") {
-        employee.holiday_balance.congesPayes = parseInt(employee.holiday_balance.congesPayes)+parseInt(diff)
+      if (holiday.type == "congés payés") {
+        employee.holiday_balance.congesPayes =
+          parseInt(employee.holiday_balance.congesPayes) + parseInt(diff);
       }
       holiday.remove();
-      employee.save()
+      employee.save();
       res.send({
         message: `Holiday deleted`,
       });
@@ -231,32 +239,32 @@ var HolidayController = {
         throw "Invalid holiday id";
       }
 
-
-      //rend les jours de congés 
-      diff = dayDiff(holiday.starting_date, holiday.ending_date)
-      let employee = await EmployeeSchema.findById(holiday.id_requester_employee)
-      if(holiday.type == "rtt") {
-        employee.holiday_balance.rtt = parseInt(employee.holiday_balance.rtt)+parseInt(diff)
+      //rend les jours de congés
+      diff = dayDiff(holiday.starting_date, holiday.ending_date);
+      let employee = await EmployeeSchema.findById(
+        holiday.id_requester_employee
+      );
+      if (holiday.type == "rtt") {
+        employee.holiday_balance.rtt =
+          parseInt(employee.holiday_balance.rtt) + parseInt(diff);
       }
-      if(holiday.type == "congés payés") {
-        employee.holiday_balance.congesPayes = parseInt(employee.holiday_balance.congesPayes)+parseInt(diff)
+      if (holiday.type == "congés payés") {
+        employee.holiday_balance.congesPayes =
+          parseInt(employee.holiday_balance.congesPayes) + parseInt(diff);
       }
 
-      
       //retire les jours de congés par rapport a la request
-      newdiff = dayDiff(req.body.starting_date, req.body.ending_date)
-      if(req.body.type == "rtt") {
-        employee.holiday_balance.rtt = parseInt(employee.holiday_balance.rtt)-parseInt(newdiff)
+      newdiff = dayDiff(req.body.starting_date, req.body.ending_date);
+      if (req.body.type == "rtt") {
+        employee.holiday_balance.rtt =
+          parseInt(employee.holiday_balance.rtt) - parseInt(newdiff);
       }
-      if(req.body.type == "congés payés") {
-        employee.holiday_balance.congesPayes = parseInt(employee.holiday_balance.congesPayes)-parseInt(newdiff)
+      if (req.body.type == "congés payés") {
+        employee.holiday_balance.congesPayes =
+          parseInt(employee.holiday_balance.congesPayes) - parseInt(newdiff);
       }
 
-
-
-      employee.save()
-
-      
+      employee.save();
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (holiday[key] = req.body[key]));
@@ -280,12 +288,12 @@ var HolidayController = {
       if (!checkKeys({ status }, ["status"])) {
         throw "Invalid keys";
       }
-      
+
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
         throw "Invalid holiday id";
       }
-      statusHolidayCache = holiday.status
+      statusHolidayCache = holiday.status;
       holiday.status = status;
       await holiday.save();
       res.send({
@@ -312,8 +320,7 @@ function checkKeys(body, allowedKeys) {
   return updatesKeys.every((key) => allowedKeys.includes(key));
 }
 
-function dayDiff(d1, d2)
-{
+function dayDiff(d1, d2) {
   d1 = new Date(d1);
   d2 = new Date(d2);
   d1 = d1.getTime() / 86400000;
