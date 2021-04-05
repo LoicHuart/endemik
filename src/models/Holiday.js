@@ -28,7 +28,7 @@ const HolidaySchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["en attente", "prévalidée", "validée", "refusée"],
+    enum: ["en attente", "prévalidé", "validé", "refusé"],
     default: "en attente",
     required: true,
   },
