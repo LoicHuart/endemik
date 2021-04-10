@@ -98,7 +98,7 @@ const EmployeeSchema = new mongoose.Schema({
   },
   children_nb: {
     type: Number,
-    required: true,
+    default: null,
   },
   password: {
     type: String,
