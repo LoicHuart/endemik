@@ -169,16 +169,17 @@ var EmployeeController = {
         } catch {}
         req.body.photo_url = req.file.filename;
       }
+      console.log(req.body);
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
-      employee.holiday_balance.rtt = JSON.parse(
-        req.body["holiday_balance.rtt"]
-      );
-      employee.holiday_balance.congesPayes = JSON.parse(
-        req.body["holiday_balance.congesPayes"]
-      );
-
+      if(req.body['holiday_balance.rtt']) {
+        employee.holiday_balance.rtt = req.body["holiday_balance.rtt"]
+       
+      }
+      if(req.body['holiday_balance.congesPayes']) {
+        employee.holiday_balance.congesPayes = req.body["holiday_balance.congesPayes"]
+      }
       await employee.save();
 
       res.send({
@@ -187,7 +188,8 @@ var EmployeeController = {
       if (serviceEmployee != req.body.id_service) {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
-    } catch (err) {
+    } catch (error) {
+      console.log(error);
       try {
         fs.unlinkSync(
           path.resolve(
@@ -197,7 +199,7 @@ var EmployeeController = {
       } catch {}
       res.status(400).send({
         message: `Error : can't updated employee with id(${id})`,
-        error: err,
+        error: error,
       });
     }
   },
