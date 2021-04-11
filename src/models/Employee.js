@@ -118,12 +118,10 @@ const EmployeeSchema = new mongoose.Schema({
     rtt: {
       type: Number,
       default: 0,
-      required: false,
     },
     congesPayes: {
       type: Number,
       default: 0,
-      required: false,
     },
   },
   id_service: {
