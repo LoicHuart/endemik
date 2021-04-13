@@ -29,6 +29,7 @@ var EmployeeController = {
           "holiday_balance.congesPayes",
           "id_service",
           "id_role",
+          "active"
         ])
       ) {
         throw "Invalid keys";
@@ -113,6 +114,7 @@ var EmployeeController = {
           "holiday_balance.congesPayes",
           "id_service",
           "id_role",
+          "active"
         ])
       ) {
         throw "Invalid keys";
@@ -144,19 +146,19 @@ var EmployeeController = {
       ) {
         throw "Invalid role id";
       }
-      if (
-        req.body.mail &&
-        !(await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
-          throw "Mail already used";
-        }))
-      ) {
-        throw "Mail already used";
-      }
 
       serviceEmployee = await EmployeeSchema.findById(id).id_service;
       employee = await EmployeeSchema.findById(id);
       if (!employee) {
         throw "Invalid employee id";
+      }
+      console.log(employee.mail)
+      console.log(req.body.mail)
+      if(req.body.mail != employee.mail) {
+        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {throw "Mail already used1"}))
+        ) {
+          throw "Mail already used2";
+        }
       }
 
       if (req.file) {
