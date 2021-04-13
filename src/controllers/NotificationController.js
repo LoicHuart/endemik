@@ -8,10 +8,6 @@ const hbs = require("handlebars");
 const path = require("path");
 const fs = require("fs");
 
-///
-
-///
-
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -151,12 +147,12 @@ var NotificationController = {
     let footer = `La Direction`;
     let button = [];
     button.push({
-      text: "validée",
+      text: "valider",
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
       color: "#D5E8D4",
     });
     button.push({
-      text: "refusée",
+      text: "refuser",
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
       color: "#FF9999",
     });
@@ -298,12 +294,12 @@ var NotificationController = {
     let footer = `La Direction`;
     let button = [];
     button.push({
-      text: "validée",
+      text: "valider",
       url: `${process.env.URL_MAILLER}/api/holidays/status/validée/${HolidayId}`,
       color: "#D5E8D4",
     });
     button.push({
-      text: "refusée",
+      text: "refuser",
       url: `${process.env.URL_MAILLER}/api/holidays/status/refusée/${HolidayId}`,
       color: "#FF9999",
     });
@@ -346,7 +342,7 @@ var NotificationController = {
       let footer = `La Direction`;
       let button = [];
       button.push({
-        text: "validée",
+        text: "générer",
         url: `${process.env.URL_MAILLER}/api/employees/updatePassword/${mail}`,
         color: "#D5E8D4",
       });
