@@ -267,9 +267,14 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      holiday = await HolidaySchema.find({ id_requester_employee: id });
-      if (holiday[0]) {
+      holiday = await HolidaySchema.findOne({ id_requester_employee: id });
+      if (holiday) {
         throw "this employee has holidays requests pending";
+      }
+
+      service = await ServiceSchema.findOne({ id_manager: id });
+      if (service) {
+        throw `this employee is the manager of the service ${service.name}`;
       }
 
       try {
