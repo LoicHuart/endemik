@@ -92,6 +92,10 @@ var ServiceController = {
       updateKeys.forEach((key) => (service[key] = req.body[key]));
       await service.save();
 
+      employee = await EmployeeSchema.findById(req.body.id_manager);
+      employee.id_service = service._id;
+      employee.save();
+
       res.send({
         message: `Service ${id} was updated !`,
       });
