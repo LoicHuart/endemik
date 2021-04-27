@@ -152,13 +152,17 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      console.log(employee.mail)
-      console.log(req.body.mail)
+
       if (req.body.mail != employee.mail) {
-        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => { throw "Mail already used1" }))
+        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => { throw "Mail already used" }))
         ) {
-          throw "Mail already used2";
+          throw "Mail already used";
         }
+      }
+
+      service = await ServiceSchema.findOne({ id_manager: id });
+      if (service && req.body.id_service) {
+        throw `this employee is the manager of the service ${service.name}`;
       }
 
       if (req.file) {
@@ -171,7 +175,6 @@ var EmployeeController = {
         } catch { }
         req.body.photo_url = req.file.filename;
       }
-      console.log(req.body);
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
