@@ -20,6 +20,11 @@ var ServiceController = {
       }
       const service = new ServiceSchema(req.body);
       await service.save();
+
+      employee = await EmployeeSchema.findById(req.body.id_manager);
+      employee.id_service = service._id;
+      employee.save();
+
       res.status(201).send(service);
     } catch (err) {
       res.status(400).send({
