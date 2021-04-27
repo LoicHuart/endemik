@@ -8,18 +8,22 @@ var ServiceController = {
         throw "Invalid keys";
       }
 
-      if (
-        req.body.id_manager &&
-        !(await EmployeeSchema.exists({ _id: req.body.id_manager }).catch(
-          (err) => {
-            throw "Invalid manager id";
-          }
-        ))
-      ) {
+      employee = await EmployeeSchema.findById(req.body.id_manager);
+      if (!employee) {
         throw "Invalid manager id";
       }
+
+      serviceTest = await ServiceSchema.findOne(req.body.id_manager)
+      if (!serviceTest) {
+        throw `this employee is already a manager of the service ${serviceTest.name}`;
+      }
+
       const service = new ServiceSchema(req.body);
       await service.save();
+
+      employee.id_service = service._id;
+      employee.save();
+
       res.status(201).send(service);
     } catch (err) {
       res.status(400).send({
@@ -68,15 +72,14 @@ var ServiceController = {
         throw "Invalid keys";
       }
 
-      if (
-        req.body.id_manager &&
-        !(await EmployeeSchema.exists({
-          _id: req.body.id_manager,
-        }).catch((err) => {
-          throw "Invalid manager id";
-        }))
-      ) {
+      employee = await EmployeeSchema.findById(req.body.id_manager);
+      if (!employee) {
         throw "Invalid manager id";
+      }
+
+      serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
+      if (serviceTest) {
+        throw `this employee is already a manager of the service ${serviceTest.name}`;
       }
 
       service = await ServiceSchema.findById(id);
@@ -86,6 +89,10 @@ var ServiceController = {
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (service[key] = req.body[key]));
       await service.save();
+
+      employee = await EmployeeSchema.findById(req.body.id_manager);
+      employee.id_service = service._id;
+      employee.save();
 
       res.send({
         message: `Service ${id} was updated !`,

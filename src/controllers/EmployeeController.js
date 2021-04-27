@@ -83,7 +83,7 @@ var EmployeeController = {
             __dirname + "../../../public/uploads/" + req.file.filename
           )
         );
-      } catch {}
+      } catch { }
       res.status(400).send({
         message: "Error : can't created employee",
         error: err,
@@ -152,13 +152,17 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      console.log(employee.mail)
-      console.log(req.body.mail)
-      if(req.body.mail != employee.mail) {
-        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {throw "Mail already used1"}))
+
+      if (req.body.mail != employee.mail) {
+        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => { throw "Mail already used" }))
         ) {
-          throw "Mail already used2";
+          throw "Mail already used";
         }
+      }
+
+      service = await ServiceSchema.findOne({ id_manager: id });
+      if (service && req.body.id_service) {
+        throw `this employee is the manager of the service ${service.name}`;
       }
 
       if (req.file) {
@@ -168,18 +172,17 @@ var EmployeeController = {
               __dirname + "../../../public/uploads/" + employee.photo_url
             )
           );
-        } catch {}
+        } catch { }
         req.body.photo_url = req.file.filename;
       }
-      console.log(req.body);
 
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
-      if(req.body['holiday_balance.rtt']) {
+      if (req.body['holiday_balance.rtt']) {
         employee.holiday_balance.rtt = req.body["holiday_balance.rtt"]
-       
+
       }
-      if(req.body['holiday_balance.congesPayes']) {
+      if (req.body['holiday_balance.congesPayes']) {
         employee.holiday_balance.congesPayes = req.body["holiday_balance.congesPayes"]
       }
       await employee.save();
@@ -198,7 +201,7 @@ var EmployeeController = {
             __dirname + "../../../public/uploads/" + req.file.filename
           )
         );
-      } catch {}
+      } catch { }
       res.status(400).send({
         message: `Error : can't updated employee with id(${id})`,
         error: error,
@@ -208,14 +211,15 @@ var EmployeeController = {
 
   async getAllEmployees(req, res) {
     const populate = parseInt(req.query.populate);
+    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role';
     let employees;
     try {
       if (populate) {
-        employees = await EmployeeSchema.find(req.body)
+        employees = await EmployeeSchema.find(req.body, filtre)
           .populate("id_service")
           .populate("id_role");
       } else {
-        employees = await EmployeeSchema.find(req.body);
+        employees = await EmployeeSchema.find(req.body, filtre);
       }
 
       if (!employees) {
@@ -235,14 +239,15 @@ var EmployeeController = {
   async getEmployeeById(req, res) {
     const id = req.params.id;
     const populate = parseInt(req.query.populate);
+    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role';
     let employee;
     try {
       if (populate) {
-        employee = await EmployeeSchema.findById(id)
+        employee = await EmployeeSchema.findById(id, filtres)
           .populate("id_service")
           .populate("id_role");
       } else {
-        employee = await EmployeeSchema.findById(id);
+        employee = await EmployeeSchema.findById(id, filtres);
       }
 
       if (!employee) {
@@ -265,9 +270,14 @@ var EmployeeController = {
       if (!employee) {
         throw "Invalid employee id";
       }
-      holiday = await HolidaySchema.find({ id_requester_employee: id });
-      if (holiday[0]) {
+      holiday = await HolidaySchema.findOne({ id_requester_employee: id });
+      if (holiday) {
         throw "this employee has holidays requests pending";
+      }
+
+      service = await ServiceSchema.findOne({ id_manager: id });
+      if (service) {
+        throw `this employee is the manager of the service ${service.name}`;
       }
 
       try {
@@ -276,7 +286,7 @@ var EmployeeController = {
             __dirname + "../../../public/uploads/" + employee.photo_url
           )
         );
-      } catch {}
+      } catch { }
       employee.remove();
 
       res.send({
