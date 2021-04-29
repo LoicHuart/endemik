@@ -215,7 +215,7 @@ var HolidayController = {
       }
 
       employeeExist = await EmployeeSchema.findById(req.body.id_requester_employee)
-      if (!employeeExist) {
+      if (!employeeExist && req.body.id_requester_employee) {
         throw "Invalid employee id";
       }
 
