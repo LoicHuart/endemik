@@ -87,12 +87,8 @@ var HolidayController = {
   async getHolidaysByUser(req, res) {
     const id = req.params.id;
     try {
-      if (
-        id &&
-        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
-          throw "Invalid employee id";
-        }))
-      ) {
+      employee = await EmployeeSchema.findById(id)
+      if (!employee) {
         throw "Invalid employee id";
       }
       holidays = await HolidaySchema.find({ id_requester_employee: id });
@@ -131,11 +127,6 @@ var HolidayController = {
     const populate = parseInt(req.query.populate);
     let holidays;
     try {
-      // let idEmployeesService = await (await EmployeeSchema.find({id_service: idService})).id;
-      // if (!employeesService) {
-      //   throw "Invalid service id";
-      // }
-
       if (populate) {
         holidays = await HolidaySchema.find(req.body).populate(
           "id_requester_employee"
@@ -223,14 +214,8 @@ var HolidayController = {
         throw "Invalid keys";
       }
 
-      if (
-        req.body.id_requester_employee &&
-        !(await HolidaySchema.exists({
-          _id: req.body.id_requester_employee,
-        }).catch((err) => {
-          throw "Invalid employee id";
-        }))
-      ) {
+      employeeExist = await EmployeeSchema.findById(req.body.id_requester_employee)
+      if (!employeeExist && req.body.id_requester_employee) {
         throw "Invalid employee id";
       }
 
@@ -241,16 +226,12 @@ var HolidayController = {
 
       //rend les jours de congés
       diff = dayDiff(holiday.starting_date, holiday.ending_date);
-      let employee = await EmployeeSchema.findById(
-        holiday.id_requester_employee
-      );
+      let employee = await EmployeeSchema.findById(holiday.id_requester_employee);
       if (holiday.type == "rtt") {
-        employee.holiday_balance.rtt =
-          parseInt(employee.holiday_balance.rtt) + parseInt(diff);
+        employee.holiday_balance.rtt = parseInt(employee.holiday_balance.rtt) + parseInt(diff);
       }
       if (holiday.type == "congés payés") {
-        employee.holiday_balance.congesPayes =
-          parseInt(employee.holiday_balance.congesPayes) + parseInt(diff);
+        employee.holiday_balance.congesPayes = parseInt(employee.holiday_balance.congesPayes) + parseInt(diff);
       }
 
       //retire les jours de congés par rapport a la request

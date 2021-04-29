@@ -73,7 +73,7 @@ var ServiceController = {
       }
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
-      if (!employee) {
+      if (!employee && req.body.id_manager) {
         throw "Invalid manager id";
       }
 
@@ -133,21 +133,15 @@ var ServiceController = {
     const id = req.params.id;
     try {
       service = await ServiceSchema.findById(id);
-      if (
-        service.name.toLowerCase() == "rh" ||
-        service.name.toLowerCase() == "direction"
-      ) {
+      if (service.name.toLowerCase() == "rh" || service.name.toLowerCase() == "direction") {
         throw "Cannot delete this service";
       }
-
       if (!service) {
         throw "Invalid service id";
       }
-      if (
-        await EmployeeSchema.exists({ id_service: id }).catch((err) => {
-          throw "Cannot delete the service while employee is linked";
-        })
-      ) {
+
+      employee = await EmployeeSchema.findOne({ id_service: id })
+      if (employee) {
         throw "Cannot delete the service while employee is linked";
       }
       service.remove();

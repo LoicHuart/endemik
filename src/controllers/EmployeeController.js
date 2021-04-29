@@ -35,30 +35,18 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if (
-        req.body.id_service &&
-        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
-          (err) => {
-            throw "Invalid service id";
-          }
-        ))
-      ) {
+      service = await ServiceSchema.findById(req.body.id_service)
+      if (!service && req.body.id_service) {
         throw "Invalid service id";
       }
-      if (
-        req.body.id_role &&
-        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
-          throw "Invalid role id";
-        }))
-      ) {
+
+      role = await RoleSchema.findById(req.body.id_role)
+      if (!role && req.body.id_role) {
         throw "Invalid role id";
       }
-      if (
-        req.body.mail &&
-        (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => {
-          throw "Mail already used";
-        }))
-      ) {
+
+      employeeMail = await EmployeeSchema.findOne({ mail: req.body.mail });
+      if (employeeMail && req.body.mail) {
         throw "Mail already used";
       }
 
@@ -120,49 +108,39 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
-      if (
-        id &&
-        !(await EmployeeSchema.exists({ _id: id }).catch((err) => {
-          throw "Invalid employee id";
-        }))
-      ) {
-        throw "Invalid employee id";
-      }
-      if (
-        req.body.id_service &&
-        !(await ServiceSchema.exists({ _id: req.body.id_service }).catch(
-          (err) => {
-            throw "Invalid service id";
-          }
-        ))
-      ) {
-        throw "Invalid service id";
-      }
-      if (
-        req.body.id_role &&
-        !(await RoleSchema.exists({ _id: req.body.id_role }).catch((err) => {
-          throw "Invalid role id";
-        }))
-      ) {
+      role = await RoleSchema.findById(req.body.id_role)
+      if (!role && req.body.id_role) {
         throw "Invalid role id";
       }
 
-      serviceEmployee = await EmployeeSchema.findById(id).id_service;
-      employee = await EmployeeSchema.findById(id);
+      employeeMail = await EmployeeSchema.findOne({ mail: req.body.mail });
+      if (employeeMail && req.body.mail) {
+        throw "Mail already used";
+      }
+
+      employee = await EmployeeSchema.findById(id)
       if (!employee) {
         throw "Invalid employee id";
       }
+      serviceEmployee = employee.id_service;
 
-      if (req.body.mail != employee.mail) {
-        if (req.body.mail && (await EmployeeSchema.exists({ mail: req.body.mail }).catch((err) => { throw "Mail already used" }))
-        ) {
-          throw "Mail already used";
-        }
+      service = await ServiceSchema.findById(req.body.id_service)
+      if (!service && req.body.id_service) {
+        throw "Invalid service id";
       }
 
-      service = await ServiceSchema.findOne({ id_manager: id });
-      if (service && req.body.id_service) {
-        throw `this employee is the manager of the service ${service.name}`;
+      serviceManager = await ServiceSchema.findOne({ id_manager: id });
+      if (serviceManager && req.body.id_service) {
+        throw `This employee is the manager of the service ${serviceManager.name}`;
+      }
+
+      if (serviceManager && (req.body.active == false)) {
+        throw `This employee is the manager of the service ${serviceManager.name}`;
+      }
+
+      holidayRequest = HolidaySchema.findOne({ id_requester_employee: id })
+      if (holidayRequest && (req.body.active == false)) {
+        throw `This employee has holiday request`;
       }
 
       if (req.file) {
@@ -180,7 +158,6 @@ var EmployeeController = {
       updateKeys.forEach((key) => (employee[key] = req.body[key]));
       if (req.body['holiday_balance.rtt']) {
         employee.holiday_balance.rtt = req.body["holiday_balance.rtt"]
-
       }
       if (req.body['holiday_balance.congesPayes']) {
         employee.holiday_balance.congesPayes = req.body["holiday_balance.congesPayes"]
@@ -215,11 +192,11 @@ var EmployeeController = {
     let employees;
     try {
       if (populate) {
-        employees = await EmployeeSchema.find(req.body, filtre)
+        employees = await EmployeeSchema.find(req.body, filtres)
           .populate("id_service")
           .populate("id_role");
       } else {
-        employees = await EmployeeSchema.find(req.body, filtre);
+        employees = await EmployeeSchema.find(req.body, filtres);
       }
 
       if (!employees) {
