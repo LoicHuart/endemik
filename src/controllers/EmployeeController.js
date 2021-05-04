@@ -131,16 +131,17 @@ var EmployeeController = {
         throw "Invalid service id";
       }
 
-      serviceManager = await ServiceSchema.findOne({ id_manager: id });
-      if (serviceManager && req.body.id_service) {
-        throw `This employee is the manager of the service ${serviceManager.name}`;
-      }
+      // serviceManager = await ServiceSchema.findOne({ id_manager: id });
+      // if (serviceManager && req.body.id_service) {
+      //   throw `This employee is the manager of the service ${serviceManager.name}`;
+      // }
 
-      if (serviceManager && (req.body.active == false)) {
-        throw `This employee is the manager of the service ${serviceManager.name}`;
-      }
+      // if (serviceManager && (req.body.active == false)) {
+      //   throw `This employee is the manager of the service ${serviceManager.name}`;
+      // }
 
-      holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id })
+      holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id, status: "en attente" })
+      holidayRequest += await HolidaySchema.findOne({ id_requester_employee: id, status: "prévalidé" })
       if (holidayRequest && (req.body.active == false)) {
         throw `This employee has holiday request`;
       }
