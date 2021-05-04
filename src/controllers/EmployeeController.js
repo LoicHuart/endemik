@@ -138,7 +138,7 @@ var EmployeeController = {
         throw `This employee is the manager of the service ${serviceManager.name}`;
       }
 
-      holidayRequest = HolidaySchema.findOne({ id_requester_employee: id })
+      holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id })
       if (holidayRequest && (req.body.active == false)) {
         throw `This employee has holiday request`;
       }
