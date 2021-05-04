@@ -29,7 +29,8 @@ var EmployeeController = {
           "holiday_balance.congesPayes",
           "id_service",
           "id_role",
-          "active"
+          "active",
+          "isManager"
         ])
       ) {
         throw "Invalid keys";
@@ -102,7 +103,8 @@ var EmployeeController = {
           "holiday_balance.congesPayes",
           "id_service",
           "id_role",
-          "active"
+          "active",
+          "isManager"
         ])
       ) {
         throw "Invalid keys";
@@ -138,7 +140,7 @@ var EmployeeController = {
         throw `This employee is the manager of the service ${serviceManager.name}`;
       }
 
-      holidayRequest = HolidaySchema.findOne({ id_requester_employee: id })
+      holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id })
       if (holidayRequest && (req.body.active == false)) {
         throw `This employee has holiday request`;
       }
@@ -188,7 +190,7 @@ var EmployeeController = {
 
   async getAllEmployees(req, res) {
     const populate = parseInt(req.query.populate);
-    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role';
+    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role isManager';
     let employees;
     try {
       if (populate) {
@@ -216,7 +218,7 @@ var EmployeeController = {
   async getEmployeeById(req, res) {
     const id = req.params.id;
     const populate = parseInt(req.query.populate);
-    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role';
+    let filtres = 'title lastName firstName date_birth social_security_number mail tel_nb postal_code street_nb street city arrival_date children_nb photo_url active holiday_balance id_service id_role isManager';
     let employee;
     try {
       if (populate) {
