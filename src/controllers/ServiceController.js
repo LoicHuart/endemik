@@ -17,6 +17,8 @@ var ServiceController = {
       if (!serviceTest) {
         throw `this employee is already a manager of the service ${serviceTest.name}`;
       }
+      employee.isManager = true;
+      employee.save();
 
       const service = new ServiceSchema(req.body);
       await service.save();
@@ -86,12 +88,18 @@ var ServiceController = {
       if (!service) {
         throw "Invalid service id";
       }
+
+      oldManager = await EmployeeSchema.findById(service.id_manager);
+      oldManager.isManager = false;
+      oldManager.save();
+
       updateKeys = Object.keys(req.body);
       updateKeys.forEach((key) => (service[key] = req.body[key]));
       await service.save();
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
       employee.id_service = service._id;
+      employee.isManager = true;
       employee.save();
 
       res.send({
