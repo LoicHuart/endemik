@@ -13,7 +13,12 @@ var ServiceController = {
         throw "Invalid manager id";
       }
 
-      serviceTest = await ServiceSchema.findOne(req.body.id_manager)
+      serviceTestName = await ServiceSchema.findOne({ name: req.body.name })
+      if (serviceTestName) {
+        throw `This service name is already use`;
+      }
+
+      serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
       if (!serviceTest) {
         throw `this employee is already a manager of the service ${serviceTest.name}`;
       }
