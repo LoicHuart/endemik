@@ -78,24 +78,24 @@ var ServiceController = {
         throw "Invalid keys";
       }
 
+      service = await ServiceSchema.findById(id);
+      if (!service) {
+        throw "Invalid service id";
+      }
+
       employee = await EmployeeSchema.findById(req.body.id_manager);
-      if (!employee && req.body.id_manager) {
+      if (!employee) {
         throw "Invalid manager id";
       }
 
       serviceTestName = await ServiceSchema.findOne({ name: req.body.name })
-      if (serviceTestName) {
+      if (serviceTestName && (serviceTestName.name != service.name)) {
         throw `This service name is already use`;
       }
 
       serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
-      if (serviceTest) {
+      if (serviceTest && (JSON.stringify(serviceTest.id_manager) != JSON.stringify(service.id_manager))) {
         throw `this employee is already a manager of the service ${serviceTest.name}`;
-      }
-
-      service = await ServiceSchema.findById(id);
-      if (!service) {
-        throw "Invalid service id";
       }
 
       oldManager = await EmployeeSchema.findById(service.id_manager);
