@@ -11,6 +11,7 @@ var LoginController = {
     try {
       let employee = await EmployeeSchema.findOne({
         mail: email,
+        active: true
       });
       if (!employee) {
         throw new Error();
