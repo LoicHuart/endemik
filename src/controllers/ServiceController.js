@@ -19,17 +19,16 @@ var ServiceController = {
       }
 
       serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
-      if (!serviceTest) {
+      if (serviceTest) {
         throw `this employee is already a manager of the service ${serviceTest.name}`;
       }
-      employee.isManager = true;
-      employee.save();
 
       const service = new ServiceSchema(req.body);
       await service.save();
 
       employee.id_service = service._id;
-      employee.save();
+      employee.isManager = true;
+      await employee.save();
 
       res.status(201).send(service);
     } catch (err) {
@@ -82,6 +81,11 @@ var ServiceController = {
       employee = await EmployeeSchema.findById(req.body.id_manager);
       if (!employee && req.body.id_manager) {
         throw "Invalid manager id";
+      }
+
+      serviceTestName = await ServiceSchema.findOne({ name: req.body.name })
+      if (serviceTestName) {
+        throw `This service name is already use`;
       }
 
       serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
@@ -146,16 +150,21 @@ var ServiceController = {
     const id = req.params.id;
     try {
       service = await ServiceSchema.findById(id);
-      if (service.name.toLowerCase() == "rh" || service.name.toLowerCase() == "direction") {
-        throw "Cannot delete this service";
-      }
       if (!service) {
         throw "Invalid service id";
       }
+      if (service.name.toLowerCase() == "rh" || service.name.toLowerCase() == "direction") {
+        throw "Cannot delete this service";
+      }
 
-      employee = await EmployeeSchema.findOne({ id_service: id })
+      employee = await EmployeeSchema.find({ id_service: id })
       if (employee) {
-        throw "Cannot delete the service while employee is linked";
+        employee.map(e => {
+          console.log(e)
+          if (JSON.stringify(e._id) != JSON.stringify(service.id_manager)) {
+            throw "Cannot delete the service while employee is linked";
+          }
+        });
       }
       service.remove();
 
