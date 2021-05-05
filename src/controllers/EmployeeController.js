@@ -110,20 +110,21 @@ var EmployeeController = {
         throw "Invalid keys";
       }
 
+      employee = await EmployeeSchema.findById(id)
+      if (!employee) {
+        throw "Invalid employee id";
+      }
+
       role = await RoleSchema.findById(req.body.id_role)
       if (!role && req.body.id_role) {
         throw "Invalid role id";
       }
 
       employeeMail = await EmployeeSchema.findOne({ mail: req.body.mail });
-      if (employeeMail && req.body.mail) {
+      if (employeeMail && (employee.mail != employeeMail.mail)) {
         throw "Mail already used";
       }
 
-      employee = await EmployeeSchema.findById(id)
-      if (!employee) {
-        throw "Invalid employee id";
-      }
       serviceEmployee = employee.id_service;
 
       service = await ServiceSchema.findById(req.body.id_service)
@@ -132,12 +133,13 @@ var EmployeeController = {
       }
 
       serviceManager = await ServiceSchema.findOne({ id_manager: id });
-      if (serviceManager && req.body.id_service) {
-        throw `This employee is the manager of the service ${serviceManager.name}`;
+      if (serviceManager && (serviceManager._id != req.body.id_service)) {
+        console.log(serviceManager._id + "  " + req.body.id_service)
+        throw `Cannot update the service of this employee, this employee is the manager of the service ${serviceManager.name}`;
       }
 
       if (serviceManager && (req.body.active == false)) {
-        throw `This employee is the manager of the service ${serviceManager.name}`;
+        throw `Cannot deactivate this employee, this employee is the manager of the service ${serviceManager.name}`;
       }
 
       holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id, status: "en attente" })
