@@ -134,17 +134,17 @@ var EmployeeController = {
 
       serviceManager = await ServiceSchema.findOne({ id_manager: id });
       if (serviceManager && (serviceManager._id != req.body.id_service)) {
-        console.log(serviceManager._id + "  " + req.body.id_service)
         throw `Cannot update the service of this employee, this employee is the manager of the service ${serviceManager.name}`;
       }
 
-      if (serviceManager && (req.body.active == false)) {
+      req.body.active = JSON.parse(req.body.active);
+      if (serviceManager && (req.body.active === false || req.body.active === 0)) {
         throw `Cannot deactivate this employee, this employee is the manager of the service ${serviceManager.name}`;
       }
 
       holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id, status: "en attente" })
       holidayRequest += await HolidaySchema.findOne({ id_requester_employee: id, status: "prévalidé" })
-      if (holidayRequest && (req.body.active == false)) {
+      if (holidayRequest && (req.body.active === false || req.body.active === 0)) {
         throw `This employee has holiday request`;
       }
 
