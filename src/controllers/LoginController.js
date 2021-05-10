@@ -34,7 +34,7 @@ var LoginController = {
         token: token,
       });
     } catch (err) {
-      res.status(401).send("Email ou mot de passe incorrect");
+      res.status(401).send("Incorrect email or password");
     }
   },
 
