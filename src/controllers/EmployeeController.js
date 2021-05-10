@@ -33,22 +33,22 @@ var EmployeeController = {
           "isManager"
         ])
       ) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "1" };
       }
 
       service = await ServiceSchema.findById(req.body.id_service)
       if (!service && req.body.id_service) {
-        throw "Invalid service id";
+        throw { err: "Invalid service id", code: "2" };
       }
 
       role = await RoleSchema.findById(req.body.id_role)
       if (!role && req.body.id_role) {
-        throw "Invalid role id";
+        throw { err: "Invalid role id", code: "3" };
       }
 
       employeeMail = await EmployeeSchema.findOne({ mail: req.body.mail });
       if (employeeMail && req.body.mail) {
-        throw "Mail already used";
+        throw { err: "Mail already used", code: "4" };
       }
 
       if (req.file) {
@@ -75,7 +75,8 @@ var EmployeeController = {
       } catch { }
       res.status(400).send({
         message: "Error : can't created employee",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -107,44 +108,44 @@ var EmployeeController = {
           "isManager"
         ])
       ) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "5" };
       }
 
       employee = await EmployeeSchema.findById(id)
       if (!employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "6" };
       }
 
       role = await RoleSchema.findById(req.body.id_role)
       if (!role && req.body.id_role) {
-        throw "Invalid role id";
+        throw { err: "Invalid role id", code: "7" };
       }
 
       employeeMail = await EmployeeSchema.findOne({ mail: req.body.mail });
       if (employeeMail && (employee.mail != employeeMail.mail)) {
-        throw "Mail already used";
+        throw { err: "Mail already used", code: "8" };
       }
 
       serviceEmployee = employee.id_service;
 
       service = await ServiceSchema.findById(req.body.id_service)
       if (!service && req.body.id_service) {
-        throw "Invalid service id";
+        throw { err: "Invalid service id", code: "9" };
       }
 
       serviceManager = await ServiceSchema.findOne({ id_manager: id });
       if (serviceManager && (serviceManager._id != req.body.id_service)) {
-        throw `Cannot update the service of this employee, this employee is the manager of the service ${serviceManager.name}`;
+        throw { err: `Cannot update the service of this employee, this employee is the manager of the service ${serviceManager.name}`, code: "10" };
       }
 
       if (serviceManager && (req.body.active === false || req.body.active === 0 || req.body.active === "0" || req.body.active === "false")) {
-        throw `Cannot deactivate this employee, this employee is the manager of the service ${serviceManager.name}`;
+        throw { err: `Cannot deactivate this employee, this employee is the manager of the service ${serviceManager.name}`, code: "11" };
       }
 
       holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id, status: "en attente" })
       holidayRequest += await HolidaySchema.findOne({ id_requester_employee: id, status: "prévalidé" })
       if (holidayRequest && (req.body.active === false || req.body.active === 0 || req.body.active === "0" || req.body.active === "false")) {
-        throw `This employee has holiday request`;
+        throw { err: `This employee has holiday request`, code: "12" };
       }
 
       if (req.file) {
@@ -174,8 +175,7 @@ var EmployeeController = {
       if (serviceEmployee != req.body.id_service) {
         NotificationController.NewEmployeetoServiceToManager(id);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
       try {
         fs.unlinkSync(
           path.resolve(
@@ -185,7 +185,8 @@ var EmployeeController = {
       } catch { }
       res.status(400).send({
         message: `Error : can't updated employee with id(${id})`,
-        error: error,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -204,15 +205,14 @@ var EmployeeController = {
       }
 
       if (!employees) {
-        return res.status(404).send({
-          message: "employee not found",
-        });
+        throw { err: `employee not found`, code: "13" };
       }
       res.send(employees);
     } catch (err) {
       res.status(400).send({
         message: "Error : can't get all employee",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -232,14 +232,15 @@ var EmployeeController = {
       }
 
       if (!employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "14" };
       }
 
       res.send(employee);
     } catch (err) {
       res.status(400).send({
         message: `Error : can't get employee with id (${id}) `,
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -249,16 +250,16 @@ var EmployeeController = {
     try {
       employee = await EmployeeSchema.findById(id);
       if (!employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "15" };
       }
       holiday = await HolidaySchema.findOne({ id_requester_employee: id });
       if (holiday) {
-        throw "this employee has holidays requests pending";
+        throw { err: "this employee has holidays requests pending", code: "16" };
       }
 
       service = await ServiceSchema.findOne({ id_manager: id });
       if (service) {
-        throw `this employee is the manager of the service ${service.name}`;
+        throw { err: `this employee is the manager of the service ${service.name}`, code: "17" };
       }
 
       try {
@@ -276,7 +277,8 @@ var EmployeeController = {
     } catch (err) {
       res.status(400).send({
         message: `Error : can't delete employee with id (${id})`,
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -290,6 +292,7 @@ var EmployeeController = {
       res.status(400).send({
         message: "Error when send ForgotPassword",
         error: "Invalid employee mail",
+        code: "18"
       });
       res.end();
     } else {

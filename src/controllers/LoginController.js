@@ -34,7 +34,11 @@ var LoginController = {
         token: token,
       });
     } catch (err) {
-      res.status(401).send("Email ou mot de passe incorrect");
+      res.status(401).send({
+        message: "error when connection",
+        error: "Incorrect email or password",
+        code: "34",
+      });
     }
   },
 
@@ -47,7 +51,11 @@ var LoginController = {
         token: token,
       });
     } catch (error) {
-      res.status(401).send("Can't logout");
+      res.status(401).send({
+        message: "error when disconnection",
+        error: "Can't logout",
+        code: "35",
+      });
     }
   },
 };
