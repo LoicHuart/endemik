@@ -34,7 +34,11 @@ var LoginController = {
         token: token,
       });
     } catch (err) {
-      res.status(401).send("Incorrect email or password");
+      res.status(401).send({
+        message: "error when connection",
+        error: "Incorrect email or password",
+        code: "34",
+      });
     }
   },
 
