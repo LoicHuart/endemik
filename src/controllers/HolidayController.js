@@ -14,27 +14,27 @@ var HolidayController = {
           "id_requester_employee",
         ])
       ) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "19" };
       }
 
       let employee = await EmployeeSchema.findById(
         req.body.id_requester_employee
       );
       if (!employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "20" };
       }
       diff = dayDiff(req.body.starting_date, req.body.ending_date);
       if (diff >= 0) {
         if (req.body.type == "rtt") {
           if (employee.holiday_balance.rtt - diff < 0) {
-            throw "The employee does not have enough holidays";
+            throw { err: "The employee does not have enough holidays", code: "21" };
           } else {
             employee.holiday_balance.rtt = employee.holiday_balance.rtt - diff;
           }
         }
         if (req.body.type == "congés payés") {
           if (employee.holiday_balance.congesPayes - diff < 0) {
-            throw "The employee does not have enough holidays";
+            throw { err: "The employee does not have enough holidays", code: "22" };
           } else {
             employee.holiday_balance.congesPayes =
               employee.holiday_balance.congesPayes - diff;
@@ -42,7 +42,7 @@ var HolidayController = {
         }
         employee.save();
       } else {
-        throw "invalid date";
+        throw { err: "invalid date", code: "23" };
       }
 
       const holiday = new HolidaySchema(req.body);
@@ -53,7 +53,8 @@ var HolidayController = {
       console.log(err);
       res.status(400).send({
         message: "Error when adding a holiday",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -72,14 +73,15 @@ var HolidayController = {
       }
 
       if (!holiday) {
-        throw "Invalid holiday id";
+        throw { err: "Invalid holiday id", code: "24" };
       }
 
       res.send(holiday);
     } catch (err) {
       res.status(400).send({
         message: "Error when geting a holiday by id",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -89,14 +91,15 @@ var HolidayController = {
     try {
       employee = await EmployeeSchema.findById(id)
       if (!employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "25" };
       }
       holidays = await HolidaySchema.find({ id_requester_employee: id });
       res.send(holidays);
     } catch (err) {
       res.status(400).send({
         message: "Error when geting a holiday by id",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -112,11 +115,16 @@ var HolidayController = {
       } else {
         holidays = await HolidaySchema.find(req.body);
       }
+
+      if (!holidays) {
+        throw { err: `holidays not found`, code: "26" };
+      }
       res.send(holidays);
     } catch (err) {
       res.status(400).send({
         message: "Error when geting all holiday",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -142,11 +150,16 @@ var HolidayController = {
         }
       });
 
+      if (!holidays) {
+        throw { err: `holidays not found`, code: "27" };
+      }
+
       res.send(holidaysService);
     } catch (err) {
       res.status(400).send({
         message: "Error when geting holiday by service",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -156,7 +169,7 @@ var HolidayController = {
     try {
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
-        throw "Invalid holiday id";
+        throw { err: "Invalid holiday id", code: "28" };
       }
 
       diff = dayDiff(holiday.starting_date, holiday.ending_date);
@@ -179,7 +192,8 @@ var HolidayController = {
     } catch (err) {
       res.status(400).send({
         message: "Error when deleting a holiday",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -211,17 +225,17 @@ var HolidayController = {
           "type",
         ])
       ) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "29" };
       }
 
       employeeExist = await EmployeeSchema.findById(req.body.id_requester_employee)
       if (!employeeExist && req.body.id_requester_employee) {
-        throw "Invalid employee id";
+        throw { err: "Invalid employee id", code: "30" };
       }
 
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
-        throw "Invalid holiday id";
+        throw { err: "Invalid holiday id", code: "31" };
       }
 
       //rend les jours de congés
@@ -257,7 +271,8 @@ var HolidayController = {
     } catch (err) {
       res.status(400).send({
         message: "Error when updating a holiday",
-        error: err,
+        error: err.err,
+        code: err.code
       });
     }
   },
@@ -267,12 +282,12 @@ var HolidayController = {
     const status = req.params.status;
     try {
       if (!checkKeys({ status }, ["status"])) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "32" };
       }
 
       holiday = await HolidaySchema.findById(id);
       if (!holiday) {
-        throw "Invalid holiday id";
+        throw { err: "Invalid holiday id", code: "33" };
       }
       statusHolidayCache = holiday.status;
       holiday.status = status;
@@ -290,7 +305,8 @@ var HolidayController = {
     } catch (err) {
       res.status(400).send({
         message: "Error when updating a holiday",
-        error: err,
+        error: err.err,
+        code: err.code,
       });
     }
   },
