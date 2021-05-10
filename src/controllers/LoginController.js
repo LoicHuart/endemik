@@ -51,7 +51,11 @@ var LoginController = {
         token: token,
       });
     } catch (error) {
-      res.status(401).send("Can't logout");
+      res.status(401).send({
+        message: "error when disconnection",
+        error: "Can't logout",
+        code: "35",
+      });
     }
   },
 };
