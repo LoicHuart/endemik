@@ -7,6 +7,7 @@ var ServiceController = {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
         throw { err: "Invalid keys", code: "36" };
       }
+      req.body.name = toLowerCase(req.body.name)
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
       if (!employee) {
@@ -84,7 +85,7 @@ var ServiceController = {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
         throw { err: "Invalid keys", code: "41" };
       }
-
+      req.body.name = toLowerCase(req.body.name)
       service = await ServiceSchema.findById(id);
       if (!service) {
         throw { err: "Invalid service id", code: "42" };
