@@ -50,7 +50,7 @@ var ServiceController = {
         services = await ServiceSchema.find(req.body);
       }
 
-      if (!employees) {
+      if (!services) {
         throw { err: `services not found`, code: "39" };
       }
 
