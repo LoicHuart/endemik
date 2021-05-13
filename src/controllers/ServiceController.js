@@ -5,22 +5,22 @@ var ServiceController = {
   async addService(req, res) {
     try {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
-        throw "Invalid keys";
+        throw { err: "Invalid keys", code: "36" };
       }
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
       if (!employee) {
-        throw { err: "Invalid manager id", code: "36" };
+        throw { err: "Invalid manager id", code: "37" };
       }
 
       serviceTestName = await ServiceSchema.findOne({ name: req.body.name })
       if (serviceTestName) {
-        throw { err: `This service name is already use`, code: "37" };
+        throw { err: `This service name is already use`, code: "38" };
       }
 
       serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
       if (serviceTest) {
-        throw { err: `this employee is already a manager of the service ${serviceTest.name}`, code: "38" };
+        throw { err: `this employee is already a manager of the service ${serviceTest.name}`, code: "39" };
       }
 
       const service = new ServiceSchema(req.body);
@@ -51,7 +51,7 @@ var ServiceController = {
       }
 
       if (!services) {
-        throw { err: `services not found`, code: "39" };
+        throw { err: `services not found`, code: "40" };
       }
 
       res.send(services);
@@ -82,27 +82,27 @@ var ServiceController = {
     const id = req.params.id;
     try {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
-        throw { err: "Invalid keys", code: "40" };
+        throw { err: "Invalid keys", code: "41" };
       }
 
       service = await ServiceSchema.findById(id);
       if (!service) {
-        throw { err: "Invalid service id", code: "41" };
+        throw { err: "Invalid service id", code: "42" };
       }
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
       if (!employee) {
-        throw { err: "Invalid manager id", code: "42" };
+        throw { err: "Invalid manager id", code: "43" };
       }
 
       serviceTestName = await ServiceSchema.findOne({ name: req.body.name })
       if (serviceTestName && (serviceTestName.name != service.name)) {
-        throw { err: `This service name is already use`, code: "43" };
+        throw { err: `This service name is already use`, code: "44" };
       }
 
       serviceTest = await ServiceSchema.findOne({ id_manager: req.body.id_manager })
       if (serviceTest && (JSON.stringify(serviceTest.id_manager) != JSON.stringify(service.id_manager))) {
-        throw { err: `this employee is already a manager of the service ${serviceTest.name}`, code: "44" };
+        throw { err: `this employee is already a manager of the service ${serviceTest.name}`, code: "45" };
       }
 
       oldManager = await EmployeeSchema.findById(service.id_manager);
@@ -142,7 +142,7 @@ var ServiceController = {
       }
 
       if (!service) {
-        throw { err: "Invalid service id", code: "45" };
+        throw { err: "Invalid service id", code: "46" };
       }
 
       res.send(service);
@@ -160,10 +160,10 @@ var ServiceController = {
     try {
       service = await ServiceSchema.findById(id);
       if (!service) {
-        throw { err: "Invalid service id", code: "46" };
+        throw { err: "Invalid service id", code: "47" };
       }
       if (service.name.toLowerCase() == "rh" || service.name.toLowerCase() == "direction") {
-        throw { err: "Cannot delete this service", code: "47" };
+        throw { err: "Cannot delete this service", code: "48" };
       }
 
       employee = await EmployeeSchema.find({ id_service: id })
@@ -171,7 +171,7 @@ var ServiceController = {
         employee.map(e => {
           console.log(e)
           if (JSON.stringify(e._id) != JSON.stringify(service.id_manager)) {
-            throw { err: "Cannot delete the service while employee is linked", code: "48" };
+            throw { err: "Cannot delete the service while employee is linked", code: "49" };
           }
         });
       }
