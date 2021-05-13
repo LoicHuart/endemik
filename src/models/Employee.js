@@ -56,7 +56,7 @@ const EmployeeSchema = new mongoose.Schema({
     required: true,
     trim: true,
     validate(value) {
-      if (!validator.isMobilePhone(value, "fr-FR")) {
+      if (!validator.isLength(value, 4)) {
         throw new Error("Le format n'est pas un téléphone portable");
       }
     },
