@@ -7,7 +7,10 @@ var ServiceController = {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
         throw { err: "Invalid keys", code: "36" };
       }
-      req.body.name = toLowerCase(req.body.name)
+
+      if (req.body.name) {
+        req.body.name = req.body.name.toLowerCase();
+      }
 
       employee = await EmployeeSchema.findById(req.body.id_manager);
       if (!employee) {
@@ -33,6 +36,7 @@ var ServiceController = {
 
       res.send(service);
     } catch (err) {
+      console.log(err)
       res.status(400).send({
         message: "Error when adding a service",
         error: err.err,
@@ -85,7 +89,11 @@ var ServiceController = {
       if (!checkKeys(req.body, ["name", "site", "id_manager"])) {
         throw { err: "Invalid keys", code: "41" };
       }
-      req.body.name = toLowerCase(req.body.name)
+
+      if (req.body.name) {
+        req.body.name = req.body.name.toLowerCase();
+      }
+
       service = await ServiceSchema.findById(id);
       if (!service) {
         throw { err: "Invalid service id", code: "42" };
