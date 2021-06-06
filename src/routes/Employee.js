@@ -7,6 +7,14 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const hasAccessRole = require("../middlewares/hasAccessRole");
 
 router
+  .route("/employees/roles")
+  .get(
+    isLoggedIn,
+    hasAccessRole(["admin", "direction", "DEV", "rh"]),
+    EmployeeController.getAllRoles
+  );
+
+router
   .route("/employees")
   .post(
     isLoggedIn,

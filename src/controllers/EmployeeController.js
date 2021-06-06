@@ -311,6 +311,18 @@ var EmployeeController = {
       NotificationController.ForgotPasswordToEmployee(Employee.id, password);
     }
   },
+
+  async getAllRoles(req, res) {
+    try {
+      roles = await RoleSchema.find();
+      res.send(roles);
+    } catch (err) {
+      res.status(400).send({
+        message: "Error : can't get all roles",
+        error: err
+      });
+    }
+  },
 };
 
 function checkKeys(body, allowedKeys) {
