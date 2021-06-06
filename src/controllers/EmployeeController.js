@@ -82,6 +82,7 @@ var EmployeeController = {
   },
 
   async updateEmployee(req, res) {
+    console.log(req.body)
     const id = req.params.id;
     try {
       if (
@@ -111,6 +112,10 @@ var EmployeeController = {
         throw { err: "Invalid keys", code: "5" };
       }
 
+      if (!req.body.active) {
+        req.body.active = false
+      }
+
       employee = await EmployeeSchema.findById(id)
       if (!employee) {
         throw { err: "Invalid employee id", code: "6" };
@@ -138,13 +143,13 @@ var EmployeeController = {
         throw { err: `Cannot update the service of this employee, this employee is the manager of the service ${serviceManager.name}`, code: "10" };
       }
 
-      if (serviceManager && (req.body.active === false || req.body.active === 0 || req.body.active === "0" || req.body.active === "false")) {
+      if (serviceManager && !req.body.active) {
         throw { err: `Cannot deactivate this employee, this employee is the manager of the service ${serviceManager.name}`, code: "11" };
       }
 
       holidayRequest = await HolidaySchema.findOne({ id_requester_employee: id, status: "en attente" })
       holidayRequest += await HolidaySchema.findOne({ id_requester_employee: id, status: "prévalidé" })
-      if (holidayRequest && (req.body.active === false || req.body.active === 0 || req.body.active === "0" || req.body.active === "false")) {
+      if (holidayRequest && !req.body.active) {
         throw { err: `This employee has holiday request`, code: "12" };
       }
 
@@ -183,6 +188,7 @@ var EmployeeController = {
           )
         );
       } catch { }
+      console.log(err)
       res.status(400).send({
         message: `Error : can't updated employee with id(${id})`,
         error: err.err,
