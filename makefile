@@ -9,7 +9,7 @@ SUCCESS=[ done "\xE2\x9C\x94" ]
 user ?= root
 service ?= api
 
-all: traefik-public data-base
+all: traefik-public database-net
 	@echo [ starting client '&' api... ]
 	docker-compose up traefik db portainer api db_admin
 
