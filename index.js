@@ -10,7 +10,7 @@ const loginRoutes = require("./src/routes/Login");
 const serviceRoutes = require("./src/routes/Service");
 
 const app = express();
-const port = process.env.APP_PORT || 4000;
+const port = process.env.APP_PORT || 3001;
 
 app.use(express.static(publicDirectoryPath));
 app.use(express.json());
