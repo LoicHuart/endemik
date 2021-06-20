@@ -1,0 +1,38 @@
+[
+  {
+    "_id": {
+      "$oid": "606af52ae9725b34f4d5f198"
+    },
+    "active": true,
+    "title": "autres",
+    "firstName": "admin",
+    "lastName": "admin",
+    "date_birth": {
+      "$date": "2000-02-16T00:00:00Z"
+    },
+    "social_security_number": "0000000000000",
+    "mail": "admin@admin.fr",
+    "tel_nb": "0000000000",
+    "postal_code": "00000",
+    "street_nb": "00",
+    "street": "admin",
+    "city": "admin",
+    "arrival_date": {
+      "$date": "2000-02-16T00:00:00Z"
+    },
+    "children_nb": 0,
+    "id_service": {
+      "$oid": "604fa5b32415f0519465c99b"
+    },
+    "id_role": {
+      "$oid": "603ea811b4a9d056a48fccd7"
+    },
+    "password": "$2b$10$M4dPKh78o3jH4H6Toty6eeIwyWYWDtQs5BsSclG.KSTSJHD2BlPLW",
+    "__v": 0,
+    "holiday_balance": {
+      "rtt": 10000,
+      "congesPayes": 10000
+    },
+    "isManager": true
+  }
+]

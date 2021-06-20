@@ -1,0 +1,24 @@
+[
+  {
+    "_id": {
+      "$oid": "604fa5ac2415f0519465c99a"
+    },
+    "name": "rh",
+    "site": "lille",
+    "id_manager": {
+      "$oid": "6091876e25ba500561146cbd"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "604fa5b32415f0519465c99b"
+    },
+    "name": "direction",
+    "site": "lille",
+    "id_manager": {
+      "$oid": "606af52ae9725b34f4d5f198"
+    },
+    "__v": 0
+  }
+]

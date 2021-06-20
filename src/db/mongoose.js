@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
-
 mongoose.connect(
   "mongodb://" +
-    process.env.DB_USERNAME +
-    ":" +
-    process.env.DB_PASSWORD +
-    "@" +
-    process.env.DB_HOST +
-    "/" +
-    process.env.DB_NAME +
-    "?authSource=admin",
+  process.env.DB_USERNAME +
+  ":" +
+  process.env.DB_PASSWORD +
+  "@" +
+  process.env.DB_HOST +
+  "/" +
+  process.env.DB_NAME +
+  "?authSource=admin",
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 const db = mongoose.connection;

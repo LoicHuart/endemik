@@ -1,0 +1,86 @@
+version: '3.1'
+
+services:
+    api:
+        container_name: api
+        build: .
+        restart: unless-stopped
+        ports:
+            - $PORT_API:$PORT_API
+        depends_on:
+            - db
+        networks: 
+            - database-net
+            - traefik-public
+
+    portainer:
+        image: portainer/portainer-ce:latest
+        container_name: portainer
+        restart: unless-stopped
+        ports:
+            - $PORT_PORTAINER:9000
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - portainer:/data
+        networks: 
+            - traefik-public
+
+    db:
+        image: mongo
+        container_name: db
+        environment: 
+            - MONGO_INITDB_ROOT_USERNAME=$DB_USERNAME
+            - MONGO_INITDB_ROOT_PASSWORD=$DB_PASSWORD
+        volumes:
+            - mongo-db:/data/db 
+        networks: 
+            - database-net
+        restart: unless-stopped
+        command: mongod --quiet --logpath /dev/null
+
+    mongo_seed:
+        container_name: mongo_seed
+        image: mongo
+        volumes:
+            - ./migrations:/migrations  
+        networks:
+            - database-net
+        depends_on:
+            - db
+        environment: 
+            - DB_USERNAME=$DB_USERNAME
+            - DB_PASSWORD=$DB_PASSWORD
+            - DB_NAME=$DB_NAME
+        profiles:
+            - donotstart
+        command:
+            sh /migrations/migrations.sh
+
+    mongoadmin:
+        container_name: mongoadmin
+        image: mongo-express
+        restart: unless-stopped
+        ports:
+            - $PORT_MONGOADMIN:8081
+        environment: 
+            - ME_CONFIG_MONGODB_SERVER=db
+            - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=$DB_USERNAME
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=$DB_PASSWORD
+            - ME_CONFIG_BASICAUTH_USERNAME=$DB_USERNAME
+            - ME_CONFIG_BASICAUTH_PASSWORD=$DB_PASSWORD
+        depends_on:
+            - db
+        networks: 
+            - database-net
+            - traefik-public
+
+volumes: 
+    portainer:
+    mongo-db:
+
+networks: 
+    database-net:
+    traefik-public:
+        external: true

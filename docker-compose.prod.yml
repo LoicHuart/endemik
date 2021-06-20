@@ -1,0 +1,124 @@
+version: '3.1'
+
+services:
+    traefik:
+        image: traefik:v2.4.8
+        container_name: traefik
+        ports:
+            - 80:80
+            - 443:443
+            - 8080:8080
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./conf/traefik.yml:/etc/traefik/traefik.yml
+        networks:
+            - traefik-public
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.traefik.tls=true"
+            - "traefik.http.routers.traefik.rule=Host(`$HOST_TREAFIK`)"
+            - "traefik.http.routers.traefik.service=api@internal"
+            - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+            - "traefik.http.routers.http-catchall.entrypoints=web"
+            - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+    api:
+        container_name: api
+        build: .
+        restart: unless-stopped
+        ports:
+            - $PORT_API:$PORT_API
+        volumes:
+            - ./:/app
+        depends_on:
+            - db
+        networks: 
+            - database-net
+            - traefik-public
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.api.tls=true"
+            - "traefik.http.routers.api.rule=Host(`$HOST_API`)"
+            - "traefik.http.routers.api.entrypoints=websecure"
+            - "traefik.http.services.api.loadbalancer.server.port=$PORT_API"
+
+    portainer:
+        image: portainer/portainer-ce:latest
+        container_name: portainer
+        restart: unless-stopped
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - portainer:/data
+        networks: 
+            - traefik-public
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.portainer.tls=true"
+            - "traefik.http.routers.portainer.rule=Host(`$HOST_PORTAINER`)"
+            - "traefik.http.routers.portainer.entrypoints=websecure"
+            - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+    db:
+        image: mongo
+        container_name: db
+        environment: 
+            - MONGO_INITDB_ROOT_USERNAME=$DB_USERNAME
+            - MONGO_INITDB_ROOT_PASSWORD=$DB_PASSWORD
+        volumes:
+            - mongo-db:/data/db 
+        networks: 
+            - database-net
+        restart: unless-stopped
+        command: mongod --quiet --logpath /dev/null
+
+    mongo_seed:
+        container_name: mongo_seed
+        image: mongo
+        volumes:
+            - ./migrations:/migrations  
+        networks:
+            - database-net
+        depends_on:
+            - db
+        environment: 
+            - DB_USERNAME=$DB_USERNAME
+            - DB_PASSWORD=$DB_PASSWORD
+            - DB_NAME=$DB_NAME
+        profiles:
+            - donotstart
+        command:
+            sh /migrations/migrations.sh
+
+    mongoadmin:
+        container_name: mongoadmin
+        image: mongo-express
+        restart: unless-stopped
+        environment: 
+            - ME_CONFIG_MONGODB_SERVER=db
+            - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=$DB_USERNAME
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=$DB_PASSWORD
+            - ME_CONFIG_BASICAUTH_USERNAME=$DB_USERNAME
+            - ME_CONFIG_BASICAUTH_PASSWORD=$DB_PASSWORD
+        depends_on:
+            - db
+        networks: 
+            - database-net
+            - traefik-public
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.mongoadmin.tls=true"
+            - "traefik.http.routers.mongoadmin.rule=Host(`$HOST_MONGOADMIN`)"
+            - "traefik.http.routers.mongoadmin.entrypoints=websecure"
+            - "traefik.http.services.mongoadmin.loadbalancer.server.port=8081"
+
+volumes: 
+    portainer:
+    mongo-db:
+
+networks: 
+    database-net:
+    traefik-public:
+        external: true

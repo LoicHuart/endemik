@@ -1,0 +1,32 @@
+[
+  {
+    "_id": {
+      "$oid": "60381701c7e71a89252b8843"
+    },
+    "name": "employee"
+  },
+  {
+    "_id": {
+      "$oid": "60381739c7e71a89252b8844"
+    },
+    "name": "admin"
+  },
+  {
+    "_id": {
+      "$oid": "603ea811b4a9d056a48fccd7"
+    },
+    "name": "DEV"
+  },
+  {
+    "_id": {
+      "$oid": "603ea81cb4a9d056a48fccd8"
+    },
+    "name": "direction"
+  },
+  {
+    "_id": {
+      "$oid": "603ea826b4a9d056a48fccd9"
+    },
+    "name": "rh"
+  }
+]

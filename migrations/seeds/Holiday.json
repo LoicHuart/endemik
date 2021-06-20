@@ -1,0 +1,24 @@
+[
+  {
+    "_id": {
+      "$oid": "60746caaa365d82bdbf592af"
+    },
+    "validation_date": null,
+    "status": "annulé",
+    "note": "Demande de congés",
+    "starting_date": {
+      "$date": "2021-04-15T00:00:00Z"
+    },
+    "ending_date": {
+      "$date": "2021-05-28T00:00:00Z"
+    },
+    "type": "rtt",
+    "id_requester_employee": {
+      "$oid": "606af52ae9725b34f4d5f198"
+    },
+    "current_date": {
+      "$date": "2021-05-18T06:54:35.066Z"
+    },
+    "__v": 0
+  }
+]
